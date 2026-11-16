@@ -65,7 +65,7 @@ function renderBattle() {
   L.querySelectorAll('[data-sk]').forEach(b => b.onclick = () => { const err = useSkill(b.dataset.sk); if (err) toast(err); renderBattle(); });
   L.querySelectorAll('[data-pot]').forEach(b => b.onclick = () => { const err = usePotion(b.dataset.pot); if (err) toast(err); renderBattle(); });
   const au = $('#auto'); if (au) au.onclick = () => { if (autoTimer) { stopAuto(); S.settings.auto = false; } else { S.settings.auto = true; runAuto(); } save(); renderBattle(); };
-  const fl = $('#flee'); if (fl) fl.onclick = () => { stopAuto(); const f = B.field; B = null; L.innerHTML = ''; battleClosed(f, 'flee'); render(); toast('You retreat. No rewards this time.'); };
+  const fl = $('#flee'); if (fl) fl.onclick = () => { stopAuto(); saveVitals('flee'); const f = B.field, w = B.w; B = null; L.innerHTML = ''; battleClosed(f, 'flee', w); render(); toast('You retreat with your wounds. No rewards this time.'); };
   bindResult();
   playFx();
 }
@@ -87,8 +87,8 @@ function playFx() {
 }
 function resultHTML() {
   if (B.over === 'lose') return `<div class="card stack" style="border-color:var(--rot)"><h2 style="color:var(--rot)">Defeated</h2>
-    <div class="small">The Rot pushes you back. Try a different party, spend attribute and skill points, upgrade gear, or train against roaming foes.</div>
-    <div class="row"><button class="btn primary grow" id="retry">Try again</button><button class="btn" id="leave">Leave</button></div></div>`;
+    <div class="small">Your companions carry you back to ${esc(townInfo(B.w).town)}. You wake with 25% HP. Rest inside the town barrier to recover, then try a different party, spend your points, upgrade gear, or train against roaming foes.</div>
+    <button class="btn primary" id="leave">Wake in town</button></div>`;
   const r = B.reward, W = DV.WORLDS[B.w - 1];
   return `<div class="card stack" style="border-color:var(--facet)"><h2 class="title-prism">Victory</h2>
     <div class="row small" style="flex-wrap:wrap"><span class="chip num">+${r.xp} XP</span><span class="chip num" style="color:var(--gold)">+${r.gold} gold</span>${r.dia ? `<span class="chip num">+${r.dia} Diamonds</span>` : ''}</div>
@@ -98,6 +98,8 @@ function resultHTML() {
     ${r.jobUp ? `<div class="small" style="color:var(--gold)">${r.jobUp.mastered ? `${DV.JOBS[r.jobUp.job].name} Mastered! Permanent bonus: ${DV.JOBS[r.jobUp.job].mastery.text}.` : `${DV.JOBS[r.jobUp.job].name} reached job Lv ${r.jobUp.lv}.`}</div>` : ''}
     ${r.bondUps.map(b => `<div class="small" style="color:var(--ok)">Bond with ${DV.COMPANIONS[b.id].name} deepened to ${b.lv}. A new chapter of their story is open in the Party tab.</div>`).join('')}
     ${r.quest ? `<div class="small" style="color:var(--gold)">Side quest complete: <b>${esc(r.quest.title)}</b>.</div>` : ''}
+    ${r.bounty ? `<div class="small" style="color:var(--gold)">Bounty done. Return to ${esc(r.bounty.giver)} in ${esc(townInfo(B.w).town)} for your reward.</div>` : ''}
+    <div class="small muted num">HP carried out of battle: ${B.party.map(u => `${u.isHero ? 'You' : esc(u.name)} ${Math.round(vitOf(u.key) * 100)}%`).join(' · ')}</div>
     ${r.drops.map(d => `<div class="small">Found: <b style="color:${DV.RARITY[d.rarity].color}">${DV.RARITY[d.rarity].name} ${esc(d.name)}</b></div>`).join('')}
     ${r.worldDone ? `<div class="small" style="color:var(--ok)">${esc(W.god.pure)} is ${W.god.corrupted ? 'free of the Rot' : 'safe'}. Blessing: ${esc(W.bless[2])} (${blessText(W)}).</div>` : ''}
     <button class="btn primary" id="cont">Continue</button></div>`;
@@ -106,9 +108,9 @@ function bindResult() {
   const c = $('#cont'), rt = $('#retry'), lv = $('#leave');
   const close = () => { $('#layer').innerHTML = ''; render(); };
   if (rt) rt.onclick = () => { B.again(); if (S.settings.auto) runAuto(); renderBattle(); };
-  if (lv) lv.onclick = () => { const f = B.field; B = null; battleClosed(f, 'lose'); close(); };
+  if (lv) lv.onclick = () => { const f = B.field, w = B.w; B = null; battleClosed(f, 'lose', w); close(); };
   if (c) c.onclick = () => {
-    const r = B.reward, W = DV.WORLDS[B.w - 1], f = B.field; B = null; battleClosed(f, 'win');
+    const r = B.reward, W = DV.WORLDS[B.w - 1], f = B.field, w = B.w; B = null; battleClosed(f, 'win', w);
     if (r.worldDone) playDialogue(W.after, () => {
       render();
       r.recruited.forEach(id => toast(`${DV.COMPANIONS[id].name} joined your party!`));
@@ -119,7 +121,7 @@ function bindResult() {
 }
 
 // Lets the open world react when a battle ends (remove a beaten foe, give a grace period after a loss).
-function battleClosed(field, outcome) { stopAuto(); if (typeof Realm !== 'undefined') Realm.afterBattle(field, outcome); }
+function battleClosed(field, outcome, w) { stopAuto(); if (typeof Realm !== 'undefined') Realm.afterBattle(field, outcome, w); }
 
 // ---------- Boot ----------
 function boot(saved) {

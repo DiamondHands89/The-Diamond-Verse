@@ -3,6 +3,8 @@
 //   story:    follows the main path. Story companions only, no hidden stories, 3 open-world fights and 4 chests per realm.
 //   explorer: also finds every hidden companion and hidden story, and fights 6 open-world foes per realm.
 // A loss is followed by 3 open-world "training" fights at that realm, then a retry (max 25 tries per stage).
+// HP carries between fights. The player rests in town before a shrine fight when anyone is under 70% HP,
+// and before an open-world fight when the hero is under 40%.
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const ROOT = path.join(__dirname, '..');
 const FILES = ['data.js', 'realms/arc1.js', 'realms/arc2.js', 'realms/arc3.js', 'realms/arc4.js', 'realms/arc5.js', 'engine.js', 'payments.js', 'party.js', 'combat.js'];
@@ -44,7 +46,7 @@ function run(primary, secondary, seed) {
     setParty(roster.slice(0, DV.PARTY_MAX));
   }
   function fight() { let n = 0, lo = 1, ko = 0; while (!B.over && n++ < 400) { autoTurn(); lo = Math.min(lo, B.p.hp / B.p.st.hp); } B.lo = lo; B.ko = B.party.filter(u => u.hp <= 0).length; return B; }
-  function field(w) { prep(); const W = DV.WORLDS[w - 1]; startEncounter(w, W.foes[Math.floor(Math.random() * 4)], stageLevel(w, 1 + Math.floor(Math.random() * 3)), Math.random() < .5, null); return fight(); }
+  function field(w) { prep(); if (vitOf('hero') < .4) healParty(1); const W = DV.WORLDS[w - 1]; startEncounter(w, W.foes[Math.floor(Math.random() * 4)], stageLevel(w, 1 + Math.floor(Math.random() * 3)), Math.random() < .5, null); return fight(); }
   for (let w = 1; w <= DV.WORLDS.length; w++) {
     const W = DV.WORLDS[w - 1];
     for (let i = 0; i < 4; i++) { S.chests[w + '-' + i] = 1; S.gold += Math.round((40 + Math.random() * 40) * w); S.shards += 4; S.potions[Math.random() < .5 ? 'hp' : 'mp']++; }
@@ -52,12 +54,12 @@ function run(primary, secondary, seed) {
     const fieldN = P.profile === 'explorer' ? 6 : 3;
     for (let i = 0; i < fieldN; i++) field(w);
     for (let s = 0; s < 5; s++) {
-      let tries = 0, farm = 0, b;
+      let tries = 0, farm = 0, rests = 0, b;
       do {
-        tries++; prep(); startBattle(w, s); b = fight();
+        tries++; prep(); if (['hero', ...S.party].some(k => vitOf(k) < .7)) { healParty(1); rests++; } startBattle(w, s); b = fight();
         if (b.over !== 'win') for (let f = 0; f < 3; f++) { field(w); farm++; }
       } while (b.over !== 'win' && tries < 25);
-      rows.push({ w, s, tries, farm, win: b.over === 'win', hp: +(b.p.hp / b.p.st.hp).toFixed(2), lo: +b.lo.toFixed(2), ko: b.ko, taken: Math.round(b.stats.dmgTaken / b.p.st.hp * 100) / 100, rounds: b.round, lvl: S.level, stageLvl: stageLevel(w, s), party: S.party.length });
+      rows.push({ w, s, tries, farm, win: b.over === 'win', hp: +(b.p.hp / b.p.st.hp).toFixed(2), lo: +b.lo.toFixed(2), ko: b.ko, taken: Math.round(b.stats.dmgTaken / b.p.st.hp * 100) / 100, rounds: b.round, rests, lvl: S.level, stageLvl: stageLevel(w, s), party: S.party.length });
       if (b.over !== 'win') { rows.push({ stuck:true, w, s }); w = 999; break; }
     }
     checkQuest(w);

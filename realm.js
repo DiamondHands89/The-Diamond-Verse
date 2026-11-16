@@ -33,7 +33,10 @@ const Realm = (() => {
   const MARK_TYPES = ['tower','arch','ring','tree','statue','dome','obelisk','pool'];
 
   let ok = null, canvas, wrap, labelsBox, mini;
-  let statics = [], colliders = [], ents = [], enemies = [], pools = [], PATH = [], shrinePos = [], nextPos = [0, -82];
+  let statics = [], colliders = [], ents = [], enemies = [], pools = [], PATH = [], shrinePos = [], nextPos = [0, -82], towns = [];
+  const TOWN_C = [0, 68];
+  const inTown = (x, z, pad = 0) => towns.some(t => dist(x, z, t.x, t.z) < t.r + pad);
+  const townAt = (x, z) => towns.find(t => dist(x, z, t.x, t.z) < t.r);
   const R = { w:1, px:0, pz:0, ry:Math.PI, yaw:0, moving:0, t:0, grace:2, log:[], keys:new Set(), jx:0, jy:0, near:null, foe:null, lastSave:0, lastNet:0 };
 
   const seeded = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
@@ -60,6 +63,11 @@ const Realm = (() => {
     shrinePos = zs.map(z => { side = -side; return [side * (12 + rand() * 26), z]; });
     nextPos = [shrinePos[4][0] * .35, -82];
     PATH = [SPAWN, ...shrinePos, nextPos];
+    // civilization: the realm's town (around the entrance) and a waystation halfway along the shrine road
+    const TI = townInfo(w);
+    const a1 = shrinePos[1], a2 = shrinePos[2], mx = (a1[0] + a2[0]) / 2, mz = (a1[1] + a2[1]) / 2, dx0 = a2[0] - a1[0], dz0 = a2[1] - a1[1], l0 = Math.hypot(dx0, dz0);
+    let px = -dz0 / l0, pz = dx0 / l0; if (Math.hypot(mx + px * 14, mz + pz * 14) > Math.hypot(mx - px * 14, mz - pz * 14)) { px = -px; pz = -pz; }
+    towns = [{ kind:'town', name:TI.town, x:TOWN_C[0], z:TOWN_C[1], r:15 }, { kind:'outpost', name:TI.outpost, x:mx + px * 14, z:mz + pz * 14, r:10 }];
     statics.push({ mesh:'disc', sx:2 * (RADIUS + 12), sy:.01, sz:2 * (RADIUS + 12), y:-.01, color:T.ground });
     PATH.slice(1).forEach((b, i) => {
       const a = PATH[i], len = dist(a[0], a[1], b[0], b[1]);
@@ -70,10 +78,10 @@ const Realm = (() => {
     W.marks.forEach((name, i) => {
       let x, z, n = 0;
       do {
-        if (i === 0) { const a = rand() * Math.PI; x = SPAWN[0] + Math.cos(a) * 20 * (rand() < .5 ? -1 : 1); z = SPAWN[1] - 6 - rand() * 12; }
-        else { const r = 28 + rand() * 52, a = rand() * Math.PI * 2; x = Math.cos(a) * r; z = Math.sin(a) * r; }
+        if (i === 0) { x = TOWN_C[0] - Math.sign(shrinePos[0][0]) * 6; z = TOWN_C[1] - 1; break; }   // the town's monument
+        const r = 28 + rand() * 52, a = rand() * Math.PI * 2; x = Math.cos(a) * r; z = Math.sin(a) * r;
         n++;
-      } while (n < 300 && (nearPath(x, z) < 10 || marks.some(m => dist(x, z, m.x, m.z) < 24) || shrinePos.some(s => dist(x, z, s[0], s[1]) < 20)));
+      } while (n < 300 && (nearPath(x, z) < 10 || marks.some(m => dist(x, z, m.x, m.z) < 24) || shrinePos.some(s => dist(x, z, s[0], s[1]) < 20) || inTown(x, z, 12)));
       const type = MARK_TYPES[(hashStr(name) + i) % MARK_TYPES.length];
       const m = { kind:'mark', i, name, type, x, z, r:3.2, label:name };
       marks.push(m); ents.push(m); colliders.push([x, z, type === 'pool' ? 3.6 : 2.6]);
@@ -81,14 +89,14 @@ const Realm = (() => {
     // hazard pools (lava, deep water, void…)
     if (T.hazard) for (let i = 0, tries = 0; i < 7 && tries < 400; tries++) {
       const r = 20 + rand() * 66, a = rand() * Math.PI * 2, x = Math.cos(a) * r, z = Math.sin(a) * r, s = 4 + rand() * 5;
-      if (nearPath(x, z) < s + 5 || marks.some(m => dist(x, z, m.x, m.z) < s + 8) || dist(x, z, SPAWN[0], SPAWN[1]) < 16) continue;
+      if (nearPath(x, z) < s + 5 || marks.some(m => dist(x, z, m.x, m.z) < s + 8) || inTown(x, z, s + 5)) continue;
       i++; pools.push([x, z, s]); colliders.push([x, z, s * .5]);
       statics.push({ mesh:'disc', x, y:.02, z, sx:s, sy:.02, sz:s, color:T.hazard, e:.55 });
     }
     // props
     for (let i = 0, tries = 0; i < 260 && tries < 4000; tries++) {
       const r = Math.sqrt(rand()) * 88, t = rand() * Math.PI * 2, x = Math.cos(t) * r, z = Math.sin(t) * r;
-      if (nearPath(x, z) < 4.8 || dist(x, z, SPAWN[0], SPAWN[1]) < 8 || marks.some(m => dist(x, z, m.x, m.z) < 6) || pools.some(p => dist(x, z, p[0], p[1]) < p[2] * .6 + 1)) continue;
+      if (nearPath(x, z) < 4.8 || inTown(x, z, 2) || marks.some(m => dist(x, z, m.x, m.z) < 6) || pools.some(p => dist(x, z, p[0], p[1]) < p[2] * .6 + 1)) continue;
       i++;
       const [mesh, c0] = rand() < .55 ? T.propA : T.propB, color = rand() < .12 ? W.hue : c0, s = .6 + rand() * 1.7;
       const tall = ['cone','gem','gem8','cyl'].includes(mesh) ? 1.5 + rand() * 1.6 : .6 + rand() * .8;
@@ -109,12 +117,10 @@ const Realm = (() => {
     for (let i = 0; i < 4; i++) {
       let x, z, n = 0;
       do { const r = 15 + rand() * 70, t = rand() * Math.PI * 2; x = Math.cos(t) * r; z = Math.sin(t) * r; n++; }
-      while ((nearPath(x, z) < 6 || colliders.some(c => dist(x, z, c[0], c[1]) < c[2] + 2) || pools.some(p => dist(x, z, p[0], p[1]) < p[2])) && n < 300);
+      while ((nearPath(x, z) < 6 || inTown(x, z, 4) || colliders.some(c => dist(x, z, c[0], c[1]) < c[2] + 2) || pools.some(p => dist(x, z, p[0], p[1]) < p[2])) && n < 300);
       ents.push({ kind:'chest', key:`${w}-${i}`, x, z, r:1 }); colliders.push([x, z, .8]);
     }
-    // guide / quest-giver
-    ents.push({ kind:'npc', who:W.quest.giver, x:NPC_POS[0], z:NPC_POS[1], r:1.4, label:W.quest.giver in DV.SPEAKERS ? DV.SPEAKERS[W.quest.giver] : W.quest.giver });
-    colliders.push([NPC_POS[0], NPC_POS[1], .6]);
+    buildTowns(W, T, TI, rand, marks[0]);
     // lore stone beside its landmark
     if (W.lore) { const m = marks[W.lore.mark]; ents.push({ kind:'lore', x:m.x + 4.2, z:m.z + 1.5, r:1.2, label:'Lore stone' }); }
     // hidden companion beside their landmark
@@ -133,11 +139,62 @@ const Realm = (() => {
     }
     marks.slice(1).forEach(m => homes.push([m.x + 8 * (er() - .5), m.z + 8]));
     homes.forEach(([hx, hz], i) => {
+      towns.forEach(t => { const d = dist(hx, hz, t.x, t.z); if (d < t.r + 6) { hx = t.x + (hx - t.x) / (d || 1) * (t.r + 6); hz = t.z + (hz - t.z) / (d || 1) * (t.r + 6); } });
       const stage = nearestStage(hx, hz), lvl = Math.max(1, stageLevel(w, stage) - (er() < .5 ? 1 : 0));
       enemies.push({ id:`${w}-e${i}`, foe:W.foes[Math.min(3, Math.floor(er() * (stage + 2)))], lvl, hx, hz, x:hx, z:hz, tx:hx, tz:hz, ry:0, dead:0, seen:false });
     });
     Online.presence.join(w);
   }
+
+  // Houses, barrier posts and townsfolk for both settlements.
+  function buildTowns(W, T, TI, rand, monument) {
+    const roof = W.hue, wall = T.stone, F = TI.folk;
+    towns.forEach(t => {
+      statics.push({ mesh:'disc', x:t.x, y:.015, z:t.z, sx:t.r * 2, sy:.01, sz:t.r * 2, color:W.hue, e:.3, a:.12 });
+      const posts = Math.round(2 * Math.PI * t.r / 4.5);
+      for (let i = 0; i < posts; i++) {
+        const a = i / posts * Math.PI * 2, x = t.x + Math.cos(a) * t.r, z = t.z + Math.sin(a) * t.r;
+        if (nearPath(x, z) < 2.4) continue;   // leave the road open as a gate
+        statics.push({ mesh:'hex', x, z, sx:.5, sy:1.5, sz:.5, color:wall });
+        statics.push({ mesh:'gem', x, y:1.5, z, sx:.42, sy:.6, sz:.42, color:W.hue, e:.85 });
+      }
+      const houses = t.kind === 'town' ? 9 : 4, spots = [];
+      for (let i = 0, tries = 0; i < houses && tries < 200; tries++) {
+        const a = rand() * Math.PI * 2, rr = t.r * (.55 + rand() * .25), x = t.x + Math.cos(a) * rr, z = t.z + Math.sin(a) * rr;
+        if (nearPath(x, z) < 5 || spots.some(p => dist(x, z, p[0], p[1]) < 5.2) || (monument && t.kind === 'town' && dist(x, z, monument.x, monument.z) < 7)) continue;
+        i++; spots.push([x, z]);
+        const ry = Math.atan2(t.x - x, t.z - z), w = 2.8 + rand() * 1.2, h = 2 + rand() * 1.2;
+        statics.push({ mesh:'box', x, z, ry, sx:w, sy:h, sz:w * .9, color:wall });
+        statics.push({ mesh: W.biome === 'crystal' || W.biome === 'celestial' ? 'gem' : 'cone', x, y:h, z, ry, sx:w * 1.35, sy:1.8, sz:w * 1.25, color:roof, e:.08 });
+        const [fx, fz] = rotOff(x, z, ry, 0, w * .46);
+        statics.push({ mesh:'box', x:fx, z:fz, ry, sx:.8, sy:1.3, sz:.1, color:'#2a1c12' });
+        statics.push({ mesh:'box', x:fx + .9 * Math.cos(ry), y:1.2, z:fz - .9 * Math.sin(ry), ry, sx:.5, sy:.5, sz:.1, color:'#ffd27a', e:.9 });
+        colliders.push([x, z, w * .62]);
+      }
+      if (t.kind === 'outpost') {
+        statics.push({ mesh:'cyl', x:t.x, z:t.z, sx:1.6, sy:.35, sz:1.6, color:wall });
+        statics.push({ mesh:'gem', x:t.x, y:.35, z:t.z, sx:1, sy:1.4, sz:1, color:'#ff9a3d', e:1 });
+        colliders.push([t.x, t.z, 1]);
+        ents.push({ kind:'sign', x:t.x, z:t.z, r:0, label:t.name });
+      }
+      // townsfolk, spread on an inner ring away from the road and the houses
+      const roles = t.kind === 'town'
+        ? [['quest', W.quest.giver], ['warden', F.warden], ['elder', F.elder], ['merchant', F.merchant], ['innkeeper', F.innkeeper], ['citizen', F.citizen]]
+        : [['keeper', F.keeper], ['trader', F.trader]];
+      let ang = rand() * Math.PI * 2;
+      roles.forEach(([role, name]) => {
+        let x, z, n = 0;
+        do { ang += .9 + rand() * .5; const rr = t.r * (t.kind === 'town' ? .32 : .4) + rand() * 2; x = t.x + Math.cos(ang) * rr; z = t.z + Math.sin(ang) * rr; n++; }
+        while (n < 60 && (nearPath(x, z) < 2.2 || colliders.some(c => dist(x, z, c[0], c[1]) < c[2] + 1.2) || ents.some(e => (e.kind === 'villager' || e.kind === 'npc') && dist(x, z, e.x, e.z) < 3)));
+        const label = name in DV.SPEAKERS ? DV.SPEAKERS[name] : name;
+        ents.push(role === 'quest' ? { kind:'npc', who:name, x, z, r:1.4, label } : { kind:'villager', role, name, x, z, r:1.3, label });
+        colliders.push([x, z, .6]);
+      });
+    });
+  }
+  const ROLE = { warden:'Town Warden', elder:'Elder', merchant:'Merchant', innkeeper:'Innkeeper', citizen:'Townsperson', keeper:'Waystation Keeper', trader:'Road Trader' };
+  const ROLE_COLOR = { warden:'#ff7a59', elder:'#c3a6ff', merchant:'#ffc145', innkeeper:'#8fe3b0', citizen:'#9aa3b5', keeper:'#5fb3ff', trader:'#ffd166' };
+  function reqFor(n) { const T = townInfo(R.w); return n.role === 'warden' ? T.bounty : n.role === 'elder' ? T.errand : null; }
 
   function placePlayer(at) { const p = at || SPAWN; R.px = p[0]; R.pz = p[1]; R.ry = Math.PI; R.yaw = 0; R.grace = 2; }
   function savePos() { S.realm = { w:R.w, x:+R.px.toFixed(2), z:+R.pz.toFixed(2) }; save(); }
@@ -206,6 +263,13 @@ const Realm = (() => {
       n.ry = Math.atan2(R.px - n.x, R.pz - n.z);
       humanoid(n.x, n.z, n.ry, npcColors(speakerColor(n.who)), 0, t);
       if (!S.qdone[R.w]) Gfx.draw({ mesh:'gem', x:n.x, y:2.6 + Math.sin(t * 3) * .12, z:n.z, ry:t * 2, sx:.35, sy:.5, sz:.35, color:'#ffc145', e:1 });
+    } else if (n.kind === 'villager') {
+      n.ry = dist(n.x, n.z, R.px, R.pz) < 12 ? Math.atan2(R.px - n.x, R.pz - n.z) : (n.ry || 0);
+      humanoid(n.x, n.z, n.ry, npcColors(ROLE_COLOR[n.role]), 0, t);
+      const q = reqFor(n), st = q && tqState(q.key).st;
+      if (st === 'new' || st === 'return') Gfx.draw({ mesh:'gem', x:n.x, y:2.6 + Math.sin(t * 3) * .12, z:n.z, ry:t * 2, sx:.35, sy:.5, sz:.35, color: st === 'return' ? '#6fe3a1' : '#ffc145', e:1 });
+    } else if (n.kind === 'sign') {
+      return;
     } else if (n.kind === 'lore') {
       Gfx.draw({ mesh:'hex', x:n.x, z:n.z, sx:1.2, sy:.9, sz:1.2, color:T.stone });
       Gfx.draw({ mesh:'gem', x:n.x, y:.9 + Math.sin(t * 2) * .1, z:n.z, ry:t, sx:.6, sy:.9, sz:.6, color: S.lore[R.w] ? '#5a6078' : '#ffe08a', e: S.lore[R.w] ? 0 : .9 });
@@ -226,7 +290,7 @@ const Realm = (() => {
   const active = () => ok && canvas && canvas.isConnected && !$('#app').hidden && !document.hidden && tab === 'world';
   function loop(now) {
     requestAnimationFrame(loop);
-    const dt = Math.min(.05, (now - last) / 1000 || 0); last = now;
+    const real = Math.min(1, (now - last) / 1000 || 0), dt = Math.min(.05, real); last = now;   // movement uses a capped step; healing uses real time
     if (!active()) return;
     R.t += dt; R.grace = Math.max(0, R.grace - dt);
     let ix = R.jx, iy = R.jy;
@@ -242,6 +306,14 @@ const Realm = (() => {
       const r = Math.hypot(R.px, R.pz); if (r > RADIUS) { R.px *= RADIUS / r; R.pz *= RADIUS / r; }
       if (R.t - R.lastSave > 3) { R.lastSave = R.t; savePos(); }
     }
+    // town barriers: heal 1% of max HP per second while inside
+    const town = townAt(R.px, R.pz);
+    if (town !== R.town) {
+      if (town) say(`You enter ${town.name}. Inside the barrier your wounds mend: 1% of max HP each second.`, 'you');
+      else if (R.town) say(`You leave ${R.town.name}.`, 'sys');
+      R.town = town; updateVitals();
+    }
+    if (town && healParty(.01 * real)) { R.healT = (R.healT || 0) + dt; if (R.healT > .25) { R.healT = 0; updateVitals(); } if (R.t - R.lastSave > 3) { R.lastSave = R.t; save(); } }
     if (R.t - R.lastNet > 2) { R.lastNet = R.t; Online.presence.update({ x:R.px, z:R.pz, ry:R.ry }); }
     // landmark discovery
     ents.forEach(n => {
@@ -249,6 +321,8 @@ const Realm = (() => {
       visitMark(R.w, n.i); say(`Discovered: ${n.name}.`, 'you'); toast(`Landmark discovered: ${n.name}`);
       const q = checkQuest(R.w); if (q) questDone(q);
     });
+    ents.forEach(n => { if (n.kind !== 'mark' || dist(n.x, n.z, R.px, R.pz) > 7) return;
+      const e = tqReachMark(R.w, n.i); if (e) { say(`You deliver ${e.item} at ${n.name}. Return to ${e.giver} in ${townInfo(R.w).town}.`, 'you'); toast('Errand delivered. Return to town.'); } });
     // foes
     const W = DV.WORLDS[R.w - 1], T = BIOMES[W.biome] || BIOMES.meadow;
     let foe = null, foeD = 4.5;
@@ -256,17 +330,18 @@ const Realm = (() => {
       if (e.dead) { if (Date.now() > e.dead) { e.dead = 0; e.x = e.hx; e.z = e.hz; } else continue; }
       const dp = dist(e.x, e.z, R.px, R.pz), dh = dist(e.x, e.z, e.hx, e.hz);
       let sp = 1.6;
-      if (dp < 7 && dh < 13 && R.grace <= 0) { e.tx = R.px; e.tz = R.pz; sp = 3.4; }
+      if (dp < 7 && dh < 13 && R.grace <= 0 && !R.town) { e.tx = R.px; e.tz = R.pz; sp = 3.4; }
       else if (dist(e.x, e.z, e.tx, e.tz) < .5 || dh > 13) { const a = Math.random() * 6.28, r = Math.random() * 5; e.tx = e.hx + Math.cos(a) * r; e.tz = e.hz + Math.sin(a) * r; }
       const dx = e.tx - e.x, dz = e.tz - e.z, l = Math.hypot(dx, dz);
       if (l > .1) { e.x += dx / l * sp * dt; e.z += dz / l * sp * dt; e.ry = Math.atan2(dx, dz); }
+      towns.forEach(t => { const d = dist(e.x, e.z, t.x, t.z); if (d < t.r + 1) { e.x = t.x + (e.x - t.x) / (d || 1) * (t.r + 1); e.z = t.z + (e.z - t.z) / (d || 1) * (t.r + 1); e.tx = e.hx; e.tz = e.hz; } });   // foes cannot cross a barrier
       if (dp < 9 && !e.seen) { e.seen = true; say(`You encounter a ${e.foe}! (Lv ${e.lvl})`, 'foe'); }
       if (dp > 16) e.seen = false;
       if (dp < foeD) { foe = e; foeD = dp; }
       if (dp < 1.3 && R.grace <= 0) { engage(e, false); return; }
     }
     let near = null, nd = Infinity;
-    ents.forEach(n => { if (n.kind === 'mark' || (n.kind === 'hidden' && compJoined(n.id))) return; const d = dist(n.x, n.z, R.px, R.pz) - n.r; if (d < 2.4 && d < nd) { near = n; nd = d; } });
+    ents.forEach(n => { if (n.kind === 'mark' || n.kind === 'sign' || (n.kind === 'hidden' && compJoined(n.id))) return; const d = dist(n.x, n.z, R.px, R.pz) - n.r; if (d < 2.4 && d < nd) { near = n; nd = d; } });
     if (near !== R.near || foe !== R.foe) { R.near = near; R.foe = foe; updateButtons(); }
     // draw
     const D = 11, H = 7.5, eye = [R.px + Math.sin(R.yaw) * D, H, R.pz + Math.cos(R.yaw) * D];
@@ -285,7 +360,10 @@ const Realm = (() => {
     if (n.kind === 'mark') return n.label + (S.marks[markKey(R.w, n.i)] ? ' ✓' : '');
     if (n.kind === 'hidden') return compJoined(n.id) ? null : dist(n.x, n.z, R.px, R.pz) < 10 ? n.label : '???';
     if (n.kind === 'lore') return S.lore[R.w] ? null : dist(n.x, n.z, R.px, R.pz) < 14 ? n.label : null;
-    if (n.kind === 'npc') return n.label + (S.qdone[R.w] ? '' : ' · Quest');
+    if (n.kind === 'npc') return dist(n.x, n.z, R.px, R.pz) > 8 ? null : n.label + (S.qdone[R.w] ? '' : ' · Quest');
+    if (n.kind === 'villager') { if (dist(n.x, n.z, R.px, R.pz) > 6) return null; const q = reqFor(n), st = q && tqState(q.key).st;
+      return `${n.label} · ${ROLE[n.role]}${st === 'new' ? ' · Request' : st === 'return' ? ' · Turn in' : ''}`; }
+    if (n.kind === 'sign') return n.label;
     return n.label;
   }
   function drawLabels() {
@@ -293,7 +371,7 @@ const Realm = (() => {
     ents.forEach((n, i) => {
       const text = labelFor(n); if (!text) return;
       const d = dist(n.x, n.z, R.px, R.pz); if (d > 40) return;
-      const h = n.kind === 'shrine' ? (n.s === 4 ? 6.4 : 4.6) : n.kind === 'mark' ? 9 : n.kind === 'portal' ? 4.4 : 2.6;
+      const h = n.kind === 'shrine' ? (n.s === 4 ? 6.4 : 4.6) : n.kind === 'mark' ? 9 : n.kind === 'portal' ? 4.4 : n.kind === 'sign' ? 3.4 : 2.6;
       const p = Gfx.project(n.x, h, n.z); if (!p || p.y < 26) return;
       let el = labelEls.get(i);
       if (!el) { el = document.createElement('div'); el.className = 'rw-label'; labelsBox.appendChild(el); labelEls.set(i, el); }
@@ -316,6 +394,7 @@ const Realm = (() => {
     g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, size, size);
     g.fillStyle = T.ground; g.beginPath(); g.arc(size / 2, size / 2, RADIUS * k, 0, Math.PI * 2); g.fill();
     g.strokeStyle = T.stone; g.lineWidth = 1.5; g.stroke();
+    towns.forEach(t => { const [a, b] = P(t.x, t.z); g.beginPath(); g.arc(a, b, t.r * k, 0, Math.PI * 2); g.fillStyle = W.hue + '40'; g.fill(); g.strokeStyle = W.hue; g.lineWidth = 1.5; g.stroke(); });
     pools.forEach(([x, z, s]) => { const [a, b] = P(x, z); g.fillStyle = T.hazard; g.beginPath(); g.arc(a, b, s / 2 * k, 0, Math.PI * 2); g.fill(); });
     g.strokeStyle = T.path; g.lineWidth = Math.max(2, 3.4 * k); g.beginPath(); PATH.forEach(([x, z], i) => { const [a, b] = P(x, z); i ? g.lineTo(a, b) : g.moveTo(a, b); }); g.stroke();
     const diamond = (x, z, r, fill, stroke) => { const [a, b] = P(x, z); g.beginPath(); g.moveTo(a, b - r); g.lineTo(a + r, b); g.lineTo(a, b + r); g.lineTo(a - r, b); g.closePath(); g.fillStyle = fill; g.fill(); if (stroke) { g.strokeStyle = stroke; g.lineWidth = 1; g.stroke(); } };
@@ -326,8 +405,10 @@ const Realm = (() => {
       if (n.kind === 'mark') { const v = S.marks[markKey(R.w, n.i)]; diamond(n.x, n.z, full ? 7 : 4, v ? W.hue : '#0a0c19', '#ffc145'); if (full) text(n.name, a, b - 11); }
       else if (n.kind === 'shrine') { const done = S.cleared[stageKey(R.w, n.s)], o = stageOpen(R.w, n.s); diamond(n.x, n.z, full ? 8 : 4.5, done ? W.hue : o ? '#ffffff' : '#3a3d4a', '#0a0c19'); if (full) { g.fillStyle = '#0a0c19'; g.fillText(n.s === 4 ? '♛' : n.s + 1, a, b + 4); text(stageName(R.w, n.s), a, b + 21); } }
       else if (n.kind === 'chest') { g.fillStyle = S.chests[n.key] ? '#5a4a3a' : '#ffc145'; g.fillRect(a - (full ? 4 : 2), b - (full ? 3 : 2), full ? 8 : 4, full ? 6 : 4); }
-      else if (n.kind === 'npc') { g.fillStyle = '#7ef2ff'; g.beginPath(); g.arc(a, b, full ? 5 : 3, 0, Math.PI * 2); g.fill(); if (full) text(n.label, a, b - 9); }
+      else if (n.kind === 'npc') { g.fillStyle = '#7ef2ff'; g.beginPath(); g.arc(a, b, full ? 5 : 3, 0, Math.PI * 2); g.fill(); }
       else if (n.kind === 'portal') { g.strokeStyle = '#b07cff'; g.lineWidth = 2; g.strokeRect(a - (full ? 6 : 3), b - (full ? 6 : 3), full ? 12 : 6, full ? 12 : 6); if (full) text(n.label, a, b + 21); }
+      else if (n.kind === 'villager') { g.fillStyle = ROLE_COLOR[n.role]; g.beginPath(); g.arc(a, b, full ? 3.5 : 2, 0, Math.PI * 2); g.fill(); }
+      else if (n.kind === 'sign' && full) text(n.label, a, b - 12);
       else if (n.kind === 'lore' && S.lore[R.w]) { g.fillStyle = '#ffe08a'; g.beginPath(); g.arc(a, b, full ? 3 : 2, 0, Math.PI * 2); g.fill(); }
     });
     if (full) enemies.forEach(e => { if (e.dead) return; const [a, b] = P(e.x, e.z); g.fillStyle = '#ff4d7a'; g.beginPath(); g.arc(a, b, 2.5, 0, Math.PI * 2); g.fill(); });
@@ -340,7 +421,7 @@ const Realm = (() => {
     const W = DV.WORLDS[R.w - 1], found = W.marks.filter((_, i) => S.marks[markKey(R.w, i)]).length, opened = [0, 1, 2, 3].filter(i => S.chests[`${R.w}-${i}`]).length;
     openSheet(`<div class="eyebrow num">Realm ${W.id} · Map</div><h2>${esc(W.name)}</h2>
       <canvas class="rw-bigmap" id="bigMap" aria-label="Map of ${esc(W.name)}"></canvas>
-      <div class="small muted map-key"><span><i class="k-mark"></i>Landmark (outline: unexplored)</span><span><i class="k-shrine"></i>Shrine</span><span><i class="k-chest"></i>Chest</span><span><i class="k-npc"></i>Person</span><span><i class="k-gate"></i>Gate</span><span><i class="k-foe"></i>Foe</span></div>
+      <div class="small muted map-key"><span><i class="k-mark"></i>Landmark (outline: unexplored)</span><span><i class="k-shrine"></i>Shrine</span><span><i class="k-chest"></i>Chest</span><span><i class="k-town"></i>Town (heals)</span><span><i class="k-npc"></i>Person</span><span><i class="k-gate"></i>Gate</span><span><i class="k-foe"></i>Foe</span></div>
       <div class="small">Landmarks found <b class="num">${found}/4</b> · Chests opened <b class="num">${opened}/4</b>${W.lore ? ` · Hidden story ${S.lore[R.w] ? '<b>found</b>' : '<span class="muted">not found</span>'}` : ''}${W.hidden ? ` · Someone is hiding here: ${compJoined(W.hidden) ? '<b>found</b>' : '<span class="muted">not found</span>'}` : ''}</div>`,
       () => requestAnimationFrame(() => drawMap($('#bigMap'), true)));
   }
@@ -372,6 +453,8 @@ const Realm = (() => {
       const q = checkQuest(R.w); if (q) questDone(q);
     } else if (n.kind === 'npc') {
       questTalk(W);
+    } else if (n.kind === 'villager') {
+      villagerSheet(n, W);
     } else if (n.kind === 'lore') {
       if (S.lore[R.w]) return say(`You have read ${W.lore.title}.`, 'sys');
       const L = readLore(R.w), k = DV.SKILLS[L.skill];
@@ -399,14 +482,67 @@ const Realm = (() => {
         <div class="muted">Reward: ${W.quest.reward.gold.toLocaleString()} gold · ${W.quest.reward.dia} Diamonds · ${W.quest.reward.shards} shards</div></div>
       <button class="btn" id="hearIntro">Hear their story again</button>`, el => { el.querySelector('#hearIntro').onclick = () => { closeSheet(); playDialogue(W.intro); }; });
   }
-  function afterBattle(field, outcome) {
+  function afterBattle(field, outcome, w) {
     R.grace = 4;
+    if (outcome === 'lose') {   // wake in the town of the realm where you fell
+      if (w && w !== R.w) build(w);
+      placePlayer([TOWN_C[0], TOWN_C[1] + 6]); savePos();
+      say(`You wake in ${townInfo(R.w).town} with 25% HP. Rest inside the barrier to recover.`, 'sys');
+      if (field) { const e = enemies.find(x => x.id === field.id); if (e) { e.x = e.hx; e.z = e.hz; } }
+      return;
+    }
     if (field) {
       const e = enemies.find(x => x.id === field.id);
       if (e && outcome === 'win') {
         e.dead = Date.now() + 60000; say(`${field.foe} is cleansed. More Rot will gather here in a minute.`, 'you');
       } else if (e) { e.x = e.hx; e.z = e.hz; e.tx = e.hx; e.tz = e.hz; say(outcome === 'flee' ? 'You slip away.' : 'You stagger back, battered but alive.', 'sys'); }
     } else if (outcome === 'win') say('The shrine glows clean.', 'you');
+  }
+
+  // ---------- townsfolk ----------
+  function villagerSheet(n, W) {
+    const T = townInfo(R.w), role = ROLE[n.role];
+    if (n.role === 'citizen' || n.role === 'keeper') return playDialogue(villagerTalk(R.w, n.role).map(t => [n.name, t]));
+    if (n.role === 'merchant' || n.role === 'trader') {
+      const items = shopItems().filter(it => n.role === 'merchant' || it.id !== 'chest');
+      return openSheet(`<div class="eyebrow">${esc(role)} · ${esc(n.name)}</div><h2>${n.role === 'merchant' ? 'Town market' : 'Road goods'}</h2>
+        <div class="small muted">“${esc(n.role === 'merchant' ? `Best prices in ${T.town}. Everything else is just further away.` : villagerTalk(R.w, 'trader')[0])}”</div>
+        ${items.map(it => `<div class="card row"><div class="grow"><b>${it.name}</b><div class="small muted">${it.text}</div></div><button class="btn sm gold" data-tbuy="${it.id}" ${S.gold >= it.price ? '' : 'disabled'}>${it.price.toLocaleString()} g</button></div>`).join('')}
+        <div class="small muted num">You have ${S.gold.toLocaleString()} gold · ${S.potions.hp} Facet Tonics · ${S.potions.mp} Mana Shards</div>`, el => {
+        el.querySelectorAll('[data-tbuy]').forEach(b => b.onclick = () => { toast(buy(b.dataset.tbuy).msg); render(); villagerSheet(n, W); });
+      });
+    }
+    if (n.role === 'innkeeper') {
+      const hurt = partyHurt();
+      return openSheet(`<div class="eyebrow">${esc(role)} · ${esc(n.name)}</div><h2>The inn</h2>
+        <div class="small">“A bed, a hot meal and you're good as new. Or stand around inside the barrier for free; it mends you slower, but it mends you.”</div>
+        <div class="small muted num">Party HP: ${['hero', ...S.party].map(k => `${k === 'hero' ? 'You' : DV.COMPANIONS[k].name} ${Math.round(vitOf(k) * 100)}%`).join(' · ')}</div>
+        <button class="btn gold" id="innRest" ${hurt && S.gold >= innPrice() ? '' : 'disabled'}>${hurt ? `Rest until fully healed · ${innPrice().toLocaleString()} gold` : 'Everyone is already rested'}</button>`, el => {
+        el.querySelector('#innRest').onclick = () => { const err = restAtInn(); if (err) return toast(err); closeSheet(); updateVitals(); render(); toast('You wake fully rested.'); say(`You rest at the inn in ${T.town}. Everyone is at full HP.`, 'you'); };
+      });
+    }
+    const q = reqFor(n), st = tqState(q.key);
+    const status = st.st === 'new' ? '' : st.st === 'active' ? (q.type === 'bounty' ? `<div class="card small">Progress: <b class="num">${st.prog}/${q.n}</b> ${esc(q.foe)}s defeated in the wilds of ${esc(W.name)}.</div>` : `<div class="card small">Take ${esc(q.item)} to <b>${esc(W.marks[q.mark])}</b>.</div>`)
+      : st.st === 'return' ? '<div class="card small" style="color:var(--ok)">Done. Hand it in for your reward.</div>' : '<div class="card small muted">Completed. Thank you again.</div>';
+    openSheet(`<div class="eyebrow">${esc(role)} · ${esc(T.town)}</div><h2>${q.type === 'bounty' ? `Bounty: ${esc(q.foe)}s` : 'An errand'}</h2>
+      <div class="small"><b>${esc(n.name)}:</b> “${esc(q.text)}”</div>${status}
+      <div class="small muted">Reward: ${q.reward.gold.toLocaleString()} gold · ${q.reward.dia} Diamonds · ${q.reward.shards} shards</div>
+      ${st.st === 'new' ? '<button class="btn primary" id="tqGo">Accept</button>' : st.st === 'return' ? '<button class="btn gold" id="tqGo">Hand in</button>' : ''}`, el => {
+      const b = el.querySelector('#tqGo'); if (!b) return;
+      b.onclick = () => {
+        if (st.st === 'new') { acceptTQ(q.key); say(`Accepted: ${q.type === 'bounty' ? `defeat ${q.n} ${q.foe}s` : `deliver ${q.item} to ${W.marks[q.mark]}`}.`, 'sys'); toast('Request accepted.'); }
+        else { const done = turnInTQ(q.key, R.w); if (done) { say(`${n.name} pays you ${done.reward.gold} gold, ${done.reward.dia} Diamonds and ${done.reward.shards} shards.`, 'you'); toast('Request complete!'); } }
+        closeSheet(); render();
+      };
+    });
+  }
+  function updateVitals() {
+    const st = calcStats(), f = vitOf('hero'), t = $('#rwHpText'), b = $('#rwHpBar');
+    if (t) t.textContent = `${Math.round(st.hp * f)}/${st.hp}`;
+    if (b) b.style.width = Math.round(f * 100) + '%';
+    const pp = $('#rwPartyHp'); if (pp) pp.textContent = S.party.map(k => `${DV.COMPANIONS[k].name} ${Math.round(vitOf(k) * 100)}%`).join(' · ');
+    const c = $('#rwTown'); if (c) { c.hidden = !R.town; c.textContent = R.town ? `In ${R.town.name}: healing 1%/s` : ''; }
+    const tb = $('#rwTonic'); if (tb) { tb.disabled = !S.potions.hp || f >= 1; tb.textContent = `Drink Tonic (${S.potions.hp})`; }
   }
 
   // ---------- HUD ----------
@@ -418,7 +554,7 @@ const Realm = (() => {
     i.querySelector('small').textContent = !n ? 'Nothing nearby'
       : n.kind === 'shrine' ? (stageOpen(R.w, n.s) ? `Enter ${n.s === 4 ? 'boss shrine' : DV.STAGE_NAMES[n.s]}` : 'Sealed shrine')
       : n.kind === 'chest' ? (S.chests[n.key] ? 'Empty chest' : 'Open chest')
-      : n.kind === 'npc' ? `Talk to ${n.label}` : n.kind === 'lore' ? (S.lore[R.w] ? 'Read again' : 'Read the lore stone')
+      : n.kind === 'npc' || n.kind === 'villager' ? `Talk to ${n.label}` : n.kind === 'lore' ? (S.lore[R.w] ? 'Read again' : 'Read the lore stone')
       : n.kind === 'hidden' ? 'Talk to the stranger' : n.kind === 'mark' ? n.name : n.label;
     i.classList.toggle('ready', !!n);
   }
@@ -475,6 +611,8 @@ const Realm = (() => {
     joy.onpointerup = joy.onpointercancel = e => { if (e.pointerId !== jid) return; jid = null; R.jx = R.jy = 0; knob.style.transform = ''; };
     $('#rwAttack').onclick = attack; $('#rwInteract').onclick = interact;
     $('#rwTravel').onclick = travelSheet; $('#rwMap').onclick = mapSheet;
+    $('#rwTonic').onclick = () => { const err = drinkTonic(); if (err) return toast(err); updateVitals(); say('You drink a Facet Tonic.', 'you'); };
+    R.town = townAt(R.px, R.pz); updateVitals();
     R.near = R.foe = undefined; updateHud(); requestAnimationFrame(() => drawMap(mini, false));
     const el = $('#rwLog'); el.scrollTop = el.scrollHeight;
   }
@@ -487,7 +625,7 @@ const Realm = (() => {
       el.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { closeSheet(); if (+b.dataset.go !== R.w) travel(+b.dataset.go); });
     });
   }
-  return { mount, afterBattle, get world() { ensure(); return R.w; }, say, get _state() { return { R, enemies, ents }; } };
+  return { mount, afterBattle, updateVitals, get world() { ensure(); return R.w; }, say, get _state() { return { R, enemies, ents, towns, build }; } };
 })();
 
 // ---------- World screen (mirrors the wireframe) ----------
@@ -506,7 +644,7 @@ SCREENS.world = st => {
     <section class="rw-char rw-panel">
       <div class="rw-name"><b>${esc(S.name)}</b> <span class="muted num">(Lv ${S.level})</span></div>
       <div class="rw-bars">
-        <div><div class="rw-stat"><span>HP</span><b class="num">${st.hp}/${st.hp}</b></div>${bar('hp', 1, 1, 5)}</div>
+        <div><div class="rw-stat"><span>HP</span><b class="num" id="rwHpText">${Math.round(st.hp * vitOf('hero'))}/${st.hp}</b></div><div class="bar hp" style="height:5px"><i id="rwHpBar" style="width:${Math.round(vitOf('hero') * 100)}%"></i></div></div>
         <div><div class="rw-stat"><span>MP</span><b class="num">${st.mp}/${st.mp}</b></div>${bar('mp', 1, 1, 5)}</div>
       </div>
       <div class="rw-stats">
@@ -516,7 +654,8 @@ SCREENS.world = st => {
         <div><span>XP</span><b class="num">${fmtK(S.xp)}/${fmtK(xpNeed(S.level))}</b></div>
         <div><span>Level</span><b class="num">${S.level}</b>${S.attrPts ? `<small style="color:var(--gold)">${S.attrPts} pts to spend</small>` : ''}</div>
       </div>
-      <div class="small rw-party">Party: <b>You</b>${S.party.map(id => `, <b>${esc(DV.COMPANIONS[id].name)}</b>`).join('')}</div>
+      <div class="small rw-party">Party HP: <span id="rwPartyHp" class="num"></span>${S.party.length ? '' : '<span class="muted">no companions yet</span>'}</div>
+      <div class="row" style="flex-wrap:wrap;gap:6px"><span class="chip pure" id="rwTown" hidden></span><button class="btn sm" id="rwTonic">Drink Tonic</button></div>
       <div class="small rw-quest">Quest: <b>${esc(W.quest.title)}</b> ${q.done ? '<span class="chip pure">Done</span>' : `<span class="muted num">${esc(questGoalText(W.id))} (${q.prog}/${q.need})</span>`}</div>
     </section>
     <section class="rw-scene rw-panel" id="rwScene"></section>

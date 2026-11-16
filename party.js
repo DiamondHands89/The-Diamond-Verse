@@ -150,3 +150,80 @@ function claimLogin() {
   S.login = { last: dayKey(), streak: st.streak };
   save(); return { ...R, item, day: st.day + 1 };
 }
+
+// ---------- Carried HP ("vitals") ----------
+// HP carries between fights as a share of max HP (so level-ups and gear changes scale it). Level-ups heal fully.
+// Town barriers heal 1% of max HP per second (realm.js). A defeat carries the party back to town at 25%.
+const vitOf = key => { const v = S.vit && S.vit[key]; return v == null ? 1 : clamp(v, 0, 1); };
+function setVit(key, v) { S.vit = S.vit || {}; S.vit[key] = clamp(v, 0, 1); }
+function healParty(frac) {   // add a share of max HP to the hero and every recruited companion
+  let changed = false;
+  ['hero', ...Object.keys(S.comps)].forEach(k => { const v = vitOf(k); if (v < 1) { setVit(k, v + frac); changed = true; } });
+  return changed;
+}
+const partyHurt = () => ['hero', ...S.party].some(k => vitOf(k) < 1);
+function drinkTonic() {   // use a Facet Tonic outside battle: heals the hero 35% (more with potion bonuses)
+  if (!S.potions.hp) return 'No Facet Tonics left. Buy more from a merchant.';
+  if (vitOf('hero') >= 1) return 'You are already at full HP.';
+  S.potions.hp--; setVit('hero', vitOf('hero') + .35 * (1 + M(mods(), 'potionPow'))); track('potion'); save(); return null;
+}
+const innPrice = () => 12 * topTier();
+function restAtInn() {
+  if (!partyHurt()) return 'Everyone is already rested.';
+  if (S.gold < innPrice()) return `A room costs ${innPrice()} gold.`;
+  S.gold -= innPrice(); healParty(1); save(); return null;
+}
+
+// ---------- Towns: villagers and town requests ----------
+// Every realm has a town (named after its first landmark) and a waystation outpost. Townsfolk names are generated
+// per realm; each town offers two requests besides the realm's main side quest: a bounty and an errand.
+const SYL = { a:['Al','Bel','Cor','Da','El','Fen','Gar','Hal','Is','Jor','Ka','Lio','Mar','Ner','Or','Pel','Quin','Ros','Sa','Tor','Ul','Vey','Wen','Yr','Zan'],
+  b:['a','e','i','o','u','ae','ia','eo'], c:['n','ra','th','ll','s','rin','mir','dor','wyn','lan','vek','ris','na','tte','bek'] };
+function townRand(seed) { return () => { seed = Math.imul(seed ^ (seed >>> 15), 2246822507) + 0x9e3779b9 | 0; return ((seed ^ (seed >>> 13)) >>> 0) / 4294967296; }; }
+function villagerName(r) { const p = a => a[Math.floor(r() * a.length)]; return p(SYL.a) + p(SYL.b) + p(SYL.c); }
+const ERRAND_ITEMS = ['a sealed letter', 'a jar of lamp oil', 'a bundle of healing herbs', 'a mended charm', 'a crate of bread', 'a map with a missing corner', 'an apology, written twice'];
+function townInfo(w) {
+  const W = DV.WORLDS[w - 1], r = townRand(w * 2654435761);
+  const names = Array.from({ length:7 }, () => villagerName(r));
+  const foeIdx = 1 + Math.floor(r() * 3), markIdx = 1 + Math.floor(r() * 3), item = ERRAND_ITEMS[Math.floor(r() * ERRAND_ITEMS.length)];
+  const t = topTierFor(w), n = 3 + Math.floor(w / 10);
+  return {
+    town: W.marks[0], outpost: `${W.people[0]} Waystation`,
+    folk: { warden:names[0], elder:names[1], merchant:names[2], innkeeper:names[3], citizen:names[4], keeper:names[5], trader:names[6] },
+    bounty: { key:`${w}-b`, type:'bounty', giver:names[0], role:'Town Warden', foe:W.foes[foeIdx], n,
+      text:`${W.foes[foeIdx]}s keep testing our barrier at night. Put down ${n} of them out in the wilds and come tell me.`,
+      reward:{ gold:Math.round(90 * t + 60), dia:8, shards:3 + Math.ceil(t / 6) } },
+    errand: { key:`${w}-e`, type:'errand', giver:names[1], role:'Elder', mark:markIdx, item,
+      text:`Would you carry ${item} out to ${W.marks[markIdx]}? Someone there has been waiting. Come back and tell me it arrived.`,
+      reward:{ gold:Math.round(70 * t + 50), dia:6, shards:2 + Math.ceil(t / 6) } }
+  };
+}
+const topTierFor = w => clamp(w, 1, DV.WORLDS.length);
+const tqState = key => (S.tq && S.tq[key]) || { st:'new', prog:0 };
+function acceptTQ(key) { S.tq = S.tq || {}; if (!S.tq[key]) S.tq[key] = { st:'active', prog:0 }; save(); }
+function tqFoeDown(w, foe) {   // a roaming foe of this realm was defeated
+  const b = townInfo(w).bounty, s = S.tq && S.tq[b.key];
+  if (s && s.st === 'active' && foe === b.foe) { s.prog = Math.min(b.n, s.prog + 1); if (s.prog >= b.n) s.st = 'return'; return s.st === 'return' ? b : null; }
+  return null;
+}
+function tqReachMark(w, i) {   // the hero walked up to landmark i of realm w
+  const e = townInfo(w).errand, s = S.tq && S.tq[e.key];
+  if (s && s.st === 'active' && e.mark === i) { s.st = 'return'; save(); return e; }
+  return null;
+}
+function turnInTQ(key, w) {
+  const s = S.tq && S.tq[key]; if (!s || s.st !== 'return') return null;
+  const T = townInfo(w), q = key.endsWith('-b') ? T.bounty : T.errand, r = q.reward;
+  s.st = 'done'; S.gold += r.gold; S.lifetimeGold += r.gold; S.dia += r.dia; S.shards += r.shards; save(); return q;
+}
+// Ambient talk for a townsperson, shaped by the realm's people, customs, god and whether the realm is saved yet.
+function villagerTalk(w, role) {
+  const W = DV.WORLDS[w - 1], safe = S.worldsCleared >= w, god = W.god.name, T = townInfo(w);
+  const lines = {
+    citizen: safe ? [`Since you stood up for ${god}, people sleep with their windows open again.`, `We ${W.custom.replace(/^[^:]*:\s*/, '').replace(/\.$/, '').toLowerCase()} again. Come watch sometime.`]
+                  : [`They say ${W.boss.split(',')[0]} can hear us if we talk too loud. So I whisper.`, `I'm ${W.people[0]}, born and raised. ${W.people[1]}`],
+    keeper: [`Welcome to ${T.outpost}. The barrier holds, and inside it your wounds will close. Rest as long as you need.`, safe ? 'Traffic on the road has doubled since the realm was saved.' : 'Foes gather thick past the next shrine. Rest before you go.'],
+    trader: ['Road prices, road goods. Potions and shards for the walk ahead.']
+  };
+  return lines[role] || [];
+}

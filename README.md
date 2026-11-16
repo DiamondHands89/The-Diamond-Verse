@@ -20,6 +20,11 @@ Progress saves in the browser (localStorage).
 ## Systems
 - **Open world (World tab)**: third-person 3D realm per world, built from 23 biomes, with a winding path of 5 battle shrines, 4 modeled
   landmarks, hazard pools, chests, lore stones, roaming foes, a minimap and full map, and a scrollable action log (last 100 entries).
+- **Towns**: every realm has a walled town (named after its first landmark) and a waystation halfway along the shrine road.
+  Standing inside a town barrier heals the party 1% of max HP per second, and foes cannot cross it. Townsfolk include the realm's
+  quest-giver, a Town Warden (bounty request), an Elder (errand request), a merchant, an innkeeper (full rest for gold) and locals to talk to.
+- **Carried HP**: HP carries between fights. Level-ups heal fully, Facet Tonics can be drunk outside battle, fallen companions get up
+  at 10%, and a defeat wakes you in the town at 25% HP.
 - **Party**: hero + up to 2 companions in battle. Companions act on their own; an Auto button plays the hero too.
 - **Combat**: level-relative damage, enemy traits by arc (Armored, Venomous, Swift, Regenerating), escalating boss mechanics.
 - **Classes**: Assassin, Guardian, Warrior, Mage, Priest; secondary class at Lv 10; 8 skills per class plus 18 hidden skills.
