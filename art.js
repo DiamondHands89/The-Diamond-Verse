@@ -28,6 +28,7 @@ function openSheet(html, bind) {
 }
 function closeSheet() { $('#sheet').innerHTML = ''; }
 function bar(cls, v, max, h) { return `<div class="bar ${cls}" ${h ? `style="height:${h}px"` : ''}><i style="width:${max ? Math.max(0, Math.min(100, v / max * 100)) : 0}%"></i></div>`; }
+const fmtK = n => n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : n >= 1e4 ? (n / 1e3).toFixed(1) + 'k' : String(n);
 function gemNum(kind, n) { return `<span class="cur num"><i class="gem ${kind}"></i>${n.toLocaleString()}</span>`; }
 
 const HAIR = [
@@ -68,3 +69,24 @@ function enemySVG(name, hue, boss, size) {
 }
 const SPEAKER_COLOR = { lumeria:'#7ef2ff', mira:'#8fe3b0', vaelith:'#b8d86b', brann:'#ff9a5b', pyrrhos:'#ff6a3d',
   isla:'#4fc3f7', nereon:'#3d8bff', riku:'#c3a6ff', zephyra:'#a98cff', nyxos:'#9b8cff', kael:'#e8f4ff', narr:'#8e95c6' };
+
+// ---------- shared helpers for the 50-realm build ----------
+const BLESS_TEXT = { hp:'max HP', mp:'max MP', atk:'ATK', mag:'MAG', def:'DEF', spd:'SPD', all:'every stat' };
+function blessText(W) {
+  const [k, v] = W.bless;
+  if (k === 'critFlat') return `+${v} CRIT`;
+  if (k === 'regen') return `heal ${+(v * 100).toFixed(1)}% HP each turn`;
+  if (k === 'mpCostCut') return `skills cost ${Math.round(v * 100)}% less MP`;
+  return `+${Math.round(v * 100)}% ${BLESS_TEXT[k] || k}`;
+}
+function speakerColor(who) {
+  if (SPEAKER_COLOR[who]) return SPEAKER_COLOR[who];
+  const id = Object.keys(DV.COMPANIONS).find(k => DV.COMPANIONS[k].name === who);
+  if (id) return DV.CLASSES[DV.COMPANIONS[id].cls].color;
+  return `hsl(${hashStr(who) % 360} 70% 70%)`;
+}
+function compBadge(id, size) {
+  const C = DV.COMPANIONS[id], col = DV.CLASSES[C.cls].color;
+  return `<svg viewBox="0 0 40 40" width="${size}" height="${size}" aria-hidden="true"><polygon points="20,2 38,20 20,38 2,20" fill="#0d1028" stroke="${col}" stroke-width="2"/>
+    <text x="20" y="25" text-anchor="middle" font-family="Marcellus SC, Georgia, serif" font-size="15" fill="${col}">${esc(C.name[0])}</text></svg>`;
+}

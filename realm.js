@@ -1,21 +1,40 @@
-// Diamondverse — open world (World tab): a third-person 3D realm per world.
-// Battle stages are shrines along a path; roaming foes start field encounters; chests, NPCs and portals are interactable.
+// Diamondverse — open world (World tab): a third-person 3D realm per world, built from the realm's biome.
+// Shrines (battle stages) line a winding path; landmarks, chests, lore stones, a quest-giver and hidden companions
+// are spread across the map; roaming foes start field encounters; portals link realms.
 const Realm = (() => {
-  // ---------- per-world look ----------
-  const THEME = {
-    1:{ ground:'#2c4636', path:'#7d9a6e', fog:'#16232c', propA:['gem','#8fe3b0'], propB:['cone','#2f6b4a'], stone:'#8a9b8f' },
-    2:{ ground:'#2a201d', path:'#6a4a3c', fog:'#26140f', propA:['hex','#3b3330'], propB:['gem','#ff8a5b'], stone:'#5d4d46' },
-    3:{ ground:'#14324a', path:'#3b7c96', fog:'#09203a', propA:['cone','#ff7aa8'], propB:['gem','#4fc3f7'], stone:'#6f8fa3' },
-    4:{ ground:'#3a3f5c', path:'#8a8fb8', fog:'#262a48', propA:['box','#8b8fb0'], propB:['gem','#c3a6ff'], stone:'#9da2c4' },
-    5:{ ground:'#1b1630', path:'#43376e', fog:'#0f0b1d', propA:['cone','#2d2554'], propB:['gem','#9b8cff'], stone:'#4c4470' },
-    6:{ ground:'#1d202c', path:'#414860', fog:'#0d0f17', propA:['gem','#22232e'], propB:['gem','#e8f4ff'], stone:'#5a6078' }
+  // ---------- biomes ----------
+  // ground, path, fog, propA/propB: [mesh, color], stone, hazard: pool colour (impassable) or null
+  const BIOMES = {
+    meadow:   { ground:'#2c4636', path:'#7d9a6e', fog:'#16232c', propA:['cone','#2f6b4a'], propB:['gem','#8fe3b0'], stone:'#8a9b8f', hazard:null },
+    volcanic: { ground:'#2a201d', path:'#6a4a3c', fog:'#26140f', propA:['hex','#3b3330'], propB:['gem','#ff8a5b'], stone:'#5d4d46', hazard:'#ff5a1f' },
+    ocean:    { ground:'#14324a', path:'#3b7c96', fog:'#09203a', propA:['cone','#ff7aa8'], propB:['gem','#4fc3f7'], stone:'#6f8fa3', hazard:'#0a4f8a' },
+    sky:      { ground:'#3a3f5c', path:'#8a8fb8', fog:'#262a48', propA:['box','#8b8fb0'], propB:['gem','#c3a6ff'], stone:'#9da2c4', hazard:'#151729' },
+    nightmare:{ ground:'#1b1630', path:'#43376e', fog:'#0f0b1d', propA:['cone','#2d2554'], propB:['gem','#9b8cff'], stone:'#4c4470', hazard:'#06040d' },
+    obsidian: { ground:'#1d202c', path:'#414860', fog:'#0d0f17', propA:['gem','#22232e'], propB:['gem','#e8f4ff'], stone:'#5a6078', hazard:'#05060a' },
+    crystal:  { ground:'#1f2747', path:'#5d6fa8', fog:'#111733', propA:['gem8','#6fd3ff'], propB:['gem','#b07cff'], stone:'#7d86b8', hazard:null },
+    jungle:   { ground:'#1f3a22', path:'#5f7a3c', fog:'#0e1d10', propA:['cone','#2b5a2a'], propB:['cyl','#3d6b35'], stone:'#6b7a55', hazard:'#2f5e3a' },
+    desert:   { ground:'#6b5636', path:'#a88a5a', fog:'#3a2c18', propA:['hex','#8a6d45'], propB:['gem','#ffd166'], stone:'#b39468', hazard:null },
+    tundra:   { ground:'#8fa3b5', path:'#c8d6e3', fog:'#5a6b7d', propA:['cone','#e8f4ff'], propB:['gem','#bfe6ff'], stone:'#a8b8c8', hazard:'#4a7ca8' },
+    clockwork:{ ground:'#3a3226', path:'#6e5b3d', fog:'#1e1910', propA:['cyl','#8a6d3b'], propB:['hex','#d9a441'], stone:'#7a6a4c', hazard:null },
+    swamp:    { ground:'#2a3a26', path:'#566b40', fog:'#152014', propA:['cyl','#3a4a2c'], propB:['cone','#9fd36b'], stone:'#5a6a48', hazard:'#1f3324' },
+    wasteland:{ ground:'#4a4640', path:'#7a756c', fog:'#24221f', propA:['box','#6a655c'], propB:['cone','#e8e2d6'], stone:'#8a857c', hazard:null },
+    storm:    { ground:'#2e3550', path:'#5f6a92', fog:'#171c30', propA:['hex','#4a5272'], propB:['gem','#7fb3ff'], stone:'#6a7398', hazard:null },
+    void:     { ground:'#120f1c', path:'#3a2f55', fog:'#07050c', propA:['gem','#1e1830'], propB:['gem8','#ff4d7a'], stone:'#3d3458', hazard:'#000000' },
+    night:    { ground:'#141a2c', path:'#3a4466', fog:'#080b16', propA:['cyl','#2a3150'], propB:['gem','#ffc145'], stone:'#4a5372', hazard:null },
+    forest:   { ground:'#223a24', path:'#5d6e3c', fog:'#101c12', propA:['cone','#1f4a28'], propB:['cyl','#4a3a28'], stone:'#6a7458', hazard:null },
+    blossom:  { ground:'#3a4a36', path:'#c9a0a8', fog:'#2a2030', propA:['cone','#ff9ec7'], propB:['cyl','#5a3a3a'], stone:'#b8a0a8', hazard:'#4a8fa8' },
+    crater:   { ground:'#3a3030', path:'#6e5a50', fog:'#1c1414', propA:['gem8','#6e5a50'], propB:['gem','#ffe08a'], stone:'#8a7468', hazard:'#ffb347' },
+    bazaar:   { ground:'#4a3a2a', path:'#9a7a52', fog:'#241a10', propA:['box','#ff7a59'], propB:['box','#4fc3f7'], stone:'#a88a62', hazard:null },
+    celestial:{ ground:'#5a5a78', path:'#e8e2d6', fog:'#3a3a58', propA:['cyl','#fff3c4'], propB:['gem','#ffd166'], stone:'#d8d4e8', hazard:'#9fe7ff' },
+    library:  { ground:'#3a2e24', path:'#8a7458', fog:'#1c140e', propA:['box','#6b4a2a'], propB:['box','#e8e2d6'], stone:'#9a8468', hazard:null },
+    fungal:   { ground:'#22182e', path:'#4e3a64', fog:'#100a18', propA:['cyl','#c08bff'], propB:['cone','#7ef2ff'], stone:'#5e4a74', hazard:'#3a1f4a' }
   };
-  const SPAWN = [0, 34], NPC_POS = [5, 31], BACK_POS = [-9, 42], NEXT_POS = [0, -50], RADIUS = 55;
-  const SHRINES = [[-12, 22], [11, 9], [-11, -6], [12, -21], [0, -38]];
-  const PATH = [SPAWN, ...SHRINES, NEXT_POS];
+  const RADIUS = 92, SPAWN = [0, 80], NPC_POS = [6, 76], BACK_POS = [-14, 84];
+  const MARK_TYPES = ['tower','arch','ring','tree','statue','dome','obelisk','pool'];
 
-  let ok = null, canvas, wrap, labelsBox, statics = [], colliders = [], ents = [], enemies = [];
-  const R = { w:1, px:0, pz:0, ry:Math.PI, yaw:0, moving:0, t:0, grace:2, log:[], keys:new Set(), jx:0, jy:0, near:null, foe:null, lastSave:0 };
+  let ok = null, canvas, wrap, labelsBox, mini;
+  let statics = [], colliders = [], ents = [], enemies = [], pools = [], PATH = [], shrinePos = [], nextPos = [0, -82];
+  const R = { w:1, px:0, pz:0, ry:Math.PI, yaw:0, moving:0, t:0, grace:2, log:[], keys:new Set(), jx:0, jy:0, near:null, foe:null, lastSave:0, lastNet:0 };
 
   const seeded = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
   const dist = (ax, az, bx, bz) => Math.hypot(ax - bx, az - bz);
@@ -24,82 +43,114 @@ const Realm = (() => {
     return dist(px, pz, a[0] + dx * t, a[1] + dz * t);
   }
   const nearPath = (x, z) => Math.min(...PATH.slice(1).map((b, i) => segDist(x, z, PATH[i], b)));
-
+  const LOG_MAX = 100;
   function say(msg, kind) {
-    R.log.push([kind || 'sys', msg]); if (R.log.length > 40) R.log.shift();
+    R.log.push([kind || 'sys', msg]); if (R.log.length > LOG_MAX) R.log.shift();
     updateHud();
   }
   const unlockedWorld = () => clamp(S.worldsCleared + 1, 1, DV.WORLDS.length);
+  const bossShort = W => W.boss.split(',')[0];
 
-  // ---------- world build ----------
+  // ---------- realm build ----------
   function build(w) {
-    R.w = w; const T = THEME[w], W = DV.WORLDS[w - 1], rand = seeded(w * 7919);
-    statics = []; colliders = []; ents = [];
-    statics.push({ mesh:'ground', sx:70, sy:1, sz:70, color:T.ground });
-    // path
+    R.w = w; const W = DV.WORLDS[w - 1], T = BIOMES[W.biome] || BIOMES.meadow, rand = seeded(w * 7919);
+    statics = []; colliders = []; ents = []; pools = [];
+    // winding path: spawn → 5 shrines → next-realm portal
+    const zs = [56, 26, -4, -34, -62]; let side = rand() < .5 ? -1 : 1;
+    shrinePos = zs.map(z => { side = -side; return [side * (12 + rand() * 26), z]; });
+    nextPos = [shrinePos[4][0] * .35, -82];
+    PATH = [SPAWN, ...shrinePos, nextPos];
+    statics.push({ mesh:'disc', sx:2 * (RADIUS + 12), sy:.01, sz:2 * (RADIUS + 12), y:-.01, color:T.ground });
     PATH.slice(1).forEach((b, i) => {
       const a = PATH[i], len = dist(a[0], a[1], b[0], b[1]);
-      statics.push({ mesh:'box', x:(a[0] + b[0]) / 2, y:.005, z:(a[1] + b[1]) / 2, ry:Math.atan2(b[0] - a[0], b[1] - a[1]), sx:3.4, sy:.02, sz:len + 3.4, color:T.path });
+      statics.push({ mesh:'box', x:(a[0] + b[0]) / 2, y:.005, z:(a[1] + b[1]) / 2, ry:Math.atan2(b[0] - a[0], b[1] - a[1]), sx:3.6, sy:.02, sz:len + 3.6, color:T.path });
     });
-    // scattered props
-    for (let i = 0, tries = 0; i < 130 && tries < 2000; tries++) {
-      const r = Math.sqrt(rand()) * 53, t = rand() * Math.PI * 2, x = Math.cos(t) * r, z = Math.sin(t) * r;
-      if (nearPath(x, z) < 4.5 || dist(x, z, SPAWN[0], SPAWN[1]) < 7 || dist(x, z, BACK_POS[0], BACK_POS[1]) < 4) continue;
+    // landmarks: mark 0 near the start, the rest spread out
+    const marks = [];
+    W.marks.forEach((name, i) => {
+      let x, z, n = 0;
+      do {
+        if (i === 0) { const a = rand() * Math.PI; x = SPAWN[0] + Math.cos(a) * 20 * (rand() < .5 ? -1 : 1); z = SPAWN[1] - 6 - rand() * 12; }
+        else { const r = 28 + rand() * 52, a = rand() * Math.PI * 2; x = Math.cos(a) * r; z = Math.sin(a) * r; }
+        n++;
+      } while (n < 300 && (nearPath(x, z) < 10 || marks.some(m => dist(x, z, m.x, m.z) < 24) || shrinePos.some(s => dist(x, z, s[0], s[1]) < 20)));
+      const type = MARK_TYPES[(hashStr(name) + i) % MARK_TYPES.length];
+      const m = { kind:'mark', i, name, type, x, z, r:3.2, label:name };
+      marks.push(m); ents.push(m); colliders.push([x, z, type === 'pool' ? 3.6 : 2.6]);
+    });
+    // hazard pools (lava, deep water, void…)
+    if (T.hazard) for (let i = 0, tries = 0; i < 7 && tries < 400; tries++) {
+      const r = 20 + rand() * 66, a = rand() * Math.PI * 2, x = Math.cos(a) * r, z = Math.sin(a) * r, s = 4 + rand() * 5;
+      if (nearPath(x, z) < s + 5 || marks.some(m => dist(x, z, m.x, m.z) < s + 8) || dist(x, z, SPAWN[0], SPAWN[1]) < 16) continue;
+      i++; pools.push([x, z, s]); colliders.push([x, z, s * .5]);
+      statics.push({ mesh:'disc', x, y:.02, z, sx:s, sy:.02, sz:s, color:T.hazard, e:.55 });
+    }
+    // props
+    for (let i = 0, tries = 0; i < 260 && tries < 4000; tries++) {
+      const r = Math.sqrt(rand()) * 88, t = rand() * Math.PI * 2, x = Math.cos(t) * r, z = Math.sin(t) * r;
+      if (nearPath(x, z) < 4.8 || dist(x, z, SPAWN[0], SPAWN[1]) < 8 || marks.some(m => dist(x, z, m.x, m.z) < 6) || pools.some(p => dist(x, z, p[0], p[1]) < p[2] * .6 + 1)) continue;
       i++;
-      const [mesh, color] = rand() < .55 ? T.propA : T.propB, s = .6 + rand() * 1.6, tall = mesh === 'cone' || mesh === 'gem' ? 1.6 + rand() * 1.4 : .6 + rand() * .7;
-      statics.push({ mesh, x, z, ry:rand() * 6, sx:s, sy:s * tall, sz:s, color, e: mesh === 'gem' && color !== '#22232e' ? .15 : 0 });
+      const [mesh, c0] = rand() < .55 ? T.propA : T.propB, color = rand() < .12 ? W.hue : c0, s = .6 + rand() * 1.7;
+      const tall = ['cone','gem','gem8','cyl'].includes(mesh) ? 1.5 + rand() * 1.6 : .6 + rand() * .8;
+      statics.push({ mesh, x, z, ry:rand() * 6, sx:s, sy:s * tall, sz:s, color, e: mesh.startsWith('gem') ? .15 : 0 });
       if (s > .9) colliders.push([x, z, s * .45]);
     }
-    // boundary ring
-    for (let i = 0; i < 44; i++) {
-      const t = i / 44 * Math.PI * 2, r = 59 + rand() * 4, s = 3 + rand() * 3;
+    for (let i = 0; i < 64; i++) {
+      const t = i / 64 * Math.PI * 2, r = RADIUS + 4 + rand() * 6, s = 4 + rand() * 4;
       statics.push({ mesh:'gem', x:Math.cos(t) * r, z:Math.sin(t) * r, ry:rand() * 6, sx:s, sy:s * (2 + rand() * 2), sz:s, color:T.stone });
     }
-    // shrines (battle stages)
-    SHRINES.forEach(([x, z], s) => {
-      const boss = s === SHRINES.length - 1;
-      ents.push({ kind:'shrine', s, x, z, r:boss ? 2.4 : 1.7, label:boss ? `♛ ${W.god.split(',')[0]}` : DV.STAGE_NAMES[s] });
+    // shrines
+    shrinePos.forEach(([x, z], s) => {
+      const boss = s === 4;
+      ents.push({ kind:'shrine', s, x, z, r:boss ? 2.4 : 1.7, label:boss ? `♛ ${bossShort(W)}` : DV.STAGE_NAMES[s] });
       colliders.push([x, z, boss ? 2.2 : 1.5]);
     });
     // chests
-    const chestRand = seeded(w * 31337);
     for (let i = 0; i < 4; i++) {
       let x, z, n = 0;
-      do { const r = 12 + chestRand() * 38, t = chestRand() * Math.PI * 2; x = Math.cos(t) * r; z = Math.sin(t) * r; n++; }
-      while ((nearPath(x, z) < 5 || colliders.some(c => dist(x, z, c[0], c[1]) < c[2] + 1.5)) && n < 200);
+      do { const r = 15 + rand() * 70, t = rand() * Math.PI * 2; x = Math.cos(t) * r; z = Math.sin(t) * r; n++; }
+      while ((nearPath(x, z) < 6 || colliders.some(c => dist(x, z, c[0], c[1]) < c[2] + 2) || pools.some(p => dist(x, z, p[0], p[1]) < p[2])) && n < 300);
       ents.push({ kind:'chest', key:`${w}-${i}`, x, z, r:1 }); colliders.push([x, z, .8]);
     }
-    // NPC (first named speaker in the world's intro)
-    const sp = (W.intro.find(l => l[0] !== 'narr' && l[0] !== 'lumeria') || ['lumeria'])[0];
-    ents.push({ kind:'npc', who:sp, x:NPC_POS[0], z:NPC_POS[1], r:1.2, label:DV.SPEAKERS[sp] }); colliders.push([NPC_POS[0], NPC_POS[1], .6]);
+    // guide / quest-giver
+    ents.push({ kind:'npc', who:W.quest.giver, x:NPC_POS[0], z:NPC_POS[1], r:1.4, label:W.quest.giver in DV.SPEAKERS ? DV.SPEAKERS[W.quest.giver] : W.quest.giver });
+    colliders.push([NPC_POS[0], NPC_POS[1], .6]);
+    // lore stone beside its landmark
+    if (W.lore) { const m = marks[W.lore.mark]; ents.push({ kind:'lore', x:m.x + 4.2, z:m.z + 1.5, r:1.2, label:'Lore stone' }); }
+    // hidden companion beside their landmark
+    if (W.hidden) { const C = DV.COMPANIONS[W.hidden], m = marks[C.mark]; ents.push({ kind:'hidden', id:W.hidden, x:m.x - 4, z:m.z - 2.5, r:1.3, label:C.name }); }
     // portals
-    ents.push({ kind:'portal', dir:1, x:NEXT_POS[0], z:NEXT_POS[1], r:2.2, label: w < DV.WORLDS.length ? `Portal to ${DV.WORLDS[w].name}` : 'Beyond the Fracture' });
-    if (w > 1) ents.push({ kind:'portal', dir:-1, x:BACK_POS[0], z:BACK_POS[1], r:2.2, label:`Portal to ${DV.WORLDS[w - 2].name}` });
-    // roaming foes: spread along the path, levelled to the nearest stage
+    ents.push({ kind:'portal', dir:1, x:nextPos[0], z:nextPos[1], r:2.4, label: w < DV.WORLDS.length ? `Gate to ${DV.WORLDS[w].name}` : 'Beyond the Lattice' });
+    if (w > 1) ents.push({ kind:'portal', dir:-1, x:BACK_POS[0], z:BACK_POS[1], r:2.4, label:`Gate to ${DV.WORLDS[w - 2].name}` });
+    // roaming foes: along the path and near landmarks, levelled to the nearest shrine
     const er = seeded(w * 104729); enemies = [];
-    for (let i = 0; i < 7; i++) {
-      const f = .12 + i / 7 * .8, seg = Math.min(SHRINES.length - 1, Math.floor(f * (PATH.length - 2))), a = PATH[seg], b = PATH[seg + 1], u = er();
-      const side = er() < .5 ? -1 : 1, off = 5 + er() * 5, dx = b[0] - a[0], dz = b[1] - a[1], l = Math.hypot(dx, dz);
-      const hx = a[0] + dx * u + (-dz / l) * off * side, hz = a[1] + dz * u + (dx / l) * off * side;
-      const stage = Math.min(3, seg), lvl = Math.max(1, stageLevel(w, stage) - (er() < .5 ? 1 : 0));
-      enemies.push({ id:`${w}-e${i}`, foe:W.foes[Math.min(3, Math.floor(er() * (stage + 2)))], lvl, hx, hz, x:hx, z:hz, tx:hx, tz:hz, ry:0, dead:0, seen:false });
+    const nearestStage = (x, z) => { let b = 0, d = Infinity; shrinePos.forEach((p, s) => { const q = dist(x, z, p[0], p[1]); if (q < d) { d = q; b = s; } }); return Math.min(3, b); };
+    const homes = [];
+    for (let i = 0; i < 10; i++) {
+      const seg = Math.min(4, Math.floor(i / 2)), a = PATH[seg], b = PATH[seg + 1], u = er(), off = (6 + er() * 7) * (er() < .5 ? -1 : 1);
+      const dx = b[0] - a[0], dz = b[1] - a[1], l = Math.hypot(dx, dz);
+      homes.push([a[0] + dx * u + (-dz / l) * off, a[1] + dz * u + (dx / l) * off]);
     }
+    marks.slice(1).forEach(m => homes.push([m.x + 8 * (er() - .5), m.z + 8]));
+    homes.forEach(([hx, hz], i) => {
+      const stage = nearestStage(hx, hz), lvl = Math.max(1, stageLevel(w, stage) - (er() < .5 ? 1 : 0));
+      enemies.push({ id:`${w}-e${i}`, foe:W.foes[Math.min(3, Math.floor(er() * (stage + 2)))], lvl, hx, hz, x:hx, z:hz, tx:hx, tz:hz, ry:0, dead:0, seen:false });
+    });
+    Online.presence.join(w);
   }
 
-  function placePlayer(at) {
-    const p = at || SPAWN; R.px = p[0]; R.pz = p[1]; R.ry = Math.PI; R.yaw = 0; R.grace = 2;
-  }
+  function placePlayer(at) { const p = at || SPAWN; R.px = p[0]; R.pz = p[1]; R.ry = Math.PI; R.yaw = 0; R.grace = 2; }
   function savePos() { S.realm = { w:R.w, x:+R.px.toFixed(2), z:+R.pz.toFixed(2) }; save(); }
   function travel(w, at) {
     build(w); placePlayer(at); savePos(); render();
     const W = DV.WORLDS[w - 1];
-    say(`You arrive in ${W.name}, ${W.sub}.`, 'sys');
+    say(`Through the gate: ${W.name}, ${W.sub}.`, 'sys');
     if (!S.seen['w' + w]) { S.seen['w' + w] = 1; save(); playDialogue(W.intro); }
   }
 
   // ---------- models ----------
   function rotOff(x, z, ry, dx, dz) { const c = Math.cos(ry), s = Math.sin(ry); return [x + dx * c + dz * s, z - dx * s + dz * c]; }
-  function shadow(x, z, s) { Gfx.draw({ mesh:'disc', x, y:.02, z, sx:s, sy:.01, sz:s, color:'#000000', a:.35 }); }
+  function shadow(x, z, s) { Gfx.draw({ mesh:'disc', x, y:.03, z, sx:s, sy:.01, sz:s, color:'#000000', a:.35 }); }
   function humanoid(x, z, ry, c, moving, t) {
     shadow(x, z, 1.1);
     const bob = Math.abs(Math.sin(t * 10)) * .07 * moving, sw = Math.sin(t * 10) * .22 * moving, P = (dx, dz) => rotOff(x, z, ry, dx, dz);
@@ -113,20 +164,34 @@ const Realm = (() => {
   }
   function heroColors() {
     const L = DV.LOOK, cls = DV.CLASSES[S.cls];
-    return { skin:L.skin[S.look.skin], hair:L.hair[S.look.hair], outfit:L.outfit[S.look.outfit], legs:'#1c2033', accent:cls.color,
-      long:S.look.hairStyle === 1, weapon:cls.main === 'mag' ? 1.6 : 1.1 };
+    return { skin:L.skin[S.look.skin], hair:L.hair[S.look.hair], outfit:L.outfit[S.look.outfit], legs:'#1c2033', accent:cls.color, long:S.look.hairStyle === 1, weapon:cls.main === 'mag' ? 1.6 : 1.1 };
   }
-  function drawEnemy(e, hue, t) {
+  const npcColors = col => ({ skin:'#e8b896', hair:'#2a2233', outfit:col, legs:'#22263a', accent:'#ffffff' });
+  function drawEnemy(e, t) {
     shadow(e.x, e.z, 1.3);
     const bob = Math.sin(t * 3 + e.hx) * .12;
     Gfx.draw({ mesh:'gem8', x:e.x, y:.25 + bob, z:e.z, ry:t * .8 + e.hx, sx:1.2, sy:1.7, sz:1.2, color:'#2a1530' });
     Gfx.draw({ mesh:'gem', x:e.x, y:.75 + bob, z:e.z, ry:-t * 1.4, sx:.6, sy:.8, sz:.6, color:'#ff4d7a', e:.9 });
-    const P = (dx) => rotOff(e.x, e.z, e.ry, dx, .52);
-    [-.2, .2].forEach(dx => { const [a, b] = P(dx); Gfx.draw({ mesh:'box', x:a, y:1.25 + bob, z:b, ry:e.ry, sx:.12, sy:.14, sz:.08, color:'#ff4d7a', e:1 }); });
+    [-.2, .2].forEach(dx => { const [a, b] = rotOff(e.x, e.z, e.ry, dx, .52); Gfx.draw({ mesh:'box', x:a, y:1.25 + bob, z:b, ry:e.ry, sx:.12, sy:.14, sz:.08, color:'#ff4d7a', e:1 }); });
+  }
+  function drawMark(n, T, W, t) {
+    const x = n.x, z = n.z, st = T.stone, hue = W.hue, seen = !!S.marks[markKey(R.w, n.i)];
+    switch (n.type) {
+      case 'tower': Gfx.draw({ mesh:'hex', x, z, sx:3.6, sy:9, sz:3.6, color:st }); Gfx.draw({ mesh:'cone', x, y:9, z, sx:4.4, sy:3.5, sz:4.4, color:hue, e:.25 }); break;
+      case 'arch': [-2.4, 2.4].forEach(d => Gfx.draw({ mesh:'box', x:x + d, z, sx:1.2, sy:6, sz:1.2, color:st })); Gfx.draw({ mesh:'box', x, y:6, z, sx:6.2, sy:1.1, sz:1.4, color:st }); Gfx.draw({ mesh:'gem', x, y:7.1, z, sx:1, sy:1.4, sz:1, color:hue, e:.6 }); break;
+      case 'ring': for (let i = 0; i < 7; i++) { const a = i / 7 * Math.PI * 2; Gfx.draw({ mesh:'box', x:x + Math.cos(a) * 3.2, z:z + Math.sin(a) * 3.2, ry:a, sx:.9, sy:3.4, sz:.5, color:st }); } Gfx.draw({ mesh:'disc', x, y:.04, z, sx:3, sy:.02, sz:3, color:hue, e:.4, a:.7 }); break;
+      case 'tree': Gfx.draw({ mesh:'cyl', x, z, sx:1.6, sy:6, sz:1.6, color:'#5a4030' }); [0, 1, 2].forEach(i => Gfx.draw({ mesh:'gem8', x:x + (i - 1) * 1.8, y:5 + (i % 2) * 1.5, z:z + (i - 1) * .8, sx:4, sy:4.5, sz:4, color:hue, e:.12 })); break;
+      case 'statue': Gfx.draw({ mesh:'box', x, z, sx:3, sy:1.6, sz:3, color:st }); Gfx.draw({ mesh:'gem8', x, y:1.6, z, ry:.4, sx:1.6, sy:5.4, sz:1.6, color:st }); Gfx.draw({ mesh:'gem', x, y:6.6, z, sx:.8, sy:1.1, sz:.8, color:hue, e:.6 }); break;
+      case 'dome': Gfx.draw({ mesh:'hex', x, z, sx:6, sy:2.4, sz:6, color:st }); Gfx.draw({ mesh:'gem8', x, y:1.4, z, sx:6.4, sy:4, sz:6.4, color:hue, e:.18 }); break;
+      case 'obelisk': Gfx.draw({ mesh:'box', x, z, sx:1.6, sy:11, sz:1.6, color:st }); Gfx.draw({ mesh:'gem', x, y:11, z, ry:t, sx:1.2, sy:1.6, sz:1.2, color:hue, e:.7 + Math.sin(t * 2) * .2 }); break;
+      case 'pool': Gfx.draw({ mesh:'disc', x, y:.03, z, sx:6.4, sy:.02, sz:6.4, color:hue, e:.6, a:.85 }); for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2; Gfx.draw({ mesh:'gem', x:x + Math.cos(a) * 3.8, z:z + Math.sin(a) * 3.8, sx:.8, sy:1.6, sz:.8, color:st }); } break;
+    }
+    if (!seen) Gfx.draw({ mesh:'gem', x, y:13 + Math.sin(t * 2) * .3, z, ry:t * 1.5, sx:.7, sy:1, sz:.7, color:'#ffc145', e:.9 });
   }
   function drawEnt(n, T, W, t) {
+    if (n.kind === 'mark') return drawMark(n, T, W, t);
     if (n.kind === 'shrine') {
-      const boss = n.s === SHRINES.length - 1, k = boss ? 1.45 : 1, done = !!S.cleared[stageKey(R.w, n.s)], open = stageOpen(R.w, n.s);
+      const boss = n.s === 4, k = boss ? 1.45 : 1, done = !!S.cleared[stageKey(R.w, n.s)], open = stageOpen(R.w, n.s);
       Gfx.draw({ mesh:'hex', x:n.x, z:n.z, sx:2.8 * k, sy:.45, sz:2.8 * k, color:T.stone });
       Gfx.draw({ mesh:'hex', x:n.x, y:.45, z:n.z, sx:2 * k, sy:.25, sz:2 * k, color:T.stone });
       const col = done ? W.hue : open ? '#ffffff' : '#3a3d4a', glow = done ? .55 : open ? .35 + Math.sin(t * 3) * .2 : 0;
@@ -138,9 +203,16 @@ const Realm = (() => {
       Gfx.draw({ mesh:'box', x:n.x, z:n.z, ry:.4, sx:1, sy:.55, sz:.7, color:'#6b4a2a' });
       Gfx.draw({ mesh:'box', x:n.x, y:.55, z:n.z, ry:.4, sx:1.04, sy:.22, sz:.74, color: opened ? '#3d2c1b' : '#ffc145', e: opened ? 0 : .25, rx: opened ? -.9 : 0 });
     } else if (n.kind === 'npc') {
-      const c = SPEAKER_COLOR[n.who] || '#7ef2ff';
       n.ry = Math.atan2(R.px - n.x, R.pz - n.z);
-      humanoid(n.x, n.z, n.ry, { skin:'#e8b896', hair:'#2a2233', outfit:c, legs:'#22263a', accent:'#ffffff' }, 0, t);
+      humanoid(n.x, n.z, n.ry, npcColors(speakerColor(n.who)), 0, t);
+      if (!S.qdone[R.w]) Gfx.draw({ mesh:'gem', x:n.x, y:2.6 + Math.sin(t * 3) * .12, z:n.z, ry:t * 2, sx:.35, sy:.5, sz:.35, color:'#ffc145', e:1 });
+    } else if (n.kind === 'lore') {
+      Gfx.draw({ mesh:'hex', x:n.x, z:n.z, sx:1.2, sy:.9, sz:1.2, color:T.stone });
+      Gfx.draw({ mesh:'gem', x:n.x, y:.9 + Math.sin(t * 2) * .1, z:n.z, ry:t, sx:.6, sy:.9, sz:.6, color: S.lore[R.w] ? '#5a6078' : '#ffe08a', e: S.lore[R.w] ? 0 : .9 });
+    } else if (n.kind === 'hidden') {
+      if (compJoined(n.id)) return;
+      n.ry = Math.atan2(R.px - n.x, R.pz - n.z);
+      humanoid(n.x, n.z, n.ry, npcColors(DV.CLASSES[DV.COMPANIONS[n.id].cls].color), 0, t);
     } else if (n.kind === 'portal') {
       const live = n.dir < 0 || (S.worldsCleared >= R.w && R.w < DV.WORLDS.length), tw = n.dir < 0 ? DV.WORLDS[R.w - 2] : DV.WORLDS[R.w] || W;
       [-1.7, 1.7].forEach(dx => Gfx.draw({ mesh:'hex', x:n.x + dx, z:n.z, sx:.7, sy:3.6, sz:.7, color:T.stone }));
@@ -157,7 +229,6 @@ const Realm = (() => {
     const dt = Math.min(.05, (now - last) / 1000 || 0); last = now;
     if (!active()) return;
     R.t += dt; R.grace = Math.max(0, R.grace - dt);
-    // input → movement relative to the camera
     let ix = R.jx, iy = R.jy;
     if (R.keys.has('a') || R.keys.has('arrowleft')) ix -= 1; if (R.keys.has('d') || R.keys.has('arrowright')) ix += 1;
     if (R.keys.has('w') || R.keys.has('arrowup')) iy -= 1; if (R.keys.has('s') || R.keys.has('arrowdown')) iy += 1;
@@ -165,14 +236,21 @@ const Realm = (() => {
     R.moving = Math.min(1, il);
     if (R.moving > .05) {
       const fx = -Math.sin(R.yaw), fz = -Math.cos(R.yaw), rx = Math.cos(R.yaw), rz = -Math.sin(R.yaw);
-      const mx = rx * ix + fx * -iy, mz = rz * ix + fz * -iy, sp = 7.5 * dt;
+      const mx = rx * ix + fx * -iy, mz = rz * ix + fz * -iy, sp = 9 * dt;
       R.px += mx * sp; R.pz += mz * sp; R.ry = Math.atan2(mx, mz);
       colliders.forEach(([cx, cz, cr]) => { const d = dist(R.px, R.pz, cx, cz), m = cr + .45; if (d < m && d > 0) { R.px = cx + (R.px - cx) / d * m; R.pz = cz + (R.pz - cz) / d * m; } });
       const r = Math.hypot(R.px, R.pz); if (r > RADIUS) { R.px *= RADIUS / r; R.pz *= RADIUS / r; }
       if (R.t - R.lastSave > 3) { R.lastSave = R.t; savePos(); }
     }
+    if (R.t - R.lastNet > 2) { R.lastNet = R.t; Online.presence.update({ x:R.px, z:R.pz, ry:R.ry }); }
+    // landmark discovery
+    ents.forEach(n => {
+      if (n.kind !== 'mark' || S.marks[markKey(R.w, n.i)] || dist(n.x, n.z, R.px, R.pz) > 7) return;
+      visitMark(R.w, n.i); say(`Discovered: ${n.name}.`, 'you'); toast(`Landmark discovered: ${n.name}`);
+      const q = checkQuest(R.w); if (q) questDone(q);
+    });
     // foes
-    const W = DV.WORLDS[R.w - 1], T = THEME[R.w];
+    const W = DV.WORLDS[R.w - 1], T = BIOMES[W.biome] || BIOMES.meadow;
     let foe = null, foeD = 4.5;
     for (const e of enemies) {
       if (e.dead) { if (Date.now() > e.dead) { e.dead = 0; e.x = e.hx; e.z = e.hz; } else continue; }
@@ -187,52 +265,100 @@ const Realm = (() => {
       if (dp < foeD) { foe = e; foeD = dp; }
       if (dp < 1.3 && R.grace <= 0) { engage(e, false); return; }
     }
-    // nearest interactable
     let near = null, nd = Infinity;
-    ents.forEach(n => { const d = dist(n.x, n.z, R.px, R.pz) - n.r; if (d < 2.2 && d < nd) { near = n; nd = d; } });
+    ents.forEach(n => { if (n.kind === 'mark' || (n.kind === 'hidden' && compJoined(n.id))) return; const d = dist(n.x, n.z, R.px, R.pz) - n.r; if (d < 2.4 && d < nd) { near = n; nd = d; } });
     if (near !== R.near || foe !== R.foe) { R.near = near; R.foe = foe; updateButtons(); }
     // draw
     const D = 11, H = 7.5, eye = [R.px + Math.sin(R.yaw) * D, H, R.pz + Math.cos(R.yaw) * D];
-    Gfx.frame(eye, [R.px, 1.3, R.pz], T.fog, [30, 78]);
+    Gfx.frame(eye, [R.px, 1.3, R.pz], T.fog, [34, 90]);
     statics.forEach(Gfx.draw);
     ents.forEach(n => drawEnt(n, T, W, R.t));
-    enemies.forEach(e => { if (!e.dead) drawEnemy(e, W.hue, R.t); });
+    enemies.forEach(e => { if (!e.dead) drawEnemy(e, R.t); });
+    Online.peers.forEach(p => humanoid(p.x, p.z, p.ry, npcColors(DV.CLASSES[p.cls] ? DV.CLASSES[p.cls].color : '#7ef2ff'), 0, R.t));
     humanoid(R.px, R.pz, R.ry, heroColors(), R.moving, R.t);
     drawLabels();
+    if (Math.floor(R.t * 6) !== Math.floor((R.t - dt) * 6)) drawMap(mini, false);
   }
   const labelEls = new Map();
+  function labelFor(n) {
+    if (n.kind === 'shrine') return n.label + (S.cleared[stageKey(R.w, n.s)] ? ' ✓' : stageOpen(R.w, n.s) ? ` · Lv ${stageLevel(R.w, n.s)}` : ' · Sealed');
+    if (n.kind === 'mark') return n.label + (S.marks[markKey(R.w, n.i)] ? ' ✓' : '');
+    if (n.kind === 'hidden') return compJoined(n.id) ? null : dist(n.x, n.z, R.px, R.pz) < 10 ? n.label : '???';
+    if (n.kind === 'lore') return S.lore[R.w] ? null : dist(n.x, n.z, R.px, R.pz) < 14 ? n.label : null;
+    if (n.kind === 'npc') return n.label + (S.qdone[R.w] ? '' : ' · Quest');
+    return n.label;
+  }
   function drawLabels() {
     const seen = new Set();
     ents.forEach((n, i) => {
-      if (!n.label) return;
-      const d = dist(n.x, n.z, R.px, R.pz); if (d > 30) return;
-      const p = Gfx.project(n.x, n.kind === 'shrine' ? (n.s === 4 ? 6.4 : 4.6) : n.kind === 'portal' ? 4.4 : 2.5, n.z); if (!p) return;
+      const text = labelFor(n); if (!text) return;
+      const d = dist(n.x, n.z, R.px, R.pz); if (d > 40) return;
+      const h = n.kind === 'shrine' ? (n.s === 4 ? 6.4 : 4.6) : n.kind === 'mark' ? 9 : n.kind === 'portal' ? 4.4 : 2.6;
+      const p = Gfx.project(n.x, h, n.z); if (!p || p.y < 26) return;
       let el = labelEls.get(i);
       if (!el) { el = document.createElement('div'); el.className = 'rw-label'; labelsBox.appendChild(el); labelEls.set(i, el); }
-      let text = n.label;
-      if (n.kind === 'shrine') text += S.cleared[stageKey(R.w, n.s)] ? ' ✓' : stageOpen(R.w, n.s) ? ` · Lv ${stageLevel(R.w, n.s)}` : ' · Sealed';
       if (el.textContent !== text) el.textContent = text;
+      el.classList.toggle('mark', n.kind === 'mark');
       el.style.transform = `translate(${p.x.toFixed(0)}px, ${p.y.toFixed(0)}px) translate(-50%, -100%)`;
-      el.style.opacity = d > 22 ? (30 - d) / 8 : 1;
+      el.style.opacity = d > 30 ? (40 - d) / 10 : 1;
       el.hidden = false; seen.add(i);
     });
     labelEls.forEach((el, i) => { if (!seen.has(i)) el.hidden = true; });
   }
 
+  // ---------- map (minimap + full map share one renderer) ----------
+  function drawMap(cv, full) {
+    if (!cv || !cv.isConnected) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1), size = cv.clientWidth;
+    if (cv.width !== Math.round(size * dpr)) { cv.width = cv.height = Math.round(size * dpr); }
+    const g = cv.getContext('2d'), W = DV.WORLDS[R.w - 1], T = BIOMES[W.biome] || BIOMES.meadow, k = size / (2 * (RADIUS + 6));
+    const P = (x, z) => [size / 2 + x * k, size / 2 + z * k];
+    g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, size, size);
+    g.fillStyle = T.ground; g.beginPath(); g.arc(size / 2, size / 2, RADIUS * k, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = T.stone; g.lineWidth = 1.5; g.stroke();
+    pools.forEach(([x, z, s]) => { const [a, b] = P(x, z); g.fillStyle = T.hazard; g.beginPath(); g.arc(a, b, s / 2 * k, 0, Math.PI * 2); g.fill(); });
+    g.strokeStyle = T.path; g.lineWidth = Math.max(2, 3.4 * k); g.beginPath(); PATH.forEach(([x, z], i) => { const [a, b] = P(x, z); i ? g.lineTo(a, b) : g.moveTo(a, b); }); g.stroke();
+    const diamond = (x, z, r, fill, stroke) => { const [a, b] = P(x, z); g.beginPath(); g.moveTo(a, b - r); g.lineTo(a + r, b); g.lineTo(a, b + r); g.lineTo(a - r, b); g.closePath(); g.fillStyle = fill; g.fill(); if (stroke) { g.strokeStyle = stroke; g.lineWidth = 1; g.stroke(); } };
+    g.font = `600 ${full ? 12 : 8}px "Barlow Semi Condensed", sans-serif`; g.textAlign = 'center'; g.lineJoin = 'round';
+    const text = (t, a, b) => { g.strokeStyle = '#0a0c19'; g.lineWidth = 3.5; g.strokeText(t, a, b); g.fillStyle = '#e9ecff'; g.fillText(t, a, b); };
+    ents.forEach(n => {
+      const [a, b] = P(n.x, n.z);
+      if (n.kind === 'mark') { const v = S.marks[markKey(R.w, n.i)]; diamond(n.x, n.z, full ? 7 : 4, v ? W.hue : '#0a0c19', '#ffc145'); if (full) text(n.name, a, b - 11); }
+      else if (n.kind === 'shrine') { const done = S.cleared[stageKey(R.w, n.s)], o = stageOpen(R.w, n.s); diamond(n.x, n.z, full ? 8 : 4.5, done ? W.hue : o ? '#ffffff' : '#3a3d4a', '#0a0c19'); if (full) { g.fillStyle = '#0a0c19'; g.fillText(n.s === 4 ? '♛' : n.s + 1, a, b + 4); text(stageName(R.w, n.s), a, b + 21); } }
+      else if (n.kind === 'chest') { g.fillStyle = S.chests[n.key] ? '#5a4a3a' : '#ffc145'; g.fillRect(a - (full ? 4 : 2), b - (full ? 3 : 2), full ? 8 : 4, full ? 6 : 4); }
+      else if (n.kind === 'npc') { g.fillStyle = '#7ef2ff'; g.beginPath(); g.arc(a, b, full ? 5 : 3, 0, Math.PI * 2); g.fill(); if (full) text(n.label, a, b - 9); }
+      else if (n.kind === 'portal') { g.strokeStyle = '#b07cff'; g.lineWidth = 2; g.strokeRect(a - (full ? 6 : 3), b - (full ? 6 : 3), full ? 12 : 6, full ? 12 : 6); if (full) text(n.label, a, b + 21); }
+      else if (n.kind === 'lore' && S.lore[R.w]) { g.fillStyle = '#ffe08a'; g.beginPath(); g.arc(a, b, full ? 3 : 2, 0, Math.PI * 2); g.fill(); }
+    });
+    if (full) enemies.forEach(e => { if (e.dead) return; const [a, b] = P(e.x, e.z); g.fillStyle = '#ff4d7a'; g.beginPath(); g.arc(a, b, 2.5, 0, Math.PI * 2); g.fill(); });
+    const [px, pz] = P(R.px, R.pz), s = full ? 9 : 6;
+    g.save(); g.translate(px, pz); g.rotate(-R.ry + Math.PI);
+    g.fillStyle = '#ffffff'; g.strokeStyle = '#0a0c19'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(0, -s); g.lineTo(s * .7, s * .7); g.lineTo(0, s * .3); g.lineTo(-s * .7, s * .7); g.closePath(); g.fill(); g.stroke();
+    g.restore();
+  }
+  function mapSheet() {
+    const W = DV.WORLDS[R.w - 1], found = W.marks.filter((_, i) => S.marks[markKey(R.w, i)]).length, opened = [0, 1, 2, 3].filter(i => S.chests[`${R.w}-${i}`]).length;
+    openSheet(`<div class="eyebrow num">Realm ${W.id} · Map</div><h2>${esc(W.name)}</h2>
+      <canvas class="rw-bigmap" id="bigMap" aria-label="Map of ${esc(W.name)}"></canvas>
+      <div class="small muted map-key"><span><i class="k-mark"></i>Landmark (outline: unexplored)</span><span><i class="k-shrine"></i>Shrine</span><span><i class="k-chest"></i>Chest</span><span><i class="k-npc"></i>Person</span><span><i class="k-gate"></i>Gate</span><span><i class="k-foe"></i>Foe</span></div>
+      <div class="small">Landmarks found <b class="num">${found}/4</b> · Chests opened <b class="num">${opened}/4</b>${W.lore ? ` · Hidden story ${S.lore[R.w] ? '<b>found</b>' : '<span class="muted">not found</span>'}` : ''}${W.hidden ? ` · Someone is hiding here: ${compJoined(W.hidden) ? '<b>found</b>' : '<span class="muted">not found</span>'}` : ''}</div>`,
+      () => requestAnimationFrame(() => drawMap($('#bigMap'), true)));
+  }
+
   // ---------- actions ----------
   function engage(e, first) {
-    savePos();
-    R.keys.clear(); R.jx = R.jy = 0;
+    savePos(); R.keys.clear(); R.jx = R.jy = 0;
     startEncounter(R.w, e.foe, e.lvl, first, e.id);
-    renderBattle();
+    openBattle();
   }
   function attack() {
     if (R.foe) return engage(R.foe, true);
     say('No foe in reach. Walk up to a corrupted foe, then Attack to strike first.', 'sys');
   }
+  function questDone(q) { say(`Side quest complete: ${q.title}. +${q.reward.gold} gold, +${q.reward.dia} Diamonds.`, 'you'); toast(`Side quest complete: ${q.title}`); render(); }
   function interact() {
     const n = R.near, W = DV.WORLDS[R.w - 1];
-    if (!n) return say('Nothing to interact with here. Walk up to a shrine, chest, portal or person.', 'sys');
+    if (!n) return say('Nothing to interact with here. Walk up to a shrine, chest, gate, stone or person.', 'sys');
     if (n.kind === 'shrine') {
       if (stageOpen(R.w, n.s)) { savePos(); stageSheet(R.w, n.s); }
       else say(`This shrine is sealed. Cleanse ${DV.STAGE_NAMES[n.s - 1]} first.`, 'sys');
@@ -243,21 +369,43 @@ const Realm = (() => {
       const pot = Math.random() < .5 ? 'hp' : 'mp'; S.potions[pot]++;
       save(); render();
       say(`You found a treasure! +${gold} gold, +${shards} shards, +1 ${pot === 'hp' ? 'Facet Tonic' : 'Mana Shard'}.`, 'you');
+      const q = checkQuest(R.w); if (q) questDone(q);
     } else if (n.kind === 'npc') {
-      playDialogue(W.intro);
+      questTalk(W);
+    } else if (n.kind === 'lore') {
+      if (S.lore[R.w]) return say(`You have read ${W.lore.title}.`, 'sys');
+      const L = readLore(R.w), k = DV.SKILLS[L.skill];
+      playDialogue([['narr', `${L.title}.`], ['narr', L.text], ['narr', `You learned the hidden skill ${k.name}: ${k.desc}`]], () => { render(); toast(`Hidden skill learned: ${k.name}`); });
+      say(`Hidden story found: ${L.title}. Learned ${k.name}.`, 'you');
+    } else if (n.kind === 'hidden') {
+      const C = DV.COMPANIONS[n.id];
+      playDialogue([[C.name, C.bio], [C.name, 'You came all this way to find me? Then I suppose I owe you my company. Let\'s go.']], () => {
+        recruit(n.id); render(); toast(`${C.name} joined you! Manage your party in the Party tab.`);
+      });
+      say(`You found ${C.name}.`, 'you');
     } else if (n.kind === 'portal') {
-      if (n.dir < 0) return travel(R.w - 1, [NEXT_POS[0], NEXT_POS[1] + 5]);
-      if (R.w >= DV.WORLDS.length) return say(S.worldsCleared >= R.w ? 'Beyond the Fracture, new worlds are still forming. Season Two awaits.' : `The way is sealed until ${W.god.split(',')[0]} is purified.`, 'sys');
-      if (S.worldsCleared < R.w) return say(`The portal is dark. Purify ${W.god.split(',')[0]} to open it.`, 'sys');
-      travel(R.w + 1, [BACK_POS[0] + 3, BACK_POS[1] - 4]);
+      if (n.dir < 0) return travel(R.w - 1, [0, -74]);
+      if (R.w >= DV.WORLDS.length) return say(S.worldsCleared >= R.w ? 'Beyond the Lattice, new realms are still forming.' : `The gate is dark until ${bossShort(W)} is defeated.`, 'sys');
+      if (S.worldsCleared < R.w) return say(`The gate is out of tune. Defeat ${bossShort(W)} to steady this realm's note.`, 'sys');
+      travel(R.w + 1, [BACK_POS[0] + 4, BACK_POS[1] - 5]);
     }
+  }
+  function questTalk(W) {
+    const q = questState(W.id), giver = W.quest.giver;
+    if (q.done) return playDialogue([[giver, W.quest.done]]);
+    openSheet(`<div class="eyebrow">Side quest · ${esc(W.name)}</div><h2>${esc(W.quest.title)}</h2>
+      <div class="small"><b>${esc(giver in DV.SPEAKERS ? DV.SPEAKERS[giver] : giver)}:</b> “${esc(W.quest.text)}”</div>
+      <div class="card small"><b>Goal:</b> ${esc(questGoalText(W.id))} <span class="num muted">(${q.prog}/${q.need})</span>
+        <div class="muted">Reward: ${W.quest.reward.gold.toLocaleString()} gold · ${W.quest.reward.dia} Diamonds · ${W.quest.reward.shards} shards</div></div>
+      <button class="btn" id="hearIntro">Hear their story again</button>`, el => { el.querySelector('#hearIntro').onclick = () => { closeSheet(); playDialogue(W.intro); }; });
   }
   function afterBattle(field, outcome) {
     R.grace = 4;
     if (field) {
       const e = enemies.find(x => x.id === field.id);
-      if (e && outcome === 'win') { e.dead = Date.now() + 60000; say(`${field.foe} is cleansed. More Rot will gather here in a minute.`, 'you'); }
-      else if (e) { e.x = e.hx; e.z = e.hz; e.tx = e.hx; e.tz = e.hz; say(outcome === 'flee' ? 'You slip away.' : 'You stagger back, battered but alive.', 'sys'); }
+      if (e && outcome === 'win') {
+        e.dead = Date.now() + 60000; say(`${field.foe} is cleansed. More Rot will gather here in a minute.`, 'you');
+      } else if (e) { e.x = e.hx; e.z = e.hz; e.tx = e.hx; e.tz = e.hz; say(outcome === 'flee' ? 'You slip away.' : 'You stagger back, battered but alive.', 'sys'); }
     } else if (outcome === 'win') say('The shrine glows clean.', 'you');
   }
 
@@ -270,12 +418,16 @@ const Realm = (() => {
     i.querySelector('small').textContent = !n ? 'Nothing nearby'
       : n.kind === 'shrine' ? (stageOpen(R.w, n.s) ? `Enter ${n.s === 4 ? 'boss shrine' : DV.STAGE_NAMES[n.s]}` : 'Sealed shrine')
       : n.kind === 'chest' ? (S.chests[n.key] ? 'Empty chest' : 'Open chest')
-      : n.kind === 'npc' ? `Talk to ${n.label}` : n.label;
+      : n.kind === 'npc' ? `Talk to ${n.label}` : n.kind === 'lore' ? (S.lore[R.w] ? 'Read again' : 'Read the lore stone')
+      : n.kind === 'hidden' ? 'Talk to the stranger' : n.kind === 'mark' ? n.name : n.label;
     i.classList.toggle('ready', !!n);
   }
   function updateHud() {
     const el = $('#rwLog'); if (!el) return;
-    el.innerHTML = R.log.slice(-5).map(([k, m]) => `<div class="${k === 'foe' ? 'foe-l' : k}">– ${esc(m)}</div>`).join('') || '<div class="sys">– Explore. Shrines hold the stages; corrupted foes roam nearby.</div>';
+    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 30;
+    el.innerHTML = R.log.map(([k, m]) => `<div class="${k === 'foe' ? 'foe-l' : k}">– ${esc(m)}</div>`).join('') || '<div class="sys">– Explore. Shrines hold the stages; corrupted foes roam nearby.</div>';
+    if (atBottom) el.scrollTop = el.scrollHeight;
+    const c = $('#rwLogCount'); if (c) c.textContent = `${R.log.length}/${LOG_MAX}`;
   }
 
   // ---------- mount / input ----------
@@ -284,9 +436,12 @@ const Realm = (() => {
     wrap = document.createElement('div'); wrap.className = 'rw-canvas-wrap';
     canvas = document.createElement('canvas'); canvas.className = 'rw-canvas'; canvas.setAttribute('aria-label', 'Open world view');
     labelsBox = document.createElement('div'); labelsBox.className = 'rw-labels';
-    wrap.append(canvas, labelsBox);
+    mini = document.createElement('canvas'); mini.className = 'rw-mini'; mini.setAttribute('aria-label', 'Minimap. Tap to open the full map.');
+    const mapBtn = document.createElement('button'); mapBtn.className = 'btn sm rw-mapbtn'; mapBtn.textContent = 'Map';
+    wrap.append(canvas, labelsBox, mini, mapBtn);
     ok = Gfx.init(canvas);
     if (!ok) return false;
+    mini.onclick = mapBtn.onclick = mapSheet;
     let drag = null;
     canvas.addEventListener('pointerdown', e => { drag = { id:e.pointerId, x:e.clientX }; canvas.setPointerCapture(e.pointerId); });
     canvas.addEventListener('pointermove', e => { if (drag && drag.id === e.pointerId) { R.yaw -= (e.clientX - drag.x) * .009; drag.x = e.clientX; } });
@@ -298,13 +453,14 @@ const Realm = (() => {
       if (['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(k)) { R.keys.add(k); e.preventDefault(); }
       else if (k === ' ' || k === 'f') { e.preventDefault(); attack(); }
       else if (k === 'e' || k === 'enter') { e.preventDefault(); interact(); }
+      else if (k === 'm') mapSheet();
       else if (k === 'q') R.yaw += .3; else if (k === 'r') R.yaw -= .3;
     });
     window.addEventListener('keyup', e => R.keys.delete(e.key.toLowerCase()));
     window.addEventListener('blur', () => R.keys.clear());
     const st = S.realm && S.realm.w <= unlockedWorld() ? S.realm : null;
     build(st ? st.w : unlockedWorld()); placePlayer(st ? [st.x, st.z] : null);
-    say(`${DV.WORLDS[R.w - 1].name}. Walk the path to the shrines to face each stage.`, 'sys');
+    say(`${DV.WORLDS[R.w - 1].name}. Follow the path to the shrines. Gold markers above landmarks show places you have not explored.`, 'sys');
     requestAnimationFrame(loop);
     return true;
   }
@@ -312,22 +468,22 @@ const Realm = (() => {
     const box = $('#rwScene');
     if (!ensure()) { box.innerHTML = '<div class="rw-nogl">This device could not start the 3D view (WebGL is turned off or unsupported). The Story tab still has every stage.</div>'; return; }
     box.appendChild(wrap);
-    // joystick
     const joy = $('#rwJoy'), knob = joy.querySelector('i'); let jid = null;
     const upd = e => { const r = joy.getBoundingClientRect(), R0 = r.width / 2 - 8; let dx = e.clientX - r.left - r.width / 2, dy = e.clientY - r.top - r.height / 2; const l = Math.hypot(dx, dy); if (l > R0) { dx *= R0 / l; dy *= R0 / l; } R.jx = dx / R0; R.jy = dy / R0; knob.style.transform = `translate(${dx}px, ${dy}px)`; };
     joy.onpointerdown = e => { jid = e.pointerId; joy.setPointerCapture(e.pointerId); upd(e); };
     joy.onpointermove = e => { if (e.pointerId === jid) upd(e); };
     joy.onpointerup = joy.onpointercancel = e => { if (e.pointerId !== jid) return; jid = null; R.jx = R.jy = 0; knob.style.transform = ''; };
     $('#rwAttack').onclick = attack; $('#rwInteract').onclick = interact;
-    $('#rwTravel').onclick = travelSheet;
-    R.near = R.foe = undefined; updateHud();
+    $('#rwTravel').onclick = travelSheet; $('#rwMap').onclick = mapSheet;
+    R.near = R.foe = undefined; updateHud(); requestAnimationFrame(() => drawMap(mini, false));
+    const el = $('#rwLog'); el.scrollTop = el.scrollHeight;
   }
   function travelSheet() {
     const max = unlockedWorld();
-    openSheet(`<div class="eyebrow">Travel</div><h2>Worlds of the Verse</h2>
-      <div class="small muted">Open worlds can be reached instantly. Purify a world's god to open the next.</div>
-      ${DV.WORLDS.map(W => `<button class="opt ${W.id === R.w ? 'on' : ''} ${W.id > max ? 'sealed' : ''}" data-go="${W.id}" ${W.id > max ? 'disabled' : ''} style="border-left:4px solid ${W.hue}">
-        <b>${W.id}. ${W.name}</b><span class="small muted">${W.id > max ? 'Sealed' : S.worldsCleared >= W.id ? 'Purified · ' + W.sub : W.sub}</span></button>`).join('')}`, el => {
+    openSheet(`<div class="eyebrow">Rift Gates</div><h2>Travel between realms</h2>
+      <div class="small muted">The Quorin gate network reaches every realm whose god rings in tune. Save a realm to open the gate beyond it.</div>
+      ${DV.ARCS.map((A, ai) => `<h3>Arc ${ai + 1} · ${esc(A.name)}</h3>` + DV.WORLDS.slice(A.from - 1, A.from + 9).map(W => `<button class="opt ${W.id === R.w ? 'on' : ''} ${W.id > max ? 'sealed' : ''}" data-go="${W.id}" ${W.id > max ? 'disabled' : ''} style="border-left:4px solid ${W.hue}">
+        <b class="num">${W.id}. ${W.id > max ? '???' : esc(W.name)}</b><span class="small muted">${W.id > max ? 'Gate out of tune' : realmStatus(W.id) + ' · ' + esc(W.sub)}</span></button>`).join('')).join('')}`, el => {
       el.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { closeSheet(); if (+b.dataset.go !== R.w) travel(+b.dataset.go); });
     });
   }
@@ -336,15 +492,17 @@ const Realm = (() => {
 
 // ---------- World screen (mirrors the wireframe) ----------
 SCREENS.world = st => {
-  Realm.world; // make sure the realm exists so the header shows the right world
+  Realm.world;
   const W = DV.WORLDS[Realm.world - 1], o = DV.LOOK.origin.find(x => x.id === S.origin), at = a => S.attrs[a] + (o.bonus[a] || 0);
   const inv = DV.SLOTS.filter(sl => S.equip[sl]).map(sl => { const it = S.equip[sl];
     return `<li style="color:${DV.RARITY[it.rarity].color}">${esc(it.name)}${it.plus ? ' +' + it.plus : ''} <span class="muted">· ${DV.SLOT_NAME[sl]}</span></li>`; });
   inv.push(`<li>Facet Tonic ×${S.potions.hp}</li>`, `<li>Mana Shard ×${S.potions.mp}</li>`, `<li>Upgrade shards ×${S.shards}</li>`);
   if (S.inv.length) inv.push(`<li class="muted">${S.inv.length} unequipped item${S.inv.length > 1 ? 's' : ''} in Gear</li>`);
+  const q = questState(W.id);
   $('#screen').innerHTML = `<div class="rw">
-    <header class="rw-head" style="--wh:${W.hue}"><div class="grow"><div class="eyebrow num">World ${W.id} · ${S.worldsCleared >= W.id ? 'Purified' : 'Corrupted'}</div>
-      <h2>${W.name}</h2><div class="small muted">${W.sub}</div></div><button class="btn sm" id="rwTravel">Travel</button></header>
+    <header class="rw-head" style="--wh:${W.hue}"><div class="grow"><div class="eyebrow num">Realm ${W.id} · ${realmStatus(W.id)}</div>
+      <h2>${esc(W.name)}</h2><div class="small muted">${esc(W.sub)} · ${esc(W.people[0])}</div></div>
+      <button class="btn sm" id="rwMap">Map</button><button class="btn sm" id="rwTravel">Travel</button></header>
     <section class="rw-char rw-panel">
       <div class="rw-name"><b>${esc(S.name)}</b> <span class="muted num">(Lv ${S.level})</span></div>
       <div class="rw-bars">
@@ -355,12 +513,14 @@ SCREENS.world = st => {
         <div><span><i class="lg">Strength</i><i class="sm">STR</i></span><b class="num">${at('str')}</b><small class="num">ATK ${st.atk}</small></div>
         <div><span><i class="lg">Agility</i><i class="sm">AGI</i></span><b class="num">${at('agi')}</b><small class="num">SPD ${st.spd}</small></div>
         <div><span><i class="lg">Intelligence</i><i class="sm">INT</i></span><b class="num">${at('int')}</b><small class="num">MAG ${st.mag}</small></div>
-        <div><span>XP</span><b class="num">${S.xp}/${xpNeed(S.level)}</b></div>
+        <div><span>XP</span><b class="num">${fmtK(S.xp)}/${fmtK(xpNeed(S.level))}</b></div>
         <div><span>Level</span><b class="num">${S.level}</b>${S.attrPts ? `<small style="color:var(--gold)">${S.attrPts} pts to spend</small>` : ''}</div>
       </div>
+      <div class="small rw-party">Party: <b>You</b>${S.party.map(id => `, <b>${esc(DV.COMPANIONS[id].name)}</b>`).join('')}</div>
+      <div class="small rw-quest">Quest: <b>${esc(W.quest.title)}</b> ${q.done ? '<span class="chip pure">Done</span>' : `<span class="muted num">${esc(questGoalText(W.id))} (${q.prog}/${q.need})</span>`}</div>
     </section>
     <section class="rw-scene rw-panel" id="rwScene"></section>
-    <section class="rw-log rw-panel"><h3>Action log</h3><div class="log" id="rwLog" aria-live="polite"></div></section>
+    <section class="rw-log rw-panel"><div class="row"><h3 class="grow">Action log</h3><span class="small muted num" id="rwLogCount"></span></div><div class="log" id="rwLog" aria-live="polite" tabindex="0"></div></section>
     <section class="rw-inv rw-panel"><h3>Inventory</h3><ul>${inv.join('')}</ul></section>
     <section class="rw-ctrl rw-panel"><h3>Controls</h3>
       <div class="rw-ctrl-row">
@@ -368,7 +528,7 @@ SCREENS.world = st => {
         <button class="act rw-btn" id="rwAttack"><b>Attack</b><small>No foe in reach</small></button>
         <button class="act rw-btn" id="rwInteract"><b>Interact</b><small>Nothing nearby</small></button>
       </div>
-      <div class="small muted">Drag the scene to turn the camera. Keyboard: WASD or arrows to move, Space to attack, E to interact.</div>
+      <div class="small muted">Drag the scene to turn the camera. Keyboard: WASD or arrows to move, Space to attack, E to interact, M for the map.</div>
     </section>
   </div>`;
   Realm.mount();

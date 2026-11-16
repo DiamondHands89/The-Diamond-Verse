@@ -26,8 +26,8 @@ SCREENS.hero = st => {
     <section class="card stack"><div class="row"><h3 class="grow">Attributes</h3><span class="chip num" style="color:var(--gold)">${S.attrPts} points</span></div>
       <div class="small muted">You earn 3 points, 1 skill point and 5 Diamonds every level.</div>${attrs}</section>
     <section class="stack"><h3>Divine blessings</h3>${bless.length ? bless.map(W =>
-      `<div class="card small" style="border-color:${W.hue}55"><b>${W.blessing.name}</b> · ${W.blessing.text}<div class="muted">From ${W.godPure}</div></div>`).join('')
-      : '<div class="small muted">Purify a corrupted god to receive their blessing.</div>'}</section>
+      `<div class="card small" style="border-color:${W.hue}55"><b>${esc(W.bless[2])}</b> · ${blessText(W)}<div class="muted">From ${esc(W.god.pure)}, Realm ${W.id}</div></div>`).join('')
+      : '<div class="small muted">Save a realm to receive its god\'s blessing.</div>'}</section>
     <button class="btn sm" id="reset" style="align-self:flex-start;color:var(--rot)">Start a new game</button>`;
   $('#screen').querySelectorAll('[data-attr]').forEach(b => b.onclick = () => { if (!S.attrPts) return; S.attrPts--; S.attrs[b.dataset.attr]++; save(); render(); });
   $('#redesign').onclick = () => openCreator(true);
@@ -136,27 +136,75 @@ function storeSheet(sku) {
 }
 
 SCREENS.skills = () => {
-  const group = cls => {
-    const ids = Object.keys(DV.SKILLS).filter(id => DV.SKILLS[id].cls === cls);
-    return `<section class="stack"><h3 style="color:${DV.CLASSES[cls].color}">${DV.CLASSES[cls].name} skills</h3>${ids.map(id => {
-      const k = DV.SKILLS[id], r = S.skills[id], inL = S.loadout.includes(id);
-      if (!r) return `<div class="card small sealed"><b>${k.name}</b> · <span class="muted">Unlocks at Lv ${k.lvl}</span><div class="muted">${k.desc}</div></div>`;
-      const pct = n => Math.round(k.pow * (1 + .15 * (n - 1)) * 100);
-      return `<div class="card stack" style="gap:6px"><div class="row"><b class="grow">${k.name}</b>
-          <span class="pips" aria-label="Rank ${r} of 5">${[1,2,3,4,5].map(n => `<i class="${n <= r ? 'on' : ''}"></i>`).join('')}</span></div>
-        <div class="small">${k.desc}</div>
-        <div class="small muted num">${k.mp} MP · ${k.cd ? k.cd + '-turn cooldown' : 'no cooldown'} · Power ${pct(r)}%${r < 5 ? ` → ${pct(r + 1)}%` : ' (max)'}</div>
-        <div class="row"><button class="btn sm" data-up="${id}" ${r < 5 && S.skillPts >= r ? '' : 'disabled'}>${r < 5 ? `Upgrade · ${r} SP` : 'Max rank'}</button>
-          <button class="btn sm ${inL ? 'primary' : ''}" data-ld="${id}">${inL ? 'In loadout' : 'Add to loadout'}</button></div></div>`;
-    }).join('')}</section>`;
+  const mpNow = k => Math.round((k.mp || 0) * (1 + S.level / 40) * Math.max(.5, 1 - M(mods(), 'mpCostCut')));
+  const card = id => {
+    const k = DV.SKILLS[id], r = S.skills[id], inL = S.loadout.includes(id);
+    if (!r) {
+      if (!k.hidden) return `<div class="card small sealed"><b>${k.name}</b> · <span class="muted">Unlocks at Lv ${k.lvl}</span><div class="muted">${k.desc}</div></div>`;
+      const W = DV.WORLDS.find(x => x.lore && x.lore.skill === id), reached = W.id <= S.worldsCleared + 1;
+      return `<div class="card small sealed"><b>${reached ? k.name : '???'}</b> · <span class="muted">Hidden story in ${reached ? esc(W.name) : 'Realm ' + W.id}</span><div class="muted">${reached ? k.desc : 'Find the hidden story to learn this skill.'}</div></div>`;
+    }
+    const pct = n => k.pow ? Math.round(k.pow * (1 + .15 * (n - 1)) * 100) + '%' : '';
+    return `<div class="card stack" style="gap:6px"><div class="row"><b class="grow">${k.name}</b>
+        <span class="pips" aria-label="Rank ${r} of 5">${[1,2,3,4,5].map(n => `<i class="${n <= r ? 'on' : ''}"></i>`).join('')}</span></div>
+      <div class="small">${k.desc}</div>
+      <div class="small muted num">${mpNow(k)} MP · ${k.cd ? k.cd + '-turn cooldown' : 'no cooldown'}${k.pow ? ` · Power ${pct(r)}${r < 5 ? ` → ${pct(r + 1)}` : ' (max)'}` : ` · Rank ${r}`}</div>
+      <div class="row"><button class="btn sm" data-up="${id}" ${r < 5 && S.skillPts >= r ? '' : 'disabled'}>${r < 5 ? `Upgrade · ${r} SP` : 'Max rank'}</button>
+        <button class="btn sm ${inL ? 'primary' : ''}" data-ld="${id}">${inL ? 'In loadout' : 'Add to loadout'}</button></div></div>`;
   };
+  const group = cls => `<section class="stack"><h3 style="color:${DV.CLASSES[cls].color}">${DV.CLASSES[cls].name} skills</h3>${Object.keys(DV.SKILLS).filter(id => DV.SKILLS[id].cls === cls).map(card).join('')}</section>`;
+  const hidden = Object.keys(DV.SKILLS).filter(id => DV.SKILLS[id].hidden);
   $('#screen').innerHTML = `
     <section class="row"><div class="grow"><div class="eyebrow">Skills</div><h2>Battle loadout</h2></div>
       <div class="stack" style="gap:4px;align-items:flex-end"><span class="chip num" style="color:var(--gold)">${S.skillPts} skill points</span><span class="chip num">${S.loadout.length} / ${DV.LOADOUT_MAX} equipped</span></div></section>
-    <div class="small muted">Each rank adds 15% power. Raising a skill to rank N+1 costs N skill points. Only loadout skills appear in battle.</div>
-    ${group(S.cls)}${S.cls2 ? group(S.cls2) : ''}`;
+    <div class="small muted">Each rank adds 15% power. Raising a skill to rank N+1 costs N skill points. Only loadout skills appear in battle. MP costs grow with your level.</div>
+    ${group(S.cls)}${S.cls2 ? group(S.cls2) : ''}
+    <section class="stack"><h3 style="color:var(--gold)">Hidden skills · ${hidden.filter(id => S.skills[id]).length}/${hidden.length} learned</h3>
+      <div class="small muted">Any class can learn these by finding a realm's hidden story. Look for glowing lore stones near landmarks in the World tab.</div>
+      ${hidden.map(card).join('')}</section>`;
   $('#screen').querySelectorAll('[data-up]').forEach(b => b.onclick = () => { if (upgradeSkill(b.dataset.up)) { render(); toast(`${DV.SKILLS[b.dataset.up].name} ranked up.`); } });
   $('#screen').querySelectorAll('[data-ld]').forEach(b => b.onclick = () => { if (!toggleLoadout(b.dataset.ld)) toast(`Loadout is full (${DV.LOADOUT_MAX}). Remove one first.`); else render(); });
+};
+
+// ---------- Party ----------
+SCREENS.party = () => {
+  const ids = Object.keys(DV.COMPANIONS), joined = ids.filter(compJoined);
+  const slot = i => { const id = S.party[i];
+    return id ? `<button class="pslot" data-pick="${id}">${compBadge(id, 40)}<b>${esc(DV.COMPANIONS[id].name)}</b><span class="small muted">${DV.CLASSES[DV.COMPANIONS[id].cls].name}</span></button>`
+      : `<div class="pslot empty"><span class="small muted">Empty slot</span></div>`; };
+  const card = id => {
+    const C = DV.COMPANIONS[id], W = DV.WORLDS[C.from - 1], j = compJoined(id), inP = S.party.includes(id), cls = DV.CLASSES[C.cls];
+    if (!j) {
+      const reached = C.from <= S.worldsCleared + 1;
+      const hint = C.join === 'story' ? `Joins when ${reached ? esc(W.name) : 'Realm ' + C.from} is saved.` : reached ? `Rumored to be hiding in ${esc(W.name)}. Explore its landmarks.` : `Hidden somewhere in Realm ${C.from}.`;
+      return `<div class="card row sealed">${C.join === 'hidden' && !reached ? '<div class="pq">?</div>' : compBadge(id, 40)}<div class="grow"><b>${C.join === 'hidden' && !reached ? '???' : esc(C.name)}</b>
+        <div class="small muted">${hint}</div></div></div>`;
+    }
+    const st = compStats(id), bond = bondLevel(id), wins = S.comps[id].wins, next = DV.BOND_WINS[bond];
+    return `<div class="card stack" style="border-left:4px solid ${cls.color}">
+      <div class="row">${compBadge(id, 44)}<div class="grow"><b>${esc(C.name)}</b><div class="small muted">${esc(C.species)} · ${cls.name}</div></div>
+        <button class="btn sm ${inP ? 'primary' : ''}" data-pick="${id}">${inP ? 'In party' : 'Add to party'}</button></div>
+      <div class="small">${esc(C.bio)}</div>
+      <div class="small num muted">HP ${st.hp} · ATK ${st.atk} · MAG ${st.mag} · DEF ${st.def} · SPD ${st.spd}</div>
+      <div class="small"><span class="muted">Signature:</span> <b>${esc(C.sig.name)}</b>. ${esc(C.sig.desc)}</div>
+      <div class="small"><span class="muted">Bond ${bond}/3</span> ${next ? `· <span class="num">${wins}/${next}</span> wins together to the next chapter` : '· Story complete'}</div>
+      ${C.story.map((t, i) => i < bond ? `<details class="small"><summary>Chapter ${i + 1}</summary><p>${esc(t)}</p></details>` : '').join('')}
+    </div>`;
+  };
+  $('#screen').innerHTML = `
+    <section><div class="eyebrow">Party</div><h2>Your companions</h2>
+      <div class="small muted">Bring up to ${DV.PARTY_MAX} companions. They match your level, use their class skills and a signature move, and share 60% of your gear's stats. Fights get tougher as your party grows, but there are more of you to share the blows. Bond grows with every win together and opens their story.</div></section>
+    <section class="pslots"><div class="pslot hero">${avatarSVG(S.look, S.cls, 40)}<b>${esc(S.name)}</b><span class="small muted">${esc(dualTitle())}</span></div>${slot(0)}${slot(1)}</section>
+    <section class="stack"><h3>Recruited · ${joined.length}/${ids.length}</h3>${joined.length ? joined.map(card).join('') : '<div class="small muted">Your first companion joins when you save Prismara.</div>'}</section>
+    <section class="stack"><h3>Not yet found</h3>${ids.filter(id => !compJoined(id)).map(card).join('') || '<div class="small muted">You found everyone.</div>'}</section>
+    <section class="stack"><h3>Online · coming soon</h3>
+      ${Online.modes().map(m => `<div class="card row"><div class="grow"><b>${m.name}</b><div class="small muted">${m.desc}</div></div><span class="chip lock">${m.status}</span></div>`).join('')}
+    </section>`;
+  $('#screen').querySelectorAll('[data-pick]').forEach(b => b.onclick = () => {
+    const id = b.dataset.pick;
+    if (!toggleParty(id)) return toast(`The party is full (${DV.PARTY_MAX}). Remove someone first.`);
+    render(); toast(S.party.includes(id) ? `${DV.COMPANIONS[id].name} joins the party.` : `${DV.COMPANIONS[id].name} waits at camp.`);
+  });
 };
 
 const itemRow = (it, attrs) => { const r = DV.RARITY[it.rarity], s = itemStats(it);

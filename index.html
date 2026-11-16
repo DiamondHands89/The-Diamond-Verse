@@ -29,8 +29,8 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--facet);outline-
 .gem{width:12px;height:12px;transform:rotate(45deg);border-radius:2px;flex:none}
 .gem.g{background:var(--gold)} .gem.d{background:var(--prism)} .gem.s{background:#b07cff}
 #screen{padding-block:16px 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
-.tabs{position:sticky;bottom:0;z-index:5;display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);background:var(--panel);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
-.tabs button{padding:10px 0 9px;font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:5px}
+.tabs{position:sticky;bottom:0;z-index:5;display:grid;grid-template-columns:repeat(8,1fr);border-top:1px solid var(--line);background:var(--panel);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.tabs button{padding:10px 0 9px;font-size:10px;font-weight:600;letter-spacing:.02em;min-width:0;overflow:hidden;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:5px}
 .tabs button i{width:9px;height:9px;transform:rotate(45deg);border:1.5px solid currentColor}
 .tabs button.on{color:var(--facet)} .tabs button.on i{background:var(--facet)}
 h2{font:22px/1.15 var(--display);margin:0;letter-spacing:.03em;text-wrap:balance}
@@ -134,7 +134,7 @@ input[type=text]{width:100%;box-sizing:border-box;background:#0d1028;border:1px 
 .rw-name{font:17px var(--display);letter-spacing:.03em}
 .rw-stat{display:flex;justify-content:space-between;gap:8px;font-size:14px} .rw-stat span{color:var(--muted)}
 .rw-bars{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.rw-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:2px}
+.rw-stats{display:grid;grid-template-columns:1fr 1fr 1fr 1.5fr .9fr;gap:6px;margin-top:2px}
 .rw-stats>div{display:flex;flex-direction:column;min-width:0}
 .rw-stats span{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rw-stats b{font-size:15px} .rw-stats small{font-size:11px;color:var(--muted)}
@@ -165,6 +165,38 @@ input[type=text]{width:100%;box-sizing:border-box;background:#0d1028;border:1px 
   .rw-scene{height:auto;min-height:420px}
   .rw-ctrl-row{grid-template-columns:auto 200px 200px;justify-content:start}
 }
+/* Party, battle party rows, daily, story arcs, map */
+.party{display:flex;flex-direction:column;gap:8px}
+.unit{position:relative;display:flex;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.unit svg{width:34px;height:auto}
+.unit.down{opacity:.4}
+.blog{max-height:132px;overflow-y:auto;min-height:0}
+.rw-log .log{max-height:168px;overflow-y:auto;scroll-behavior:smooth}
+.pslots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pslot{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 6px;min-width:0}
+.pslot b{font-size:13px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pslot.empty{border-style:dashed;justify-content:center;min-height:80px}
+.pslot.hero{border-color:var(--facet)}
+.pq{width:40px;height:40px;display:grid;place-items:center;font:20px var(--display);color:var(--muted);border:1px dashed var(--line);transform:rotate(45deg);border-radius:6px}
+details summary{cursor:pointer}
+details p{margin:6px 0 0}
+.daily-btn{flex:none}
+.ldays{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.lday{background:#0d1028;border:1px solid var(--line);border-radius:8px;padding:6px 2px;text-align:center;display:flex;flex-direction:column;gap:2px;min-width:0}
+.lday b{font-size:11px} .lday small{font-size:9px;color:var(--gold)} .lday .eyebrow{font-size:9px;letter-spacing:.04em}
+.lday.got{opacity:.45} .lday.today{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.arc-head{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.arc-head b{font:17px var(--display)} .arc-head.on{border-color:var(--facet)} .arc-head:disabled{opacity:.45}
+.rw-mini{position:absolute;right:8px;top:8px;width:96px;height:96px;border-radius:50%;background:#0a0c19aa;border:1px solid var(--line);cursor:pointer;touch-action:manipulation}
+.rw-mapbtn{position:absolute;right:8px;top:110px}
+.rw-bigmap{width:100%;aspect-ratio:1;max-width:520px;align-self:center;background:#0a0c19;border-radius:12px;border:1px solid var(--line)}
+.map-key{display:flex;flex-wrap:wrap;gap:10px}
+.map-key i{display:inline-block;width:9px;height:9px;margin-right:4px;vertical-align:middle}
+.k-mark{background:#ffc145;transform:rotate(45deg)} .k-shrine{background:#fff;transform:rotate(45deg)} .k-chest{background:#ffc145} .k-npc{background:#7ef2ff;border-radius:50%}
+.k-gate{border:2px solid #b07cff} .k-foe{background:#ff4d7a;border-radius:50%}
+.rw-label.mark{color:var(--gold);border-color:#5a4a1a}
+.rw-party,.rw-quest{margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log .ally{color:#a6f0c6}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -178,8 +210,16 @@ input[type=text]{width:100%;box-sizing:border-box;background:#0d1028;border:1px 
 <div id="toast" hidden></div>
 
 <script src="data.js"></script>
+<script src="realms/arc1.js"></script>
+<script src="realms/arc2.js"></script>
+<script src="realms/arc3.js"></script>
+<script src="realms/arc4.js"></script>
+<script src="realms/arc5.js"></script>
 <script src="engine.js"></script>
 <script src="payments.js"></script>
+<script src="party.js"></script>
+<script src="combat.js"></script>
+<script src="online.js"></script>
 <script src="art.js"></script>
 <script src="gfx.js"></script>
 <script src="views.js"></script>

@@ -1,4 +1,4 @@
-// Diamondverse — rules engine: state, stats, progression, gear and combat. No DOM code here.
+// Diamondverse — rules engine: state, stats, progression, gear, jobs. Combat lives in combat.js; party/quests/dailies in party.js.
 const SAVE_KEY = 'diamondverse.save.v1';
 let S = null;   // persistent game state
 let B = null;   // active battle
@@ -9,13 +9,14 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 function newState() {
   return {
-    v:2, created:false, name:'', look:{skin:1,hair:0,eyes:0,outfit:0,hairStyle:0}, origin:'student',
+    v:3, created:false, name:'', look:{skin:1,hair:0,eyes:0,outfit:0,hairStyle:0}, origin:'student',
     level:1, xp:0, attrPts:0, attrs:{str:0,int:0,vit:0,agi:0,spi:0},
     cls:null, cls2:null, job:null, jobsOwned:[], jobXp:{}, entitlements:{}, playerId:newPlayerId(),
     skillPts:0, skills:{}, loadout:[],
     gold:200, dia:30, lifetimeGold:0, shards:10, potions:{hp:3, mp:2},
     equip:{weapon:null,helm:null,armor:null,charm:null}, inv:[], nextId:1,
-    cleared:{}, worldsCleared:0, seen:{}, chests:{}, realm:null
+    cleared:{}, worldsCleared:0, seen:{}, chests:{}, realm:null,
+    comps:{}, party:[], marks:{}, lore:{}, qprog:{}, qdone:{}, daily:null, login:{ last:null, streak:0 }, settings:{ auto:false }
   };
 }
 function newPlayerId() {
@@ -32,6 +33,11 @@ function migrate(st) {
     st.playerId = st.playerId || newPlayerId();
     st.v = 2;
   }
+  if (st.v < 3) {
+    // v3: 50 realms with new layouts. Keep progress; respawn at the realm entrance; add story companions already earned.
+    st.realm = null; st.comps = st.comps || {}; st.party = st.party || [];
+    st.v = 3;
+  }
   return st;
 }
 function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) {} }
@@ -47,7 +53,7 @@ function addMods(m, src) {
 }
 function mods() {
   const m = {};
-  DV.WORLDS.slice(0, S.worldsCleared).forEach(w => addMods(m, w.blessing.mods));
+  DV.WORLDS.slice(0, S.worldsCleared).forEach(w => addMods(m, { [w.bless[0]]: w.bless[1] }));
   if (S.job) addMods(m, DV.JOBS[S.job].mods);
   for (const id in DV.JOBS) if (jobMastered(id) && DV.JOBS[id].mastery) addMods(m, DV.JOBS[id].mastery.mods);
   return m;
@@ -68,7 +74,7 @@ function makeItem(slot, tier, rarity) {
     stats[key] = Math.max(1, Math.round(base[k] * scale));
   }
   const noun = slot === 'weapon' ? DV.CLASSES[S.cls].weapon : DV.SLOT_NOUN[slot];
-  return { id:S.nextId++, slot, tier, rarity, plus:0, name:`${DV.MATERIAL[tier - 1]} ${noun}`, stats };
+  return { id:S.nextId++, slot, tier, rarity, plus:0, name:`${DV.materialFor(tier)} ${noun}`, stats };
 }
 function itemStats(it) {
   const o = {};
@@ -78,7 +84,7 @@ function itemStats(it) {
 function itemPower(it) { const s = itemStats(it); return Object.entries(s).reduce((t,[k,v]) => t + v * (k==='hp'||k==='mp' ? .25 : 2), 0) | 0; }
 function upgradeCost(it) {
   const m = mods();
-  return { gold: Math.round(40 * Math.pow(it.plus + 1, 1.5) * it.tier * Math.max(.4, 1 - M(m, 'upCostCut'))), shards: Math.ceil((it.plus + 1) * 1.6) };
+  return { gold: Math.round(30 * Math.pow(it.plus + 1, 1.5) * it.tier * Math.max(.4, 1 - M(m, 'upCostCut'))), shards: Math.ceil((it.plus + 1) * 1.6) };
 }
 function upgradeRate(it) {
   const m = mods();
@@ -94,7 +100,7 @@ function tryUpgrade(it) {
   S.gold -= c.gold; S.shards -= c.shards;
   const success = Math.random() < upgradeRate(it);
   if (success) it.plus++;
-  save();
+  track('upgrade'); save();
   return { ok:true, success, msg: success ? `${it.name} is now +${it.plus}.` : `The facet cracked. ${it.name} stays +${it.plus}. Materials were used.` };
 }
 function salvage(id) {
@@ -135,14 +141,15 @@ function calcStats() {
 function heroPower() { const s = calcStats(); return Math.round(s.hp * .3 + s.mp * .15 + (s.atk + s.mag) * 2 + s.def * 2.5 + s.spd * 2 + s.crit * 3); }
 
 // ---------- Leveling & skills ----------
-const xpNeed = L => Math.floor(24 * Math.pow(L, 1.35)) + 10;
+const xpNeed = L => Math.round(25 + 36 * L * (1 + L / 500));
+// Every skill the hero can currently slot: class skills (primary + secondary) and hidden skills already learned.
 function skillPool() {
-  return Object.keys(DV.SKILLS).filter(id => { const k = DV.SKILLS[id]; return k.cls === S.cls || k.cls === S.cls2; });
+  return Object.keys(DV.SKILLS).filter(id => { const k = DV.SKILLS[id]; return k.hidden ? !!S.skills[id] : (k.cls === S.cls || k.cls === S.cls2); });
 }
 function unlockSkills() {
   const fresh = [];
   skillPool().forEach(id => {
-    if (!S.skills[id] && DV.SKILLS[id].lvl <= S.level) {
+    if (!S.skills[id] && !DV.SKILLS[id].hidden && DV.SKILLS[id].lvl <= S.level) {
       S.skills[id] = 1; fresh.push(id);
       if (S.loadout.length < DV.LOADOUT_MAX) S.loadout.push(id);
     }
@@ -223,181 +230,11 @@ function stageOpen(w, s) {
   if (w > S.worldsCleared + 1) return false;
   return s === 0 || !!S.cleared[stageKey(w, s - 1)];
 }
-function stageLevel(w, s) { return (w - 1) * 8 + [1, 2, 4, 5, 7][s]; }
-function topTier() { return clamp(S.worldsCleared + 1, 1, 6); }
-
-// ---------- Combat ----------
-function makeEnemy(name, lvl, boss, weak) {
-  const m = boss ? { hp:4.5, atk:1.3, def:1.15, spd:1.1 } : weak ? { hp:.72, atk:.75, def:1, spd:1 } : { hp:1, atk:1, def:1, spd:1 };
-  const hp = Math.round((36 + lvl * 19 + lvl * lvl * .3) * m.hp);
-  return { name, lvl, boss, hp, max:hp, atk:Math.round((4 + lvl * 2.7 + lvl * lvl * .025) * m.atk), def:Math.round((2 + lvl * 1.4) * m.def),
-    spd:Math.round((8 + lvl * .9) * m.spd), dots:[], stun:0, debuff:null, turn:0, enraged:false, charging:false };
-}
-function startBattle(w, s) {
-  const W = DV.WORLDS[w - 1], lvl = stageLevel(w, s), boss = s === DV.STAGES_PER_WORLD - 1;
-  let enemies;
-  if (boss) enemies = [makeEnemy(W.god, lvl, true)];
-  else {
-    const n = s < 2 ? 2 : 3;
-    enemies = Array.from({ length:n }, (_, i) => makeEnemy(W.foes[Math.min(3, Math.floor(rnd(0, s + 1.6)))], Math.max(1, lvl - (i === 0 ? 0 : 1)), false, n === 3));
-  }
-  beginBattle(w, s, enemies, boss, boss ? `${W.god} descends.` : `${enemies.length} corrupted foes block the way.`);
-  B.again = () => startBattle(w, s);
-  return B;
-}
-// Open-world encounter with a roaming foe. Rewards XP, gold and drops, but no stage clear or first-clear Diamonds.
-// first = the hero struck first (Attack button): foes start at 85% HP.
-function startEncounter(w, foe, lvl, first, id) {
-  const W = DV.WORLDS[w - 1], enemies = [makeEnemy(foe, lvl, false, false)];
-  if (Math.random() < .45) enemies.push(makeEnemy(pick(W.foes), Math.max(1, lvl - 1), false, true));
-  if (first) enemies.forEach(e => e.hp = Math.round(e.hp * .85));
-  beginBattle(w, null, enemies, false, first ? `You strike first! ${foe} reels.` : `${foe} ambushes you!`);
-  B.field = { id, foe, lvl };
-  B.again = () => startEncounter(w, foe, lvl, false, id);
-  return B;
-}
-function beginBattle(w, s, enemies, boss, opener) {
-  const st = calcStats(), m = mods();
-  const buffs = [];
-  if (m.feast) { buffs.push({ stat:'atk', amt:m.feast, turns:3 }, { stat:'mag', amt:m.feast, turns:3 }); }
-  B = { w, s, boss, enemies, target:0, round:1, over:null, potUsed:0, potMax:2 + M(m, 'potUses'), potPow:1 + M(m, 'potionPow'),
-    p:{ hp:st.hp, mp:st.mp, st, shield:0, buffs, cds:{}, regen:M(m, 'regen'), mpCost:Math.max(.5, 1 - M(m, 'mpCostCut')) },
-    log:[[ 'sys', opener ]], fx:[] };
-}
-function buffed(stat) {
-  let v = B.p.st[stat];
-  B.p.buffs.forEach(b => { if (b.stat === stat) v *= 1 + b.amt; });
-  return v;
-}
-const mitigate = (raw, def) => Math.max(1, Math.round(raw * 70 / (70 + def) * rnd(.92, 1.08)));
-const say = (t, msg) => B.log.push([t, msg]);
-function aliveEnemies() { return B.enemies.filter(e => e.hp > 0); }
-function fixTarget() { if (!B.enemies[B.target] || B.enemies[B.target].hp <= 0) B.target = B.enemies.findIndex(e => e.hp > 0); }
-
-function hitEnemy(e, idx, raw, critBonus, k) {
-  const def = e.def * (e.debuff ? 1 - e.debuff.amt : 1);
-  const crit = Math.random() * 100 < B.p.st.crit + (critBonus || 0);
-  let d = mitigate(raw * (crit ? 1.7 : 1), def);
-  if (k && k.execute && e.hp / e.max < .3) d *= 2;
-  e.hp = Math.max(0, e.hp - d);
-  B.fx.push({ to:'e' + idx, v:d, crit });
-  return d;
-}
-function useSkill(id) {
-  const k = id === 'basic' ? { name:'Attack', kind:'hit', pow:1, stat:mainStat(), mp:0, cd:0 } : DV.SKILLS[id];
-  const rank = S.skills[id] || 1, mult = 1 + .15 * (rank - 1), p = B.p;
-  const cost = Math.round(k.mp * p.mpCost);
-  if (p.cds[id] > 0) return 'On cooldown.';
-  if (p.mp < cost) return 'Not enough MP.';
-  p.mp -= cost; if (k.cd) p.cds[id] = k.cd + 1;
-  fixTarget();
-  const raw = k.pow * mult * buffed(k.stat === 'def' ? 'def' : k.stat) + (k.defScale ? k.defScale * mult * buffed('def') : 0);
-  let total = 0;
-  if (k.kind === 'hit' || k.kind === 'multi') {
-    const e = B.enemies[B.target];
-    for (let h = 0; h < (k.hits || 1); h++) if (e.hp > 0) total += hitEnemy(e, B.target, raw, k.critBonus, k);
-    applyRiders(k, [e], raw);
-    say('you', `${k.name} hits ${e.name} for ${total}.`);
-  } else if (k.kind === 'aoe') {
-    const hits = aliveEnemies();
-    hits.forEach(e => total += hitEnemy(e, B.enemies.indexOf(e), raw, k.critBonus, k));
-    applyRiders(k, hits, raw);
-    say('you', `${k.name} hits ${hits.length} foes for ${total} total.`);
-  } else if (k.kind === 'heal') {
-    const h = Math.round(raw); p.hp = Math.min(p.st.hp, p.hp + h); B.fx.push({ to:'p', v:h, heal:true });
-    say('you', `${k.name} restores ${h} HP.`);
-  } else if (k.kind === 'shield') {
-    const sh = Math.round(raw); p.shield += sh; say('you', `${k.name} grants a ${sh}-point shield.`);
-  }
-  if (k.buff) { p.buffs.push({ ...k.buff, amt:k.buff.amt * mult, turns:k.buff.turns + 1 }); say('you', `${k.name}: +${Math.round(k.buff.amt * mult * 100)}% ${DV.STAT_LABEL[k.buff.stat]}.`); }
-  if (k.healPct) { const h = Math.round(p.st.hp * k.healPct * mult); p.hp = Math.min(p.st.hp, p.hp + h); B.fx.push({ to:'p', v:h, heal:true }); }
-  if (k.lifesteal && total) { const h = Math.round(total * k.lifesteal); p.hp = Math.min(p.st.hp, p.hp + h); B.fx.push({ to:'p', v:h, heal:true }); }
-  return endPlayerTurn();
-}
-function applyRiders(k, targets, raw) {
-  targets.forEach(e => {
-    if (e.hp <= 0) return;
-    if (k.dot) e.dots.push({ dmg:Math.round(raw * k.dot.pct), turns:k.dot.turns });
-    if (k.stun && Math.random() < k.stun) { e.stun = 1; say('you', `${e.name} is stunned.`); }
-    if (k.debuff) e.debuff = { ...k.debuff, turns:k.debuff.turns + 1 };
-  });
-}
-function usePotion(type) {
-  if (B.potUsed >= B.potMax) return `Only ${B.potMax} potions per battle.`;
-  if (!S.potions[type]) return 'None left. Buy more in the Bazaar.';
-  const p = B.p;
-  S.potions[type]--; B.potUsed++;
-  if (type === 'hp') { const h = Math.round(p.st.hp * .35 * B.potPow); p.hp = Math.min(p.st.hp, p.hp + h); B.fx.push({ to:'p', v:h, heal:true }); say('you', `Facet Tonic restores ${h} HP.`); }
-  else { const m = Math.round(p.st.mp * .45 * B.potPow); p.mp = Math.min(p.st.mp, p.mp + m); say('you', `Mana Shard restores ${m} MP.`); }
-  return endPlayerTurn();
-}
-function endPlayerTurn() {
-  if (checkEnd()) return null;
-  const avgSpd = aliveEnemies().reduce((t, e) => t + e.spd, 0) / aliveEnemies().length;
-  if (Math.random() * 100 < clamp((B.p.st.spd - avgSpd) * 1.2, 0, 20)) { say('sys', 'Swift! You act again.'); tickCds(); return null; }
-  enemyPhase(); return null;
-}
-function enemyPhase() {
-  const p = B.p;
-  aliveEnemies().forEach(e => {
-    const idx = B.enemies.indexOf(e);
-    if (e.stun) { e.stun = 0; say('foe', `${e.name} is stunned and loses its turn.`); return; }
-    e.turn++;
-    let mult = Math.random() < .2 ? 1.5 : 1, label = mult > 1 ? 'Heavy strike' : 'strikes';
-    if (e.boss) {
-      if (!e.enraged && e.hp / e.max < .5) { e.enraged = true; e.atk = Math.round(e.atk * 1.25); say('foe', `${e.name} is enraged. The Rot surges.`); }
-      if (e.charging) { mult = 2.2; label = 'Corrupted Wrath'; e.charging = false; }
-      else if (e.turn % 3 === 2) { e.charging = true; say('warn', `${e.name} gathers corrupted power. Shield up or heal now.`); return; }
-    }
-    const dodge = clamp((p.st.spd - e.spd) * 1.5, 0, 25);
-    if (Math.random() * 100 < dodge) { say('you', `You dodge ${e.name}.`); B.fx.push({ to:'p', miss:true }); return; }
-    let d = mitigate(e.atk * mult, buffed('def'));
-    if (p.shield) { const a = Math.min(p.shield, d); p.shield -= a; d -= a; }
-    p.hp = Math.max(0, p.hp - d); B.fx.push({ to:'p', v:d, from:'e' + idx });
-    say('foe', `${e.name} ${label === 'strikes' ? 'strikes' : 'uses ' + label} for ${d}.`);
-  });
-  // end of round: dots, regen, timers
-  B.enemies.forEach((e, i) => {
-    if (e.hp <= 0) return;
-    e.dots = e.dots.filter(d => { e.hp = Math.max(0, e.hp - d.dmg); B.fx.push({ to:'e' + i, v:d.dmg, dot:true }); return --d.turns > 0; });
-    if (e.debuff && --e.debuff.turns <= 0) e.debuff = null;
-  });
-  if (p.regen && p.hp > 0) p.hp = Math.min(p.st.hp, p.hp + Math.round(p.st.hp * p.regen));
-  p.mp = Math.min(p.st.mp, p.mp + Math.round(p.st.mp * .06));
-  p.buffs = p.buffs.filter(b => --b.turns > 0);
-  tickCds(); B.round++;
-  checkEnd();
-}
-function tickCds() { for (const id in B.p.cds) if (B.p.cds[id] > 0) B.p.cds[id]--; }
-function checkEnd() {
-  if (!aliveEnemies().length) { B.over = 'win'; B.reward = grantRewards(); return true; }
-  if (B.p.hp <= 0) { B.over = 'lose'; return true; }
-  fixTarget(); return false;
-}
-function grantRewards() {
-  const m = mods(), field = !!B.field, key = field ? null : stageKey(B.w, B.s), first = !field && !S.cleared[key];
-  let xp = 0, gold = 0;
-  B.enemies.forEach(e => { xp += (14 + e.lvl * 9) * (e.boss ? 4 : 1); gold += (10 + e.lvl * 5) * (e.boss ? 4 : 1); });
-  xp = Math.round(xp * (1 + M(m, 'xp'))); gold = Math.round(gold * (1 + M(m, 'gold')));
-  let dia = (first ? (B.boss ? 60 : 15) : 0) + M(m, 'dia');
-  S.gold += gold; S.lifetimeGold += gold; S.dia += dia;
-  if (!field) S.cleared[key] = (S.cleared[key] || 0) + 1;
-  let worldDone = false;
-  if (B.boss && first && S.worldsCleared < B.w) { S.worldsCleared = B.w; worldDone = true; }
-  const drops = [];
-  const chance = (B.boss ? 1 : field ? .25 : .35) + M(m, 'drop');
-  if (Math.random() < chance) drops.push(makeItem(pick(DV.SLOTS), B.w, rollRarity(B.boss ? [0, 50, 35, 13, 2] : [60, 28, 9, 2.6, .4], M(m, 'rarityUp'))));
-  drops.forEach(d => S.inv.push(d));
-  const found = [];
-  if (Math.random() < M(m, 'harvest')) { S.potions.hp++; found.push('Facet Tonic'); }
-  if (Math.random() < M(m, 'catch')) { S.potions.mp++; found.push('Mana Shard'); }
-  const avgLvl = B.enemies.reduce((t, e) => t + e.lvl, 0) / B.enemies.length;
-  const jxp = S.job ? Math.round((8 + avgLvl * 2) * (B.boss ? 3 : 1)) : 0;
-  const jobUp = gainJobXp(jxp);
-  const lv = gainXp(xp);
-  save();
-  return { xp, gold, dia, drops, found, jxp, jobUp, first, worldDone, ...lv };
-}
+// Stage levels climb 4 per realm: realm 1 = Lv 1–5, realm 50 = Lv 197–201.
+function stageLevel(w, s) { return 1 + (w - 1) * 4 + s; }
+function topTier() { return clamp(S.worldsCleared + 1, 1, DV.WORLDS.length); }
+function realmStatus(w) { const W = DV.WORLDS[w - 1]; return S.worldsCleared >= w ? (W.god.corrupted ? 'Purified' : 'Saved') : (W.god.corrupted ? 'Corrupted' : 'Besieged'); }
+function stageName(w, s) { const W = DV.WORLDS[w - 1]; return s < 4 ? DV.STAGE_NAMES[s] : W.god.corrupted ? 'Avatar of the God' : 'The Herald\'s Siege'; }
 
 // ---------- Bazaar ----------
 function shopItems() {
@@ -406,7 +243,7 @@ function shopItems() {
     { id:'hp', name:'Facet Tonic', text:'Restores 35% HP in battle.', price:20 * t },
     { id:'mp', name:'Mana Shard', text:'Restores 45% MP in battle.', price:20 * t },
     { id:'shards', name:'Shard Pouch ×10', text:'Upgrade material.', price:110 * t },
-    { id:'chest', name:`${DV.MATERIAL[t - 1]} Gear Cache`, text:'One random tier-' + t + ' item. Odds: 40% Common, 40% Rare, 15% Epic, 4.5% Legendary, 0.5% Mythic.', price:260 * t }
+    { id:'chest', name:`${DV.materialFor(t)} Gear Cache`, text:'One random tier-' + t + ' item. Odds: 40% Common, 40% Rare, 15% Epic, 4.5% Legendary, 0.5% Mythic.', price:260 * t }
   ].map(it => ({ ...it, price: Math.round(it.price * cut) }));
 }
 function buy(id) {
@@ -427,5 +264,6 @@ function createHero(name, look, origin, cls) {
   unlockSkills();
   S.equip.weapon = makeItem('weapon', 1, 0);
   S.equip.armor = makeItem('armor', 1, 0);
+  S.realm = null;
   save();
 }
