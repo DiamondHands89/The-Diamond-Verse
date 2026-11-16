@@ -71,6 +71,9 @@ function resultHTML() {
     <div class="row small" style="flex-wrap:wrap"><span class="chip num">+${r.xp} XP</span><span class="chip num" style="color:var(--gold)">+${r.gold} gold</span>${r.dia ? `<span class="chip num">+${r.dia} Diamonds</span>` : ''}</div>
     ${r.ups.length ? `<div class="small" style="color:var(--gold)">Level up! You are now Lv ${S.level}. +${r.ups.length * 3} attribute points, +${r.ups.length} skill point${r.ups.length > 1 ? 's' : ''}.</div>` : ''}
     ${r.fresh.length ? `<div class="small">New skill: <b>${r.fresh.map(id => DV.SKILLS[id].name).join(', ')}</b></div>` : ''}
+    ${r.found.length ? `<div class="small">${DV.JOBS[S.job].name} find: <b>${r.found.join(', ')}</b></div>` : ''}
+    ${r.jxp ? `<div class="small muted num">+${r.jxp} ${DV.JOBS[S.job].name} job XP</div>` : ''}
+    ${r.jobUp ? `<div class="small" style="color:var(--gold)">${r.jobUp.mastered ? `${DV.JOBS[r.jobUp.job].name} Mastered! Permanent bonus: ${DV.JOBS[r.jobUp.job].mastery.text}.` : `${DV.JOBS[r.jobUp.job].name} reached job Lv ${r.jobUp.lv}.`}</div>` : ''}
     ${r.drops.map(d => `<div class="small">Found: <b style="color:${DV.RARITY[d.rarity].color}">${DV.RARITY[d.rarity].name} ${esc(d.name)}</b></div>`).join('')}
     ${r.worldDone ? `<div class="small" style="color:var(--ok)">${DV.WORLDS[B.w - 1].godPure} is free of the Rot.</div>` : ''}
     <button class="btn primary" id="cont">Continue</button></div>`;
@@ -89,7 +92,8 @@ function bindResult() {
 
 // ---------- Boot ----------
 function boot(saved) {
-  S = saved || load() || newState();
+  S = migrate(saved || load() || newState());
+  applyEntitlements();
   if (!S.created) {
     $('#topbar').innerHTML = ''; $('#tabs').innerHTML = ''; $('#screen').innerHTML = '';
     playDialogue(DV.PROLOGUE, () => openCreator(false));

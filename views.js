@@ -136,7 +136,7 @@ function stageSheet(w, s) {
     ${boss ? '<div class="small" style="color:var(--gold)">Every third turn the god charges Corrupted Wrath. Shield, heal or stun before it lands. Below 50% HP it enrages.</div>' : ''}
     <div class="small"><span class="muted">First clear:</span> ${boss ? '60' : '15'} Diamonds${boss ? ` and the blessing <b>${W.blessing.name}</b> (${W.blessing.text})` : ''}.
       ${clears ? `<span class="muted">Cleared ${clears}×. Replays give XP, gold and drops.</span>` : ''}</div>
-    <div class="small"><span class="muted">Gear drop chance:</span> ${boss ? '100% (Rare or better)' : Math.round((0.35 + (jobMods().drop || 0)) * 100) + '%'} · <span class="muted">Your power:</span> <b class="num">${heroPower().toLocaleString()}</b></div>
+    <div class="small"><span class="muted">Gear drop chance:</span> ${boss ? '100% (Rare or better)' : Math.round((0.35 + (mods().drop || 0)) * 100) + '%'} · <span class="muted">Your power:</span> <b class="num">${heroPower().toLocaleString()}</b></div>
     <button class="btn primary" id="fight" style="padding:12px">Enter battle</button>`, el => {
     el.querySelector('#fight').onclick = () => {
       closeSheet();

@@ -9,30 +9,50 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 function newState() {
   return {
-    v:1, created:false, name:'', look:{skin:1,hair:0,eyes:0,outfit:0,hairStyle:0}, origin:'student',
+    v:2, created:false, name:'', look:{skin:1,hair:0,eyes:0,outfit:0,hairStyle:0}, origin:'student',
     level:1, xp:0, attrPts:0, attrs:{str:0,int:0,vit:0,agi:0,spi:0},
-    cls:null, cls2:null, job:null, jobsOwned:['blacksmith','alchemist','hunter','scholar'],
+    cls:null, cls2:null, job:null, jobsOwned:[], jobXp:{}, entitlements:{}, playerId:newPlayerId(),
     skillPts:0, skills:{}, loadout:[],
     gold:200, dia:30, lifetimeGold:0, shards:10, potions:{hp:3, mp:2},
     equip:{weapon:null,helm:null,armor:null,charm:null}, inv:[], nextId:1,
     cleared:{}, worldsCleared:0, seen:{}
   };
 }
+function newPlayerId() {
+  try { return crypto.randomUUID(); } catch (e) { return 'p-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
+}
+// Old saves (v1) had Alchemist/Scholar and luxury jobs bought with Diamonds. Luxury jobs are now real-money only,
+// so v1 luxury purchases are refunded in Diamonds and the job list is reset to the new tiers.
+function migrate(st) {
+  if ((st.v || 1) < 2) {
+    const refund = { gemcutter:300, chef:450, starforger:550, baron:750 };
+    (st.jobsOwned || []).forEach(j => { if (refund[j]) st.dia += refund[j]; });
+    st.jobsOwned = []; st.jobXp = st.jobXp || {}; st.entitlements = st.entitlements || {};
+    if (!['blacksmith','hunter'].includes(st.job)) st.job = null;
+    st.playerId = st.playerId || newPlayerId();
+    st.v = 2;
+  }
+  return st;
+}
 function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) {} }
 function load() {
-  try { const raw = localStorage.getItem(SAVE_KEY); if (raw) return Object.assign(newState(), JSON.parse(raw)); } catch (e) {}
+  try { const raw = localStorage.getItem(SAVE_KEY); if (raw) return migrate(Object.assign(newState(), JSON.parse(raw))); } catch (e) {}
   return null;
 }
 
-// ---------- Modifiers from job + blessings ----------
-function jobMods() { return (S.job && DV.JOBS[S.job].mods) || {}; }
-function blessingMods() {
+// ---------- Modifiers: blessings + active job + mastered jobs ----------
+// Every key is additive (see the key list in data.js); safeTo takes the highest value.
+function addMods(m, src) {
+  for (const k in src) m[k] = k === 'safeTo' ? Math.max(m[k] || 0, src[k]) : (m[k] || 0) + src[k];
+}
+function mods() {
   const m = {};
-  DV.WORLDS.slice(0, S.worldsCleared).forEach(w => {
-    for (const k in w.blessing.mods) m[k] = (k === 'mpCost') ? (m[k] || 1) * w.blessing.mods[k] : (m[k] || 0) + w.blessing.mods[k];
-  });
+  DV.WORLDS.slice(0, S.worldsCleared).forEach(w => addMods(m, w.blessing.mods));
+  if (S.job) addMods(m, DV.JOBS[S.job].mods);
+  for (const id in DV.JOBS) if (jobMastered(id) && DV.JOBS[id].mastery) addMods(m, DV.JOBS[id].mastery.mods);
   return m;
 }
+const M = (m, k) => m[k] || 0;
 function mainStat(cls) { return DV.CLASSES[cls || S.cls].main; }
 function dualTitle() {
   if (!S.cls2) return DV.CLASSES[S.cls].name;
@@ -57,11 +77,11 @@ function itemStats(it) {
 }
 function itemPower(it) { const s = itemStats(it); return Object.entries(s).reduce((t,[k,v]) => t + v * (k==='hp'||k==='mp' ? .25 : 2), 0) | 0; }
 function upgradeCost(it) {
-  const m = jobMods();
-  return { gold: Math.round(40 * Math.pow(it.plus + 1, 1.5) * it.tier * (m.upCost || 1)), shards: Math.ceil((it.plus + 1) * 1.6) };
+  const m = mods();
+  return { gold: Math.round(40 * Math.pow(it.plus + 1, 1.5) * it.tier * Math.max(.4, 1 - M(m, 'upCostCut'))), shards: Math.ceil((it.plus + 1) * 1.6) };
 }
 function upgradeRate(it) {
-  const m = jobMods();
+  const m = mods();
   if (m.safeTo && it.plus < m.safeTo) return 1;
   let r = DV.UPGRADE.rate[it.plus] ?? 0;
   if (it.plus >= 5 && m.upRate) r += m.upRate;
@@ -79,7 +99,7 @@ function tryUpgrade(it) {
 }
 function salvage(id) {
   const i = S.inv.findIndex(x => x.id === id); if (i < 0) return 0;
-  const it = S.inv[i], n = DV.RARITY[it.rarity].shards + it.plus * 2;
+  const it = S.inv[i], n = Math.round((DV.RARITY[it.rarity].shards + it.plus * 2) * (1 + M(mods(), 'salvageBonus')));
   S.inv.splice(i, 1); S.shards += n; save(); return n;
 }
 function equipItem(id) {
@@ -103,10 +123,12 @@ function calcStats() {
     const pts = S.attrs[a] + ((o && o.bonus[a]) || 0);
     for (const k in DV.ATTRS[a].gives) st[k] += DV.ATTRS[a].gives[k] * pts;
   }
-  DV.SLOTS.forEach(s => { const it = S.equip[s]; if (it) { const is = itemStats(it); for (const k in is) st[k] += is[k]; } });
-  const bm = blessingMods(), jm = jobMods(), all = (1 + (bm.all || 0)) * (jm.all || 1);
-  for (const k in st) st[k] = st[k] * (1 + (bm[k] || 0)) * all;
-  st.crit = clamp(st.crit + (bm.critFlat || 0), 0, 75);
+  const m = mods(), all = 1 + M(m, 'all');
+  DV.SLOTS.forEach(s => { const it = S.equip[s]; if (it) {
+    const is = itemStats(it), g = (s === 'helm' || s === 'armor') ? 1 + M(m, 'armorGear') : 1;
+    for (const k in is) st[k] += is[k] * g; } });
+  for (const k in st) st[k] = st[k] * (1 + M(m, k)) * all;
+  st.crit = clamp(st.crit + M(m, 'critFlat'), 0, 75);
   for (const k in st) st[k] = k === 'crit' ? Math.round(st[k] * 10) / 10 : Math.round(st[k]);
   return st;
 }
@@ -151,22 +173,48 @@ function toggleLoadout(id) {
 }
 
 // ---------- Jobs ----------
-function jobRevealed(id) {
-  const j = DV.JOBS[id]; if (!j.luxury) return true;
-  const r = j.reveal;
-  return (r.level && S.level >= r.level) || (r.world && S.worldsCleared >= r.world) || (r.gold && S.lifetimeGold >= r.gold);
+function jobLevel(id) {
+  let xp = S.jobXp[id] || 0, L = 1;
+  while (L <= DV.JOB_XP.length && xp >= DV.JOB_XP[L - 1]) { xp -= DV.JOB_XP[L - 1]; L++; }
+  return L;
+}
+function jobProgress(id) {   // { lv, xp, need } — xp toward the next level
+  let xp = S.jobXp[id] || 0, L = 1;
+  while (L <= DV.JOB_XP.length && xp >= DV.JOB_XP[L - 1]) { xp -= DV.JOB_XP[L - 1]; L++; }
+  return { lv:L, xp, need: DV.JOB_XP[L - 1] || 0 };
+}
+const jobMastered = id => jobLevel(id) > DV.JOB_XP.length;
+function reqStatus(id) {
+  return (DV.JOBS[id].req || []).map(q => {
+    if (q.job) return { text:`Master ${DV.JOBS[q.job].name} (job Lv ${q.lv})`, met: jobLevel(q.job) >= q.lv };
+    if (q.anyJob) return { text:`Master ${q.anyJob.map(j => DV.JOBS[j].name).join(' or ')} (job Lv ${q.lv})`, met: q.anyJob.some(j => jobLevel(j) >= q.lv) };
+    if (q.level) return { text:`Reach hero Lv ${q.level}`, met: S.level >= q.level };
+    if (q.world) return { text:`Purify ${DV.WORLDS[q.world - 1].name}`, met: S.worldsCleared >= q.world };
+    if (q.gold) return { text:`Earn ${q.gold.toLocaleString()} lifetime gold`, met: S.lifetimeGold >= q.gold };
+    return { text:'?', met:false };
+  });
+}
+// Tier 1 is always open; Tier 2 after unlockJob(); luxury after a store purchase (payments.js).
+function jobAvailable(id) { return DV.JOBS[id].tier === 1 || S.jobsOwned.includes(id); }
+function unlockJob(id) {
+  const j = DV.JOBS[id];
+  if (j.tier !== 2 || S.jobsOwned.includes(id)) return null;
+  if (!reqStatus(id).every(r => r.met)) return 'Requirements not met yet.';
+  if (S.dia < j.cost) return `Needs ${j.cost} Diamonds. You have ${S.dia}.`;
+  S.dia -= j.cost; S.jobsOwned.push(id); save(); return null;
 }
 function setJob(id) {
-  const j = DV.JOBS[id];
-  if (j.luxury && !S.jobsOwned.includes(id)) {
-    if (!jobRevealed(id)) return 'Still sealed.';
-    if (S.dia < j.cost) return `Needs ${j.cost} Diamonds.`;
-    S.dia -= j.cost; S.jobsOwned.push(id);
-  } else if (!j.luxury && S.job && S.job !== id) {
-    if (S.gold < DV.JOB_SWAP_GOLD) return `Changing jobs costs ${DV.JOB_SWAP_GOLD} gold.`;
-    S.gold -= DV.JOB_SWAP_GOLD;
-  }
+  if (S.job === id) return null;
+  if (!jobAvailable(id)) return DV.JOBS[id].tier === 3 ? 'Buy this job in the Diamond Store first.' : 'Unlock this job first.';
+  if (S.job) { if (S.gold < DV.JOB_SWAP_GOLD) return `Changing jobs costs ${DV.JOB_SWAP_GOLD} gold.`; S.gold -= DV.JOB_SWAP_GOLD; }
   S.job = id; save(); return null;
+}
+function gainJobXp(n) {
+  if (!S.job) return null;
+  const before = jobLevel(S.job);
+  S.jobXp[S.job] = (S.jobXp[S.job] || 0) + n;
+  const after = jobLevel(S.job);
+  return after > before ? { job:S.job, lv:after, mastered: after > DV.JOB_XP.length } : null;
 }
 
 // ---------- World progress ----------
@@ -187,7 +235,7 @@ function makeEnemy(name, lvl, boss, weak) {
 }
 function startBattle(w, s) {
   const W = DV.WORLDS[w - 1], lvl = stageLevel(w, s), boss = s === DV.STAGES_PER_WORLD - 1;
-  const st = calcStats(), jm = jobMods(), bm = blessingMods();
+  const st = calcStats(), m = mods();
   let enemies;
   if (boss) enemies = [makeEnemy(W.god, lvl, true)];
   else {
@@ -195,9 +243,9 @@ function startBattle(w, s) {
     enemies = Array.from({ length:n }, (_, i) => makeEnemy(W.foes[Math.min(3, Math.floor(rnd(0, s + 1.6)))], Math.max(1, lvl - (i === 0 ? 0 : 1)), false, n === 3));
   }
   const buffs = [];
-  if (jm.feast) { buffs.push({ stat:'atk', amt:jm.feast, turns:3 }, { stat:'mag', amt:jm.feast, turns:3 }); }
-  B = { w, s, boss, enemies, target:0, round:1, over:null, potUsed:0, potMax:2 + (jm.potUses || 0),
-    p:{ hp:st.hp, mp:st.mp, st, shield:0, buffs, cds:{}, regen:(bm.regen || 0) + (jm.regen || 0), mpCost:bm.mpCost || 1 },
+  if (m.feast) { buffs.push({ stat:'atk', amt:m.feast, turns:3 }, { stat:'mag', amt:m.feast, turns:3 }); }
+  B = { w, s, boss, enemies, target:0, round:1, over:null, potUsed:0, potMax:2 + M(m, 'potUses'), potPow:1 + M(m, 'potionPow'),
+    p:{ hp:st.hp, mp:st.mp, st, shield:0, buffs, cds:{}, regen:M(m, 'regen'), mpCost:Math.max(.5, 1 - M(m, 'mpCostCut')) },
     log:[[ 'sys', boss ? `${W.god} descends.` : `${enemies.length} corrupted foes block the way.` ]], fx:[] };
   return B;
 }
@@ -262,10 +310,10 @@ function applyRiders(k, targets, raw) {
 function usePotion(type) {
   if (B.potUsed >= B.potMax) return `Only ${B.potMax} potions per battle.`;
   if (!S.potions[type]) return 'None left. Buy more in the Bazaar.';
-  const p = B.p, jm = jobMods();
+  const p = B.p;
   S.potions[type]--; B.potUsed++;
-  if (type === 'hp') { const h = Math.round(p.st.hp * .35 * (jm.potion || 1)); p.hp = Math.min(p.st.hp, p.hp + h); B.fx.push({ to:'p', v:h, heal:true }); say('you', `Facet Tonic restores ${h} HP.`); }
-  else { const m = Math.round(p.st.mp * .45 * (jm.potion || 1)); p.mp = Math.min(p.st.mp, p.mp + m); say('you', `Mana Shard restores ${m} MP.`); }
+  if (type === 'hp') { const h = Math.round(p.st.hp * .35 * B.potPow); p.hp = Math.min(p.st.hp, p.hp + h); B.fx.push({ to:'p', v:h, heal:true }); say('you', `Facet Tonic restores ${h} HP.`); }
+  else { const m = Math.round(p.st.mp * .45 * B.potPow); p.mp = Math.min(p.st.mp, p.mp + m); say('you', `Mana Shard restores ${m} MP.`); }
   return endPlayerTurn();
 }
 function endPlayerTurn() {
@@ -312,33 +360,39 @@ function checkEnd() {
   fixTarget(); return false;
 }
 function grantRewards() {
-  const jm = jobMods(), key = stageKey(B.w, B.s), first = !S.cleared[key];
+  const m = mods(), key = stageKey(B.w, B.s), first = !S.cleared[key];
   let xp = 0, gold = 0;
   B.enemies.forEach(e => { xp += (14 + e.lvl * 9) * (e.boss ? 4 : 1); gold += (10 + e.lvl * 5) * (e.boss ? 4 : 1); });
-  xp = Math.round(xp * (jm.xp || 1)); gold = Math.round(gold * (jm.gold || 1));
-  let dia = (first ? (B.boss ? 60 : 15) : 0) + (jm.dia || 0);
+  xp = Math.round(xp * (1 + M(m, 'xp'))); gold = Math.round(gold * (1 + M(m, 'gold')));
+  let dia = (first ? (B.boss ? 60 : 15) : 0) + M(m, 'dia');
   S.gold += gold; S.lifetimeGold += gold; S.dia += dia;
   S.cleared[key] = (S.cleared[key] || 0) + 1;
   let worldDone = false;
   if (B.boss && first && S.worldsCleared < B.w) { S.worldsCleared = B.w; worldDone = true; }
   const drops = [];
-  const chance = (B.boss ? 1 : .35) + (jm.drop || 0);
-  if (Math.random() < chance) drops.push(makeItem(pick(DV.SLOTS), B.w, rollRarity(B.boss ? [0, 50, 35, 13, 2] : [60, 28, 9, 2.6, .4], jm.rarityUp)));
+  const chance = (B.boss ? 1 : .35) + M(m, 'drop');
+  if (Math.random() < chance) drops.push(makeItem(pick(DV.SLOTS), B.w, rollRarity(B.boss ? [0, 50, 35, 13, 2] : [60, 28, 9, 2.6, .4], M(m, 'rarityUp'))));
   drops.forEach(d => S.inv.push(d));
+  const found = [];
+  if (Math.random() < M(m, 'harvest')) { S.potions.hp++; found.push('Facet Tonic'); }
+  if (Math.random() < M(m, 'catch')) { S.potions.mp++; found.push('Mana Shard'); }
+  const avgLvl = B.enemies.reduce((t, e) => t + e.lvl, 0) / B.enemies.length;
+  const jxp = S.job ? Math.round((8 + avgLvl * 2) * (B.boss ? 3 : 1)) : 0;
+  const jobUp = gainJobXp(jxp);
   const lv = gainXp(xp);
   save();
-  return { xp, gold, dia, drops, first, worldDone, ...lv };
+  return { xp, gold, dia, drops, found, jxp, jobUp, first, worldDone, ...lv };
 }
 
 // ---------- Bazaar ----------
 function shopItems() {
-  const t = topTier();
+  const t = topTier(), cut = 1 - Math.min(.5, M(mods(), 'shopCut'));
   return [
     { id:'hp', name:'Facet Tonic', text:'Restores 35% HP in battle.', price:20 * t },
     { id:'mp', name:'Mana Shard', text:'Restores 45% MP in battle.', price:20 * t },
     { id:'shards', name:'Shard Pouch ×10', text:'Upgrade material.', price:110 * t },
     { id:'chest', name:`${DV.MATERIAL[t - 1]} Gear Cache`, text:'One random tier-' + t + ' item. Odds: 40% Common, 40% Rare, 15% Epic, 4.5% Legendary, 0.5% Mythic.', price:260 * t }
-  ];
+  ].map(it => ({ ...it, price: Math.round(it.price * cut) }));
 }
 function buy(id) {
   const it = shopItems().find(x => x.id === id);
@@ -347,7 +401,7 @@ function buy(id) {
   let got = null;
   if (id === 'hp' || id === 'mp') S.potions[id]++;
   else if (id === 'shards') S.shards += 10;
-  else { got = makeItem(pick(DV.SLOTS), topTier(), rollRarity([40, 40, 15, 4.5, .5], jobMods().rarityUp)); S.inv.push(got); }
+  else { got = makeItem(pick(DV.SLOTS), topTier(), rollRarity([40, 40, 15, 4.5, .5], M(mods(), 'rarityUp'))); S.inv.push(got); }
   save();
   return { msg: got ? `Got ${DV.RARITY[got.rarity].name} ${got.name}.` : `Bought ${it.name}.`, got };
 }

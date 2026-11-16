@@ -50,24 +50,39 @@ SCREENS.class = () => {
       <div class="grid2">${others.map(id => `<button class="opt ${S.cls2 === id ? 'on' : ''}" data-sec="${id}" style="border-left:4px solid ${DV.CLASSES[id].color}">
         <b>${DV.CLASSES[id].name}</b><span class="small">→ ${DV.DUAL_TITLES[[S.cls, id].sort().join('+')]}</span><span class="small muted">${DV.CLASSES[id].role}</span></button>`).join('')}</div>`;
   const jobCard = id => {
-    const j = DV.JOBS[id], owned = S.jobsOwned.includes(id), rev = jobRevealed(id), on = S.job === id;
-    if (j.luxury && !rev) return `<div class="opt lux sealed"><b>??? · Sealed luxury job</b><span class="small muted">Revealed when you ${j.hint.toLowerCase()}.</span></div>`;
-    const action = on ? '<span class="chip pure">Active</span>'
-      : j.luxury && !owned ? `<button class="btn sm gold" data-job="${id}">Buy · ${j.cost} ◆</button>`
-      : `<button class="btn sm" data-job="${id}">${!S.job || j.luxury ? 'Take job' : `Switch · ${DV.JOB_SWAP_GOLD} gold`}</button>`;
-    return `<div class="opt ${j.luxury ? 'lux' : ''} ${on ? 'on' : ''}"><div class="row"><b class="grow" style="${j.luxury ? 'color:var(--gold)' : ''}">${j.name}</b>${action}</div>
-      <span class="small muted">${j.perk}</span></div>`;
+    const j = DV.JOBS[id], on = S.job === id, avail = jobAvailable(id), jp = jobProgress(id), max = DV.JOB_XP.length + 1;
+    const lvLine = `<div class="row small"><span class="pips" aria-label="Job level ${jp.lv} of ${max}">${Array.from({ length:max }, (_, n) =>
+        `<i class="${n < jp.lv ? 'on' : ''}"></i>`).join('')}</span>
+      <span class="muted num">${jobMastered(id) ? 'Mastered' : `Job Lv ${jp.lv}${(S.jobXp[id] || 0) ? ` · ${jp.xp}/${jp.need} XP` : ''}`}</span></div>`;
+    let action;
+    if (on) action = '<span class="chip pure">Active</span>';
+    else if (avail) action = `<button class="btn sm" data-job="${id}">${S.job ? `Switch · ${DV.JOB_SWAP_GOLD} g` : 'Take job'}</button>`;
+    else if (j.tier === 2) { const ready = reqStatus(id).every(q => q.met);
+      action = `<button class="btn sm ${ready ? 'gold' : ''}" data-unlock="${id}" ${ready ? '' : 'disabled'}>Unlock · ${j.cost} ◆</button>`; }
+    else action = `<button class="btn sm gold" data-store="${j.sku}">${storeProducts().find(p => p.sku === j.sku).priceLabel}</button>`;
+    const reqs = j.tier === 2 && !avail ? `<div class="stack" style="gap:2px">${reqStatus(id).map(q =>
+      `<span class="small" style="color:${q.met ? 'var(--ok)' : 'var(--muted)'}">${q.met ? '✓' : '○'} ${q.text}</span>`).join('')}</div>` : '';
+    return `<div class="opt ${j.tier === 3 ? 'lux' : ''} ${on ? 'on' : ''} ${!avail && j.tier === 2 ? 'sealed' : ''} stack" style="gap:6px">
+      <div class="row"><b class="grow" style="${j.tier === 3 ? 'color:var(--gold)' : ''}">${j.name}</b>${action}</div>
+      <span class="small">${j.perk}</span>
+      ${j.mastery ? `<span class="small muted">Mastery bonus (job Lv ${max}, permanent): ${j.mastery.text}</span>` : ''}
+      ${reqs}${avail || j.tier === 1 ? lvLine : ''}</div>`;
+  };
+  const tierBlock = t => {
+    const T = DV.JOB_TIERS[t - 1], ids = Object.keys(DV.JOBS).filter(id => DV.JOBS[id].tier === t);
+    return `<section class="stack"><div class="row"><div class="eyebrow grow" style="${t === 3 ? 'color:var(--gold)' : ''}">${T.name}</div>
+        ${t === 3 ? '<button class="btn sm" id="restore">Restore purchases</button>' : ''}</div>
+      <div class="small muted">${T.note}${t === 3 ? storeNote() : ''}</div>${ids.map(jobCard).join('')}</section>`;
   };
   $('#screen').innerHTML = `
     <section class="stack"><div class="eyebrow">Combat class</div><h2 style="color:${P.color}">${esc(dualTitle())}</h2></section>
     <section class="card stack" style="border-left:4px solid ${P.color}"><div class="row"><b class="grow">Primary · ${P.name}</b><span class="chip">Chosen at rebirth</span></div>
       <div class="small">${P.desc}</div><div class="small muted">${P.role} · Weapon: ${P.weapon}</div></section>
     <section class="card stack"><div class="row"><b class="grow">Secondary class</b>${unlocked ? '<span class="chip pure">Unlocked</span>' : '<span class="chip lock">Locked</span>'}</div>${secBlock}</section>
-    <section class="stack"><div class="eyebrow">Job class · passive perks</div>
-      <div class="small muted">${S.job ? '' : 'Your first job is free. '}One job active at a time.</div>
-      ${['blacksmith','alchemist','hunter','scholar'].map(jobCard).join('')}</section>
-    <section class="stack"><div class="eyebrow" style="color:var(--gold)">Luxury jobs · bought once with Diamonds</div>
-      ${['gemcutter','chef','starforger','baron'].map(jobCard).join('')}</section>`;
+    <section class="stack"><div class="eyebrow">Job class</div><h2>${S.job ? DV.JOBS[S.job].name : 'No job yet'}</h2>
+      <div class="small muted">One job is active at a time. The active job earns job XP every win; at job Lv ${DV.JOB_XP.length + 1} it is Mastered and its mastery bonus stays with you forever.
+        Switching jobs costs ${DV.JOB_SWAP_GOLD} gold.</div></section>
+    ${tierBlock(1)}${tierBlock(2)}${tierBlock(3)}`;
   $('#screen').querySelectorAll('[data-sec]').forEach(b => b.onclick = () => {
     const id = b.dataset.sec; if (S.cls2 === id) return;
     if (S.cls2) { if (S.gold < 500) return toast('Changing secondary class costs 500 gold.'); S.gold -= 500; }
@@ -79,7 +94,46 @@ SCREENS.class = () => {
     const err = setJob(b.dataset.job); if (err) return toast(err);
     render(); toast(`Job set: ${DV.JOBS[S.job].name}.`);
   });
+  $('#screen').querySelectorAll('[data-unlock]').forEach(b => b.onclick = () => {
+    const err = unlockJob(b.dataset.unlock); if (err) return toast(err);
+    render(); toast(`${DV.JOBS[b.dataset.unlock].name} unlocked. Take the job to activate it.`);
+  });
+  bindStoreButtons($('#screen'));
 };
+
+// ---------- Diamond Store (real-money) ----------
+function storeNote() {
+  return Store.mode() === 'live' ? '' : Store.mode() === 'sandbox' ? ' Test mode: purchases are free and marked as tests.' : ' The store opens soon.';
+}
+function bindStoreButtons(root) {
+  root.querySelectorAll('[data-store]').forEach(b => b.onclick = () => storeSheet(b.dataset.store));
+  const rs = root.querySelector('#restore');
+  if (rs) rs.onclick = async () => { rs.disabled = true; const res = await Store.restore(); toast(res.message); render(); };
+}
+function storeSheet(sku) {
+  const p = storeProducts().find(x => x.sku === sku), j = DV.JOBS[p.grants], owned = ownsSku(sku);
+  const mode = Store.mode();
+  openSheet(`<div class="eyebrow" style="color:var(--gold)">Diamond Store · Luxury job</div>
+    <h2 style="color:var(--gold)">${p.name}</h2>
+    <div class="small">${j.perk}</div>
+    ${j.mastery ? `<div class="small muted">Mastery bonus (permanent): ${j.mastery.text}</div>` : ''}
+    <div class="card stack small">
+      <div class="row"><span class="grow muted">Price</span><b class="num">${p.priceLabel} ${PAYMENTS.currency}</b></div>
+      <div class="row"><span class="grow muted">Type</span><span>One-time purchase, yours to keep</span></div>
+      ${mode === 'sandbox' ? '<div style="color:var(--gold)">Test mode. You will not be charged.</div>' : ''}
+      ${mode === 'disabled' ? '<div class="muted">Purchases are not available yet. The Diamond Store opens in a future update.</div>' : ''}
+    </div>
+    <button class="btn gold" id="buyNow" style="padding:12px" ${owned || !Store.canBuy() ? 'disabled' : ''}>
+      ${owned ? 'Owned' : mode === 'sandbox' ? `Test purchase · ${p.priceLabel}` : mode === 'live' ? `Buy · ${p.priceLabel}` : 'Coming soon'}</button>`, el => {
+    const bn = el.querySelector('#buyNow');
+    bn.onclick = async () => {
+      bn.disabled = true; bn.textContent = 'Processing…';
+      const res = await Store.purchase(sku);
+      toast(res.message);
+      if (res.ok) { closeSheet(); render(); } else { bn.disabled = false; bn.textContent = `Buy · ${p.priceLabel}`; }
+    };
+  });
+}
 
 SCREENS.skills = () => {
   const group = cls => {
@@ -149,8 +203,14 @@ SCREENS.shop = () => {
     <div class="row small"><span class="chip num">Facet Tonics ${S.potions.hp}</span><span class="chip num">Mana Shards ${S.potions.mp}</span>${gemNum('s', S.shards)}</div>
     ${shopItems().map(it => `<div class="card row"><div class="grow"><b>${it.name}</b><div class="small muted">${it.text}</div></div>
       <button class="btn sm gold" data-buy="${it.id}" ${S.gold >= it.price ? '' : 'disabled'}>${it.price.toLocaleString()} g</button></div>`).join('')}
+    <section class="stack"><div class="row"><div class="eyebrow grow" style="color:var(--gold)">Diamond Store · Luxury jobs</div><button class="btn sm" id="restore">Restore purchases</button></div>
+      <div class="small muted">Premium jobs, bought once with real money.${storeNote()}</div>
+      ${storeProducts().map(p => `<div class="card lux row"><div class="grow"><b style="color:var(--gold)">${p.name}</b>
+        <div class="small muted">${p.description}</div></div>
+        ${ownsSku(p.sku) ? '<span class="chip pure">Owned</span>' : `<button class="btn sm gold" data-store="${p.sku}">${p.priceLabel}</button>`}</div>`).join('')}</section>
     <section class="card stack small"><h3>How you earn Diamonds</h3>
-      <div>15 per first clear of a stage · 60 per purified god · 5 per level gained. Diamonds unlock luxury jobs in the Class tab (300–750).</div>
+      <div>15 per first clear of a stage · 60 per purified god · 5 per level gained. Diamonds unlock Tier 2 jobs in the Class tab (150–200).</div>
       <div class="muted">Prices scale with the highest world you have reached. Gear Cache odds are shown on the item.</div></section>`;
   $('#screen').querySelectorAll('[data-buy]').forEach(b => b.onclick = () => { const r = buy(b.dataset.buy); toast(r.msg); render(); });
+  bindStoreButtons($('#screen'));
 };

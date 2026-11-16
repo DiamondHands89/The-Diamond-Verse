@@ -10,7 +10,10 @@ Progress saves in the browser (localStorage).
 - **Hero design**: name, skin, hair, eyes, outfit, past-life origin (starting attributes)
 - **Leveling**: 3 attribute points, 1 skill point, 5 Diamonds per level
 - **Combat classes**: Assassin, Guardian, Warrior, Mage, Priest; secondary class unlocks at Lv 10 after purifying Prismara (10 dual-class titles)
-- **Job classes**: 4 free jobs + 4 hidden luxury jobs bought with Diamonds
+- **Job classes**: one active job, job levels 1–5, permanent mastery bonuses at Lv 5
+  - Tier 1 (always open): Blacksmith, Tailor, Hunter, Fisher, Farmer, Chef
+  - Tier 2 (unlock via requirements + Diamonds): Doctor, Botanist, Merchant
+  - Luxury (real-money, Diamond Store): Royal Gemcutter, Celestial Gourmand, Starforger, Diamond Baron
 - **Skills**: 4 per class, ranks 1–5, 5-slot loadout
 - **Equipment**: 4 slots, 5 rarities, upgrades to +15, salvage into shards
 - **Story**: 6 worlds, 6 corrupted gods, blessings on purification, Season One ending
@@ -25,5 +28,16 @@ Progress saves in the browser (localStorage).
 | `views.js` | Story map, dialogue, hero creation |
 | `screens.js` | Hero, Class, Skills, Gear, Bazaar tabs |
 | `battle.js` | Battle screen and boot |
+| `payments.js` | Diamond Store: product catalog, entitlements, payment-provider adapter hook |
 
 To add a world, append an entry to `DV.WORLDS` in `data.js`.
+
+## Payments (not yet connected)
+Luxury jobs are sold through the Diamond Store in `payments.js`. Set `PAYMENTS.mode`:
+- `disabled` (default): prices shown, buying turned off
+- `sandbox`: free test purchases — open the game with `#sandbox` at the end of the URL
+- `live`: real purchases through `PAYMENTS.provider`
+
+To connect a processor, write an adapter with `purchase`, `verify` and `restore` (interface documented at the top of `payments.js`).
+Verify receipts on a server: entitlements in the browser save can be edited by players.
+Web builds can use Stripe; App Store / Google Play builds must use Apple In-App Purchase / Google Play Billing for digital items.

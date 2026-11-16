@@ -68,22 +68,51 @@ DV.SKILLS = {
 DV.LOADOUT_MAX = 5;
 
 // ---------- Job classes ----------
-// Free jobs swap for gold. Luxury jobs stay hidden until their reveal condition, then cost Diamonds once.
+// Jobs give passive perks. Every modifier key is an additive bonus, merged with blessings and mastery bonuses in engine.js:
+//   hp/mp/atk/mag/def/spd: +% stat · critFlat: +CRIT · all: +% every stat · regen: % max HP healed per turn
+//   gold/xp/drop: +% rewards · rarityUp: rarity steps on drops · dia: Diamonds per win · feast: +% ATK/MAG for 3 turns at battle start
+//   potionPow: +% potion strength · potUses: extra potions per battle · mpCostCut: −% skill MP cost · shopCut: −% Bazaar prices
+//   upCostCut: −% upgrade gold · upRate: +success at +5 and above · safeTo: upgrades below this + never fail
+//   armorGear: +% stats from helm & armor · salvageBonus: +% salvage shards · harvest/catch: chance of a Tonic/Mana Shard after a win
+// A job reaching Lv 5 is Mastered: its mastery bonus stays active forever, even after switching jobs.
+DV.JOB_TIERS = [
+  { id:1, name:'Tier 1 · Trade jobs', note:'Always available. Your first job is free.' },
+  { id:2, name:'Tier 2 · Advanced jobs', note:'Unlock by meeting the requirements, then paying Diamonds once.' },
+  { id:3, name:'Luxury jobs', note:'Premium jobs bought in the Diamond Store.' }
+];
 DV.JOBS = {
-  blacksmith:{name:'Blacksmith',perk:'Upgrades cost 20% less gold, +5% success above +5.',mods:{upCost:.8,upRate:.05}},
-  alchemist:{name:'Alchemist',perk:'Potions heal 50% more. One extra potion per battle.',mods:{potion:1.5,potUses:1}},
-  hunter:{name:'Hunter',perk:'+20% gold, +10% gear drop chance.',mods:{gold:1.2,drop:.10}},
-  scholar:{name:'Scholar',perk:'+20% XP from battles.',mods:{xp:1.2}},
-  gemcutter:{name:'Royal Gemcutter',luxury:true,cost:300,reveal:{level:5},hint:'Reach Lv 5',
-    perk:'+10% to all stats. Upgrades up to +8 never fail.',mods:{all:1.1,safeTo:8}},
-  chef:{name:'Celestial Chef',luxury:true,cost:450,reveal:{world:1},hint:'Purify Prismara',
-    perk:'Start battles with +25% ATK/MAG for 3 turns. Regen 4% HP each turn.',mods:{feast:.25,regen:.04}},
-  starforger:{name:'Starforger',luxury:true,cost:550,reveal:{world:2},hint:'Purify Ashenreach',
-    perk:'Gear drops roll one rarity higher. +15% drop chance.',mods:{rarityUp:1,drop:.15}},
-  baron:{name:'Diamond Baron',luxury:true,cost:750,reveal:{gold:5000},hint:'Earn 5,000 lifetime gold',
-    perk:'+50% gold and +5 Diamonds every victory.',mods:{gold:1.5,dia:5}}
+  // Tier 1
+  blacksmith:{tier:1,name:'Blacksmith',perk:'Forge upgrades cost 20% less gold. +5% success at +5 and above.',
+    mods:{upCostCut:.2,upRate:.05}, mastery:{text:'+3% ATK',mods:{atk:.03}}},
+  tailor:{tier:1,name:'Tailor',perk:'Helms and armor give 20% more stats. Salvage gives 50% more shards.',
+    mods:{armorGear:.2,salvageBonus:.5}, mastery:{text:'+3% DEF',mods:{def:.03}}},
+  hunter:{tier:1,name:'Hunter',perk:'+20% gold and +10% gear drop chance.',
+    mods:{gold:.2,drop:.1}, mastery:{text:'+2 CRIT',mods:{critFlat:2}}},
+  fisher:{tier:1,name:'Fisher',perk:'+15% max MP. 30% chance to reel in a Mana Shard after each win.',
+    mods:{mp:.15,catch:.3}, mastery:{text:'+5% max MP',mods:{mp:.05}}},
+  farmer:{tier:1,name:'Farmer',perk:'+12% max HP. 30% chance to harvest a Facet Tonic after each win.',
+    mods:{hp:.12,harvest:.3}, mastery:{text:'+5% max HP',mods:{hp:.05}}},
+  chef:{tier:1,name:'Chef',perk:'Start every battle with +15% ATK and MAG for 3 turns.',
+    mods:{feast:.15}, mastery:{text:'+2% ATK and MAG',mods:{atk:.02,mag:.02}}},
+  // Tier 2 — req types: {job, lv} job level · {anyJob:[...], lv} · {level} hero level · {world} worlds purified · {gold} lifetime gold
+  doctor:{tier:2,name:'Doctor',cost:150,perk:'Potions heal 60% more. +1 potion per battle. Heal 3% HP every turn.',
+    req:[{job:'chef',lv:5},{level:10}], mods:{potionPow:.6,potUses:1,regen:.03}, mastery:{text:'Heal 1% HP every turn',mods:{regen:.01}}},
+  botanist:{tier:2,name:'Botanist',cost:150,perk:'35% chance each to gather a Facet Tonic and a Mana Shard after wins. Skills cost 10% less MP.',
+    req:[{job:'farmer',lv:5},{world:1}], mods:{harvest:.35,catch:.35,mpCostCut:.1}, mastery:{text:'Skills cost 5% less MP',mods:{mpCostCut:.05}}},
+  merchant:{tier:2,name:'Merchant',cost:200,perk:'Bazaar prices 20% lower. +30% gold from battles.',
+    req:[{anyJob:['hunter','fisher'],lv:5},{gold:3000}], mods:{shopCut:.2,gold:.3}, mastery:{text:'+10% gold',mods:{gold:.1}}},
+  // Luxury — real-money purchases. `sku` is the product id used by the store (payments.js); price is display only.
+  gemcutter:{tier:3,name:'Royal Gemcutter',sku:'job.gemcutter',price:4.99,perk:'+10% to every stat. Upgrades up to +8 never fail.',
+    mods:{all:.10,safeTo:8}, mastery:{text:'+2% to every stat',mods:{all:.02}}},
+  gourmand:{tier:3,name:'Celestial Gourmand',sku:'job.gourmand',price:4.99,perk:'Start battles with +25% ATK and MAG for 3 turns. Heal 4% HP every turn. Potions 25% stronger.',
+    mods:{feast:.25,regen:.04,potionPow:.25}, mastery:{text:'Heal 1% HP every turn',mods:{regen:.01}}},
+  starforger:{tier:3,name:'Starforger',sku:'job.starforger',price:7.99,perk:'Gear drops roll one rarity higher. +15% drop chance.',
+    mods:{rarityUp:1,drop:.15}, mastery:{text:'+5% drop chance',mods:{drop:.05}}},
+  baron:{tier:3,name:'Diamond Baron',sku:'job.baron',price:9.99,perk:'+50% gold and +5 Diamonds every victory.',
+    mods:{gold:.5,dia:5}, mastery:{text:'+10% gold',mods:{gold:.1}}}
 };
 DV.JOB_SWAP_GOLD = 150;
+DV.JOB_XP = [30, 70, 120, 180]; // job XP to go from Lv 1→2, 2→3, 3→4, 4→5 (Mastered)
 
 // ---------- Equipment ----------
 DV.SLOTS = ['weapon','helm','armor','charm'];
@@ -181,7 +210,7 @@ DV.WORLDS = [
       ['riku','Need a ride to the edge of the sky? First trip is free. Second one costs a story.']] },
   { id:5, name:'Umbravale', sub:'World of Waking Nightmares', hue:'#9b8cff',
     god:'Nyxos, the Nightmare Weaver', godPure:'Nyxos, God of Dreams',
-    blessing:{name:'Lucid Mind',text:'+15% max MP, skills cost 10% less',mods:{mp:.15,mpCost:.9}},
+    blessing:{name:'Lucid Mind',text:'+15% max MP, skills cost 10% less',mods:{mp:.15,mpCostCut:.1}},
     foes:['Dread Moth','Mirror Shade','Sleepless Knight','Hollow Self'],
     intro:[
       ['narr','You step through the portal onto your own street. Rain. Headlights. Breaking glass.'],
