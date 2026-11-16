@@ -30,7 +30,7 @@ function renderBattle() {
       <button class="act" data-pot="mp" ${S.potions.mp && potLeft ? '' : 'disabled'}><b>Mana Shard</b><small class="num">${S.potions.mp} owned</small></button>
     </div>`;
   $('#layer').innerHTML = `<div class="layer" style="background:radial-gradient(ellipse at 50% 0,${W.hue}22,var(--void) 60%)"><div class="inner">
-    <div class="row"><div class="grow"><div class="eyebrow num">${W.name} · ${B.boss ? 'God avatar' : DV.STAGE_NAMES[B.s]} · Round ${B.round}</div></div>
+    <div class="row"><div class="grow"><div class="eyebrow num">${W.name} · ${B.field ? 'Wild encounter' : B.boss ? 'God avatar' : DV.STAGE_NAMES[B.s]} · Round ${B.round}</div></div>
       ${B.over ? '' : '<button class="btn sm" id="flee">Retreat</button>'}</div>
     <div class="foes">${foes}</div>
     <div class="log" aria-live="polite">${log}</div>
@@ -47,7 +47,7 @@ function renderBattle() {
   L.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { B.target = +b.dataset.t; renderBattle(); });
   L.querySelectorAll('[data-sk]').forEach(b => b.onclick = () => { const err = useSkill(b.dataset.sk); if (err) toast(err); renderBattle(); });
   L.querySelectorAll('[data-pot]').forEach(b => b.onclick = () => { const err = usePotion(b.dataset.pot); if (err) toast(err); renderBattle(); });
-  const fl = $('#flee'); if (fl) fl.onclick = () => { B = null; L.innerHTML = ''; render(); toast('You retreat. No rewards this time.'); };
+  const fl = $('#flee'); if (fl) fl.onclick = () => { const f = B.field; B = null; L.innerHTML = ''; battleClosed(f, 'flee'); render(); toast('You retreat. No rewards this time.'); };
   bindResult();
   playFx();
 }
@@ -81,14 +81,17 @@ function resultHTML() {
 function bindResult() {
   const c = $('#cont'), rt = $('#retry'), lv = $('#leave');
   const close = () => { $('#layer').innerHTML = ''; render(); };
-  if (rt) rt.onclick = () => startBattleUI(B.w, B.s);
-  if (lv) lv.onclick = () => { B = null; close(); };
+  if (rt) rt.onclick = () => { B.again(); renderBattle(); };
+  if (lv) lv.onclick = () => { const f = B.field; B = null; battleClosed(f, 'lose'); close(); };
   if (c) c.onclick = () => {
-    const r = B.reward, W = DV.WORLDS[B.w - 1]; B = null;
+    const r = B.reward, W = DV.WORLDS[B.w - 1], f = B.field; B = null; battleClosed(f, 'win');
     if (r.worldDone) playDialogue(W.after, () => { render(); toast(`Blessing gained: ${W.blessing.name} (${W.blessing.text}).`); });
     else close();
   };
 }
+
+// Lets the open world react when a battle ends (remove a beaten foe, give a grace period after a loss).
+function battleClosed(field, outcome) { if (typeof Realm !== 'undefined') Realm.afterBattle(field, outcome); }
 
 // ---------- Boot ----------
 function boot(saved) {

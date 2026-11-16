@@ -1,11 +1,12 @@
 // Diamondverse — app shell, dialogue, hero creation and the Story map.
 const SCREENS = {};
-let tab = 'story';
-const TABS = [['story','Story'],['hero','Hero'],['class','Class'],['skills','Skills'],['gear','Gear'],['shop','Bazaar']];
+let tab = 'world';
+const TABS = [['world','World'],['story','Story'],['hero','Hero'],['class','Class'],['skills','Skills'],['gear','Gear'],['shop','Bazaar']];
 
 function render() {
   if (!S.created) return;
   const st = calcStats();
+  $('#app').classList.toggle('wide', tab === 'world');
   $('#topbar').innerHTML = `
     <div style="width:38px;flex:none">${avatarSVG(S.look, S.cls, 38)}</div>
     <div class="who"><b>${esc(S.name)}</b><small class="num">Lv ${S.level} ${esc(dualTitle())}${S.job ? ' · ' + DV.JOBS[S.job].name : ''}</small></div>
@@ -80,7 +81,7 @@ function openCreator(edit) {
   $('#cgo').onclick = () => {
     if (edit) { S.name = c.name || S.name; S.look = c.look; save(); L.innerHTML = ''; render(); toast('Vessel reshaped.'); return; }
     createHero(c.name, c.look, c.origin, c.cls);
-    L.innerHTML = ''; tab = 'story'; render();
+    L.innerHTML = ''; tab = 'world'; render();
     toast(`${DV.CLASSES[c.cls].name} reborn. Pick a job in the Class tab.`);
   };
 }

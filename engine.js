@@ -15,7 +15,7 @@ function newState() {
     skillPts:0, skills:{}, loadout:[],
     gold:200, dia:30, lifetimeGold:0, shards:10, potions:{hp:3, mp:2},
     equip:{weapon:null,helm:null,armor:null,charm:null}, inv:[], nextId:1,
-    cleared:{}, worldsCleared:0, seen:{}
+    cleared:{}, worldsCleared:0, seen:{}, chests:{}, realm:null
   };
 }
 function newPlayerId() {
@@ -235,19 +235,34 @@ function makeEnemy(name, lvl, boss, weak) {
 }
 function startBattle(w, s) {
   const W = DV.WORLDS[w - 1], lvl = stageLevel(w, s), boss = s === DV.STAGES_PER_WORLD - 1;
-  const st = calcStats(), m = mods();
   let enemies;
   if (boss) enemies = [makeEnemy(W.god, lvl, true)];
   else {
     const n = s < 2 ? 2 : 3;
     enemies = Array.from({ length:n }, (_, i) => makeEnemy(W.foes[Math.min(3, Math.floor(rnd(0, s + 1.6)))], Math.max(1, lvl - (i === 0 ? 0 : 1)), false, n === 3));
   }
+  beginBattle(w, s, enemies, boss, boss ? `${W.god} descends.` : `${enemies.length} corrupted foes block the way.`);
+  B.again = () => startBattle(w, s);
+  return B;
+}
+// Open-world encounter with a roaming foe. Rewards XP, gold and drops, but no stage clear or first-clear Diamonds.
+// first = the hero struck first (Attack button): foes start at 85% HP.
+function startEncounter(w, foe, lvl, first, id) {
+  const W = DV.WORLDS[w - 1], enemies = [makeEnemy(foe, lvl, false, false)];
+  if (Math.random() < .45) enemies.push(makeEnemy(pick(W.foes), Math.max(1, lvl - 1), false, true));
+  if (first) enemies.forEach(e => e.hp = Math.round(e.hp * .85));
+  beginBattle(w, null, enemies, false, first ? `You strike first! ${foe} reels.` : `${foe} ambushes you!`);
+  B.field = { id, foe, lvl };
+  B.again = () => startEncounter(w, foe, lvl, false, id);
+  return B;
+}
+function beginBattle(w, s, enemies, boss, opener) {
+  const st = calcStats(), m = mods();
   const buffs = [];
   if (m.feast) { buffs.push({ stat:'atk', amt:m.feast, turns:3 }, { stat:'mag', amt:m.feast, turns:3 }); }
   B = { w, s, boss, enemies, target:0, round:1, over:null, potUsed:0, potMax:2 + M(m, 'potUses'), potPow:1 + M(m, 'potionPow'),
     p:{ hp:st.hp, mp:st.mp, st, shield:0, buffs, cds:{}, regen:M(m, 'regen'), mpCost:Math.max(.5, 1 - M(m, 'mpCostCut')) },
-    log:[[ 'sys', boss ? `${W.god} descends.` : `${enemies.length} corrupted foes block the way.` ]], fx:[] };
-  return B;
+    log:[[ 'sys', opener ]], fx:[] };
 }
 function buffed(stat) {
   let v = B.p.st[stat];
@@ -360,17 +375,17 @@ function checkEnd() {
   fixTarget(); return false;
 }
 function grantRewards() {
-  const m = mods(), key = stageKey(B.w, B.s), first = !S.cleared[key];
+  const m = mods(), field = !!B.field, key = field ? null : stageKey(B.w, B.s), first = !field && !S.cleared[key];
   let xp = 0, gold = 0;
   B.enemies.forEach(e => { xp += (14 + e.lvl * 9) * (e.boss ? 4 : 1); gold += (10 + e.lvl * 5) * (e.boss ? 4 : 1); });
   xp = Math.round(xp * (1 + M(m, 'xp'))); gold = Math.round(gold * (1 + M(m, 'gold')));
   let dia = (first ? (B.boss ? 60 : 15) : 0) + M(m, 'dia');
   S.gold += gold; S.lifetimeGold += gold; S.dia += dia;
-  S.cleared[key] = (S.cleared[key] || 0) + 1;
+  if (!field) S.cleared[key] = (S.cleared[key] || 0) + 1;
   let worldDone = false;
   if (B.boss && first && S.worldsCleared < B.w) { S.worldsCleared = B.w; worldDone = true; }
   const drops = [];
-  const chance = (B.boss ? 1 : .35) + M(m, 'drop');
+  const chance = (B.boss ? 1 : field ? .25 : .35) + M(m, 'drop');
   if (Math.random() < chance) drops.push(makeItem(pick(DV.SLOTS), B.w, rollRarity(B.boss ? [0, 50, 35, 13, 2] : [60, 28, 9, 2.6, .4], M(m, 'rarityUp'))));
   drops.forEach(d => S.inv.push(d));
   const found = [];

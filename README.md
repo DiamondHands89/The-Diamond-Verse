@@ -7,6 +7,9 @@ No build step. Open `index.html` in a browser, or drag the folder into Netlify D
 Progress saves in the browser (localStorage).
 
 ## Systems
+- **Open world (World tab)**: third-person 3D realm for each world. Walk the path to stage shrines, fight roaming foes,
+  open chests, talk to NPCs, and take portals between purified worlds. Controls: on-screen joystick, Attack, Interact;
+  drag the scene to turn the camera; keyboard WASD/arrows, Space, E.
 - **Hero design**: name, skin, hair, eyes, outfit, past-life origin (starting attributes)
 - **Leveling**: 3 attribute points, 1 skill point, 5 Diamonds per level
 - **Combat classes**: Assassin, Guardian, Warrior, Mage, Priest; secondary class unlocks at Lv 10 after purifying Prismara (10 dual-class titles)
@@ -28,6 +31,8 @@ Progress saves in the browser (localStorage).
 | `views.js` | Story map, dialogue, hero creation |
 | `screens.js` | Hero, Class, Skills, Gear, Bazaar tabs |
 | `battle.js` | Battle screen and boot |
+| `gfx.js` | Tiny dependency-free WebGL renderer (low-poly meshes, light, fog) |
+| `realm.js` | Open world: layout per world, hero/foe movement, interactions, World tab UI |
 | `payments.js` | Diamond Store: product catalog, entitlements, payment-provider adapter hook |
 
 To add a world, append an entry to `DV.WORLDS` in `data.js`.
