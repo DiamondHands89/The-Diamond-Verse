@@ -29,12 +29,12 @@ function makeEnemy(name, lvl, kind, w) {
 // ---------- party units ----------
 function heroUnit() {
   const st = calcStats(), m = mods();
-  return { key:'hero', name:S.name, cls:S.cls, isHero:true, lvl:S.level, st, hp:Math.max(1, Math.round(st.hp * vitOf('hero'))), mp:st.mp, shield:0, buffs:[], cds:{}, dots:[], taunt:0,
+  return { key:'hero', name:S.name, cls:S.cls, isHero:true, lvl:S.level, st, hp:Math.max(1, Math.round(st.hp * vitOf('hero'))), mp:Math.round(st.mp * mpOf('hero')), shield:0, buffs:[], cds:{}, dots:[], taunt:0,
     regen:M(m, 'regen'), mpCost:Math.max(.5, 1 - M(m, 'mpCostCut')), skills:S.loadout.slice() };
 }
 function compUnit(id) {
   const st = compStats(id), C = DV.COMPANIONS[id];
-  return { key:id, name:C.name, cls:C.cls, isHero:false, lvl:S.level, st, hp:Math.max(1, Math.round(st.hp * vitOf(id))), mp:st.mp, shield:0, buffs:[], cds:{}, dots:[], taunt:0,
+  return { key:id, name:C.name, cls:C.cls, isHero:false, lvl:S.level, st, hp:Math.max(1, Math.round(st.hp * vitOf(id))), mp:Math.round(st.mp * mpOf(id)), shield:0, buffs:[], cds:{}, dots:[], taunt:0,
     regen:0, mpCost:1, skills:compSkills(id) };
 }
 const unitMain = u => DV.CLASSES[u.cls].main;
@@ -302,7 +302,8 @@ function enemyPhase() {
 function tickCds() { B.party.forEach(u => { for (const id in u.cds) if (u.cds[id] > 0) u.cds[id]--; }); }
 // Carry HP out of battle. Fallen companions get back up at 10%; a defeated hero wakes in town at 25%.
 function saveVitals(outcome) {
-  B.party.forEach(u => setVit(u.key, u.isHero && outcome === 'lose' ? .25 : u.hp <= 0 ? .1 : u.hp / u.st.hp));
+  B.party.forEach(u => { setVit(u.key, u.isHero && outcome === 'lose' ? .25 : u.hp <= 0 ? .1 : u.hp / u.st.hp); setMp(u.key, u.mp / u.st.mp); });
+  S.mpAt = Date.now();
   if (outcome === 'lose') S.party.forEach(k => setVit(k, Math.max(vitOf(k), .25)));
   save();
 }

@@ -154,6 +154,22 @@ function claimLogin() {
 // ---------- Carried HP ("vitals") ----------
 // HP carries between fights as a share of max HP (so level-ups and gear changes scale it). Level-ups heal fully.
 // Town barriers heal 1% of max HP per second (realm.js). A defeat carries the party back to town at 25%.
+// MP also carries, and recharges slowly anywhere outside battle: 0.4% of max MP per second (empty to full in about 4 minutes),
+// including time spent away from the game.
+const MP_REGEN = .004;
+const mpOf = key => { const v = S.mpv && S.mpv[key]; return v == null ? 1 : clamp(v, 0, 1); };
+function setMp(key, v) { S.mpv = S.mpv || {}; S.mpv[key] = clamp(v, 0, 1); }
+function regenMp(seconds) {
+  let changed = false;
+  ['hero', ...Object.keys(S.comps)].forEach(k => { const v = mpOf(k); if (v < 1) { setMp(k, v + MP_REGEN * seconds); changed = true; } });
+  return changed;
+}
+// Called once a second while no battle is running, and on load for the time spent away.
+function tickOutsideBattle() {
+  const now = Date.now(), secs = Math.max(0, Math.min(86400, (now - (S.mpAt || now)) / 1000));
+  S.mpAt = now;
+  return regenMp(secs);
+}
 const vitOf = key => { const v = S.vit && S.vit[key]; return v == null ? 1 : clamp(v, 0, 1); };
 function setVit(key, v) { S.vit = S.vit || {}; S.vit[key] = clamp(v, 0, 1); }
 function healParty(frac) {   // add a share of max HP to the hero and every recruited companion
@@ -161,7 +177,12 @@ function healParty(frac) {   // add a share of max HP to the hero and every recr
   ['hero', ...Object.keys(S.comps)].forEach(k => { const v = vitOf(k); if (v < 1) { setVit(k, v + frac); changed = true; } });
   return changed;
 }
-const partyHurt = () => ['hero', ...S.party].some(k => vitOf(k) < 1);
+const partyHurt = () => ['hero', ...S.party].some(k => vitOf(k) < 1 || mpOf(k) < 1);
+function drinkManaShard() {   // restores 45% MP outside battle
+  if (!S.potions.mp) return 'No Mana Shards left. Buy more from a merchant.';
+  if (mpOf('hero') >= 1) return 'Your MP is already full.';
+  S.potions.mp--; setMp('hero', mpOf('hero') + .45 * (1 + M(mods(), 'potionPow'))); track('potion'); save(); return null;
+}
 function drinkTonic() {   // use a Facet Tonic outside battle: heals the hero 35% (more with potion bonuses)
   if (!S.potions.hp) return 'No Facet Tonics left. Buy more from a merchant.';
   if (vitOf('hero') >= 1) return 'You are already at full HP.';
@@ -171,7 +192,7 @@ const innPrice = () => 12 * topTier();
 function restAtInn() {
   if (!partyHurt()) return 'Everyone is already rested.';
   if (S.gold < innPrice()) return `A room costs ${innPrice()} gold.`;
-  S.gold -= innPrice(); healParty(1); save(); return null;
+  S.gold -= innPrice(); healParty(1); regenMp(1e6); save(); return null;
 }
 
 // ---------- Towns: villagers and town requests ----------

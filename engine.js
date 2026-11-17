@@ -9,14 +9,14 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 function newState() {
   return {
-    v:4, created:false, name:'', look:{skin:1,hair:0,eyes:0,outfit:0,hairStyle:0}, origin:'student',
+    v:5, created:false, name:'', look:{skin:1,hair:0,eyes:0,outfit:0,hairStyle:0}, origin:'student',
     level:1, xp:0, attrPts:0, attrs:{str:0,int:0,vit:0,agi:0,spi:0},
     cls:null, cls2:null, job:null, jobsOwned:[], jobXp:{}, entitlements:{}, playerId:newPlayerId(),
     skillPts:0, skills:{}, loadout:[],
     gold:200, dia:30, lifetimeGold:0, shards:10, potions:{hp:3, mp:2},
     equip:{weapon:null,helm:null,armor:null,charm:null}, inv:[], nextId:1,
     cleared:{}, worldsCleared:0, seen:{}, chests:{}, realm:null,
-    comps:{}, party:[], marks:{}, lore:{}, qprog:{}, qdone:{}, daily:null, login:{ last:null, streak:0 }, settings:{ auto:false }, vit:{ hero:1 }, tq:{}
+    comps:{}, party:[], marks:{}, lore:{}, qprog:{}, qdone:{}, daily:null, login:{ last:null, streak:0 }, settings:{ auto:false }, ws:{}, vit:{ hero:1 }, mpv:{ hero:1 }, mpAt:0, tq:{}
   };
 }
 function newPlayerId() {
@@ -39,9 +39,10 @@ function migrate(st) {
     st.v = 3;
   }
   if (st.v < 4) { st.vit = st.vit || { hero:1 }; st.tq = st.tq || {}; st.realm = null; st.v = 4; }   // v4: carried HP, towns
+  if (st.v < 5) { st.look = { ...{ sex:0, race:0, physique:1, height:1 }, ...(st.look || {}) }; st.realm = null; st.ws = st.ws || {}; st.v = 5; }   // v5: new looks, 10× realms
   return st;
 }
-function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) {} }
+function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) {} if (typeof Account !== 'undefined') Account.onSave(); }
 function load() {
   try { const raw = localStorage.getItem(SAVE_KEY); if (raw) return migrate(Object.assign(newState(), JSON.parse(raw))); } catch (e) {}
   return null;
@@ -165,7 +166,7 @@ function gainXp(n) {
     S.attrPts += 3; S.skillPts += 1; S.dia += 5;
     ups.push(S.level);
   }
-  if (ups.length) { S.vit = { hero:1 }; Object.keys(S.comps || {}).forEach(k => S.vit[k] = 1); }   // a level-up heals everyone
+  if (ups.length) { S.vit = { hero:1 }; S.mpv = { hero:1 }; Object.keys(S.comps || {}).forEach(k => { S.vit[k] = 1; S.mpv[k] = 1; }); }   // a level-up restores everyone
   const fresh = ups.length ? unlockSkills() : [];
   return { ups, fresh };
 }

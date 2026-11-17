@@ -99,7 +99,7 @@ function resultHTML() {
     ${r.bondUps.map(b => `<div class="small" style="color:var(--ok)">Bond with ${DV.COMPANIONS[b.id].name} deepened to ${b.lv}. A new chapter of their story is open in the Party tab.</div>`).join('')}
     ${r.quest ? `<div class="small" style="color:var(--gold)">Side quest complete: <b>${esc(r.quest.title)}</b>.</div>` : ''}
     ${r.bounty ? `<div class="small" style="color:var(--gold)">Bounty done. Return to ${esc(r.bounty.giver)} in ${esc(townInfo(B.w).town)} for your reward.</div>` : ''}
-    <div class="small muted num">HP carried out of battle: ${B.party.map(u => `${u.isHero ? 'You' : esc(u.name)} ${Math.round(vitOf(u.key) * 100)}%`).join(' · ')}</div>
+    <div class="small muted num">Carried out of battle: ${B.party.map(u => `${u.isHero ? 'You' : esc(u.name)} ${Math.round(vitOf(u.key) * 100)}% HP, ${Math.round(mpOf(u.key) * 100)}% MP`).join(' · ')}</div>
     ${r.drops.map(d => `<div class="small">Found: <b style="color:${DV.RARITY[d.rarity].color}">${DV.RARITY[d.rarity].name} ${esc(d.name)}</b></div>`).join('')}
     ${r.worldDone ? `<div class="small" style="color:var(--ok)">${esc(W.god.pure)} is ${W.god.corrupted ? 'free of the Rot' : 'safe'}. Blessing: ${esc(W.bless[2])} (${blessText(W)}).</div>` : ''}
     <button class="btn primary" id="cont">Continue</button></div>`;
@@ -123,6 +123,17 @@ function bindResult() {
 // Lets the open world react when a battle ends (remove a beaten foe, give a grace period after a loss).
 function battleClosed(field, outcome, w) { stopAuto(); if (typeof Realm !== 'undefined') Realm.afterBattle(field, outcome, w); }
 
+// MP recharges outside battle wherever you are (and the World view shows it live).
+let outsideTicker = null;
+function startOutsideTicker() {
+  clearInterval(outsideTicker);
+  outsideTicker = setInterval(() => {
+    if (!S || !S.created) return;
+    if (B && !B.over) { S.mpAt = Date.now(); return; }
+    if (tickOutsideBattle() && typeof Realm !== 'undefined') Realm.updateVitals();
+  }, 1000);
+}
+
 // ---------- Boot ----------
 function boot(saved) {
   S = migrate(saved || load() || newState());
@@ -132,7 +143,8 @@ function boot(saved) {
     playDialogue(DV.PROLOGUE, () => openCreator(false));
     return;
   }
-  syncRecruits(); ensureDaily(); save();
+  syncRecruits(); ensureDaily(); tickOutsideBattle(); save();
+  startOutsideTicker();
   render();
   if (!loginStatus().claimed) dailySheet(true);
 }

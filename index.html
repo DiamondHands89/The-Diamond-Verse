@@ -89,7 +89,7 @@ h3{font:15px var(--display);margin:0;letter-spacing:.06em;color:var(--muted)}
 .opt.on{border-color:var(--facet);background:#102040}
 .opt b{display:block}
 .opt>span{display:block}
-input[type=text]{width:100%;box-sizing:border-box;background:#0d1028;border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--text);font:16px var(--body)}
+input[type=text],input[type=password]{width:100%;box-sizing:border-box;background:#0d1028;border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--text);font:16px var(--body)}
 .avatar-wrap{display:grid;place-items:center;background:radial-gradient(circle,#1e2559,transparent 70%);border-radius:12px;padding:6px}
 /* Battle */
 .foes{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px}
@@ -140,7 +140,7 @@ input[type=text]{width:100%;box-sizing:border-box;background:#0d1028;border:1px 
 .rw-stats b{font-size:15px} .rw-stats small{font-size:11px;color:var(--muted)}
 .rw-head h2{font-size:20px}
 .rw-stats i{font-style:normal} .rw-stats .lg{display:none}
-.rw-head .small{display:none}
+.rw-head .small{display:none} .rw-head .rw-region{display:block}
 .rw-char{padding:10px 12px;gap:4px}
 .rw-scene{padding:0;overflow:hidden;position:relative;height:280px}
 .rw-canvas-wrap{position:absolute;inset:0}
@@ -193,6 +193,9 @@ details p{margin:6px 0 0}
 .map-key{display:flex;flex-wrap:wrap;gap:10px}
 .map-key i{display:inline-block;width:9px;height:9px;margin-right:4px;vertical-align:middle}
 .k-mark{background:#ffc145;transform:rotate(45deg)} .k-shrine{background:#fff;transform:rotate(45deg)} .k-chest{background:#ffc145} .k-npc{background:#7ef2ff;border-radius:50%}
+.acct-float{position:fixed;left:12px;top:calc(12px + env(safe-area-inset-top,0px));z-index:55}
+.acct-btn.on{border-color:var(--facet);color:var(--facet)}
+.k-way{background:#7ef2ff;border-radius:50%;border:1px solid #0a0c19} .ft-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px} .ft-list .opt{text-align:left} .rw-region{margin-top:2px;color:var(--facet)}
 .k-gate{border:2px solid #b07cff} .k-town{border:2px solid var(--facet);border-radius:50%} .k-foe{background:#ff4d7a;border-radius:50%}
 .rw-label.mark{color:var(--gold);border-color:#5a4a1a}
 .rw-party,.rw-quest{margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -222,7 +225,10 @@ details p{margin:6px 0 0}
 <script src="online.js"></script>
 <script src="art.js"></script>
 <script src="gfx.js"></script>
+<script src="chars.js"></script>
+<script src="foes.js"></script>
 <script src="views.js"></script>
 <script src="screens.js"></script>
 <script src="realm.js"></script>
 <script src="battle.js"></script>
+<script src="account.js"></script>

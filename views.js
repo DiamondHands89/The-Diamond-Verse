@@ -10,9 +10,11 @@ function render() {
   $('#topbar').innerHTML = `
     <div style="width:38px;flex:none">${avatarSVG(S.look, S.cls, 38)}</div>
     <div class="who"><b>${esc(S.name)}</b><small class="num">Lv ${S.level} ${esc(dualTitle())}${S.job ? ' · ' + DV.JOBS[S.job].name : ''}</small></div>
+    <button class="btn sm acct-btn" id="acctBtn" aria-label="Account and cloud saves">☁</button>
     <button class="btn sm daily-btn" id="dailyBtn" aria-label="Daily rewards and challenges">Daily${dailyPending() ? ' •' : ''}</button>
     <div class="stack" style="gap:2px;align-items:flex-end">${gemNum('g', S.gold)}${gemNum('d', S.dia)}</div>`;
   $('#dailyBtn').onclick = () => dailySheet(false);
+  $('#acctBtn').onclick = () => Account.sheet(); if (typeof Account !== 'undefined') Account.refresh();
   $('#tabs').innerHTML = TABS.map(([id, n]) => {
     const dot = (id === 'hero' && S.attrPts) || (id === 'skills' && S.skillPts) ? ' •' : '';
     return `<button class="${tab === id ? 'on' : ''}" data-tab="${id}" aria-label="${n}"><i></i>${n}${dot}</button>`;
@@ -44,7 +46,8 @@ function playDialogue(lines, done) {
 
 // ---------- Hero creation / redesign ----------
 function openCreator(edit) {
-  const c = { name:S.name || '', look:{ ...S.look }, origin:S.origin, cls:S.cls || 'assassin' };
+  const c = { name:S.name || '', look:normLook(S.look), origin:S.origin, cls:S.cls || 'assassin' };
+  const grp = (key, list) => `<div class="row" style="flex-wrap:wrap">${list.map((n, i) => `<button class="btn sm ${c.look[key] === i ? 'primary' : ''}" data-g="${key}" data-i="${i}">${n}</button>`).join('')}</div>`;
   const sw = (key, list) => `<div class="swatches">${list.map((col, i) =>
     `<button class="sw ${c.look[key] === i ? 'on' : ''}" data-k="${key}" data-i="${i}" style="background:${col}" aria-label="${key} ${i + 1}"></button>`).join('')}</div>`;
   const classCards = DV.CLASS_ORDER.map(id => { const k = DV.CLASSES[id];
@@ -56,10 +59,14 @@ function openCreator(edit) {
     <h2>${edit ? 'Change your look' : 'Who walks into the Diamondverse?'}</h2>
     <div class="avatar-wrap" id="cprev">${avatarSVG(c.look, c.cls, 150)}</div>
     <label class="stack small"><span class="eyebrow">Name</span><input type="text" id="cname" maxlength="18" value="${esc(c.name)}" placeholder="Facetborn"></label>
-    <div class="stack"><span class="eyebrow">Skin</span>${sw('skin', DV.LOOK.skin)}</div>
+    <div class="stack"><span class="eyebrow">Sex</span>${grp('sex', DV.LOOK.sex)}</div>
+    <div class="stack"><span class="eyebrow">Race · cosmetic, no stat changes</span><div class="grid2">${DV.LOOK.race.map((rc, i) =>
+      `<button class="opt ${c.look.race === i ? 'on' : ''}" data-race="${i}"><b>${rc.name}</b><span class="small muted">${rc.text}</span></button>`).join('')}</div></div>
+    <div class="stack"><span class="eyebrow">Skin tone</span>${sw('skin', DV.LOOK.skin)}</div>
+    <div class="stack"><span class="eyebrow">Physique</span>${grp('physique', DV.LOOK.physique)}</div>
+    <div class="stack"><span class="eyebrow">Height</span>${grp('height', DV.LOOK.height)}</div>
+    <div class="stack"><span class="eyebrow">Hair style</span>${grp('hairStyle', DV.LOOK.hairStyle)}</div>
     <div class="stack"><span class="eyebrow">Hair colour</span>${sw('hair', DV.LOOK.hair)}</div>
-    <div class="stack"><span class="eyebrow">Hair style</span><div class="row" style="flex-wrap:wrap">${DV.LOOK.hairStyle.map((n, i) =>
-      `<button class="btn sm ${c.look.hairStyle === i ? 'primary' : ''}" data-hs="${i}">${n}</button>`).join('')}</div></div>
     <div class="stack"><span class="eyebrow">Eyes</span>${sw('eyes', DV.LOOK.eyes)}</div>
     <div class="stack"><span class="eyebrow">Outfit</span>${sw('outfit', DV.LOOK.outfit)}</div>
     ${edit ? '' : `
@@ -74,8 +81,9 @@ function openCreator(edit) {
   L.querySelectorAll('.sw').forEach(b => b.onclick = () => {
     c.look[b.dataset.k] = +b.dataset.i;
     L.querySelectorAll(`.sw[data-k="${b.dataset.k}"]`).forEach(x => x.classList.toggle('on', x === b)); refresh(); });
-  L.querySelectorAll('[data-hs]').forEach(b => b.onclick = () => {
-    c.look.hairStyle = +b.dataset.hs; L.querySelectorAll('[data-hs]').forEach(x => x.classList.toggle('primary', x === b)); refresh(); });
+  L.querySelectorAll('[data-g]').forEach(b => b.onclick = () => {
+    c.look[b.dataset.g] = +b.dataset.i; L.querySelectorAll(`[data-g="${b.dataset.g}"]`).forEach(x => x.classList.toggle('primary', x === b)); refresh(); });
+  L.querySelectorAll('[data-race]').forEach(b => b.onclick = () => { c.look.race = +b.dataset.race; L.querySelectorAll('[data-race]').forEach(x => x.classList.toggle('on', x === b)); refresh(); });
   L.querySelectorAll('[data-or]').forEach(b => b.onclick = () => { c.origin = b.dataset.or; L.querySelectorAll('[data-or]').forEach(x => x.classList.toggle('on', x === b)); });
   L.querySelectorAll('[data-cls]').forEach(b => b.onclick = () => { c.cls = b.dataset.cls; L.querySelectorAll('[data-cls]').forEach(x => x.classList.toggle('on', x === b)); refresh(); });
   $('#cname').oninput = e => c.name = e.target.value.trim();
