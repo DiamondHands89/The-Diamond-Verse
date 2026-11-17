@@ -311,3 +311,15 @@ DV.LOOK = {
     {id:'athlete',name:'Gym Rat',bonus:{str:2,vit:1},text:'+2 Strength, +1 Vitality'}
   ]
 };
+
+// ---------- Open-world foe tiers ----------
+// Roaming foes have fixed levels set by the realm and their tier, never by the hero's level. Higher tiers keep to the
+// wilds, away from the roads; Dread foes guard lairs hidden near the edges of every realm.
+//   lvl: levels above the realm's boss (tier 1 uses the nearest shrine's level instead)
+//   hp/atk/def: multipliers on a normal foe of that level · xp/gold: reward multipliers · respawn: seconds
+DV.FOE_TIERS = [
+  { tier:1, title:'',         name:'Rotspawn', stars:'',    lvl:null, hp:1,   atk:1,    def:1,   xp:1,   gold:1,   drop:.25, rarity:[60, 28, 9, 2.6, .4], respawn:60,  where:'Along the roads' },
+  { tier:2, title:'Veteran',  name:'Veteran',  stars:'★',   lvl:2,    hp:1.4, atk:1.12, def:1.1, xp:2.5, gold:2,   drop:.45, rarity:[35, 38, 20, 6, 1],   respawn:180, where:'Around landmarks and off the road' },
+  { tier:3, title:'Champion', name:'Champion', stars:'★★',  lvl:5,    hp:2,   atk:1.25, def:1.2, xp:5,   gold:3.5, drop:.7,  rarity:[10, 35, 35, 16, 4],  respawn:360, where:'Deep in the wilds' },
+  { tier:4, title:'Dread',    name:'Dread',    stars:'★★★', lvl:9,    hp:3,   atk:1.4,  def:1.3, xp:12,  gold:7,   drop:1,   rarity:[0, 10, 40, 38, 12],  respawn:900, where:'Lairs hidden near the edge of the realm' }
+];

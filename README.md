@@ -28,17 +28,35 @@ real players sign in.
 ## Systems
 - **Open world (World tab)**: third-person 3D realm per world, built from 23 biomes. Each realm is about 580 m across (10× the
   original area) with rolling hills, lakes, ~2,000 trees, rocks and crystals, a winding road of 5 battle shrines, 4 modeled landmarks,
-  12 chests, lore stones, ~40 roaming foes, a local minimap, a full map, and a scrollable action log (last 100 entries).
+  12 chests, lore stones, ~50 roaming foes in four tiers, two hidden Dread lairs, a local minimap and a full map.
+- **World screen**: the scene fills the screen and the HUD sits on top: character (HP, MP, XP, party), realm and region,
+  Menu / Bag / Map / Realms buttons, minimap, a collapsible action log (last 100 entries), a joystick, and Attack, Interact,
+  Tonic and Mana buttons. Bag shows Strength, Agility, Intelligence, XP, level, inventory and the side quest. On a phone held
+  upright the view turns sideways so it is always wide (switch off in Menu → Display); a phone held sideways, a tablet or a
+  computer shows it as is. Computers: WASD/arrows move, drag or Q/R turn, mouse wheel or +/− zoom, Space attack, E interact,
+  M map, B bag, L log, Esc menu. Menu also offers full screen (and landscape lock where the browser allows it).
+- **Foe tiers**: roaming foes have fixed levels set by their realm and tier, never by the hero's level.
+
+  | Tier | Where | Level | HP / ATK | XP | Escorts | Respawn |
+  |---|---|---|---|---|---|---|
+  | Rotspawn | along the roads | nearest shrine | ×1 | ×1 | 0–1 | 1 min |
+  | ★ Veteran | landmarks, open country | realm boss +2 | ×1.4 / ×1.12 | ×2.5 | 0–1 | 3 min |
+  | ★★ Champion | deep wilds | realm boss +5 | ×2 / ×1.25 | ×5 | 2 | 6 min |
+  | ★★★ Dread | hidden lairs near the edge | realm boss +9 | ×3 / ×1.4, every arc trait | ×12 | none | 15 min |
+
+  Higher tiers also drop gear more often and at better rarity, and the first defeat of each Champion or Dread pays Diamonds.
+  Each tier looks different: Veterans wear bronze plate and horns, Champions grow crystal armour with orbiting shards, and
+  Dread foes are twice the size with a gold crown, halo and aura (a Dread serpent becomes a three-headed hydra).
 - **Regions and fast travel**: 11 waystones per realm (town, waystation, each shrine, each landmark, the gate). Walk near one to
   attune it; attuned waystones are listed under Map · Fast travel. The HUD shows the region you are in.
 - **Characters**: anime-style heroes with sex, 5 races (Human, Elf, Beastkin, Dragonkin, Dwarf; cosmetic), 11 skin tones,
   12 hair styles, 12 hair colours, 4 physiques and 3 heights. Townsfolk, companions and foes are modeled in 3D with ink outlines;
-  foes take one of 7 body types (serpent, flyer, wraith, beast, brute, horror, golem) from their names.
+  foes take one of 10 body types (crawler, knight, elemental, serpent, flyer, wraith, beast, brute, horror, golem) from their names.
 - **Towns**: every realm has a walled town (named after its first landmark) and a waystation halfway along the shrine road.
   Standing inside a town barrier heals the party 1% of max HP per second, and foes cannot cross it. Townsfolk include the realm's
   quest-giver, a Town Warden (bounty request), an Elder (errand request), a merchant, an innkeeper (full rest for gold) and locals to talk to.
-- **Carried HP and MP**: HP and MP carry between fights. MP recharges 0.4% of max per second anywhere outside battle (also while
-  the game is closed, up to a day). Level-ups and the inn restore both, Facet Tonics and Mana Shards can be used outside battle,
+- **Carried HP and MP**: HP and MP carry over after every battle. MP does not recharge outside battle: Mana Shards, a night at
+  an inn and level-ups restore it. Town barriers heal HP only. Facet Tonics and Mana Shards can be used outside battle,
   fallen companions get up at 10%, and a defeat wakes you in the town at 25% HP.
 - **Accounts and cloud saves**: sign in from the ☁ button. Progress saves on the device first and uploads a few seconds later.
   Cloud saves are versioned; if two devices both changed the save, you choose which one to keep.
@@ -75,8 +93,8 @@ node tools/sim.js story story.json 3
 node tools/sim.js explorer explorer.json 3
 node tools/export-report.js story.json explorer.json docs/balance
 ```
-The simulator carries HP and MP between fights, recharges MP for 40 s of walking between fights, and rests in town
-before a shrine fight when anyone is under 70% HP.
+The simulator carries HP and MP between fights (no MP recharge), heals in town before a shrine fight when anyone is
+under 70% HP, and pays for the inn when the hero's MP is under 35% before a shrine fight (25% before a field fight).
 Tuning knobs live in `combat.js` (`makeEnemy`, party scaling in `beginBattle`) and `DV.ARCS[].bossAtk` in `data.js`.
 
 ## Payments (not yet connected)

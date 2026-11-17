@@ -70,13 +70,27 @@ function startBattle(w, s) {
   B.again = () => startBattle(w, s);
   return B;
 }
-function startEncounter(w, foe, lvl, first, id) {
-  const W = DV.WORLDS[w - 1], enemies = [makeEnemy(foe, lvl, 'normal', w)];
-  if (Math.random() < .45) enemies.push(makeEnemy(pick(W.foes), Math.max(1, lvl - 1), 'weak', w));
+// A roaming foe of tier 1–4 (DV.FOE_TIERS). Its level is fixed by the realm and tier, not by the hero.
+function makeTiered(foe, lvl, w, tier) {
+  const T = DV.FOE_TIERS[(tier || 1) - 1], e = makeEnemy(T.title ? `${T.title} ${foe}` : foe, lvl, 'normal', w);
+  e.base = foe; e.tier = T.tier;
+  if (T.tier > 1) {
+    e.hp = e.max = Math.round(e.max * T.hp); e.atk = Math.round(e.atk * T.atk); e.def = Math.round(e.def * T.def);
+    if (T.tier === 4) for (const t in TRAITS) if (DV.arcOf(w) >= TRAITS[t].arc && !e.traits.includes(t)) { e.traits.push(t); if (t === 'armored') e.def = Math.round(e.def * 1.25); }
+  }
+  return e;
+}
+function startEncounter(w, foe, lvl, first, id, tier = 1) {
+  const W = DV.WORLDS[w - 1], enemies = [makeTiered(foe, lvl, w, tier)];
+  // Escorts: rotspawn sometimes travel in pairs, veterans may bring one, champions bring two; Dread foes fight alone.
+  const escorts = tier === 1 ? (Math.random() < .45 ? 1 : 0) : tier === 2 ? (Math.random() < .5 ? 1 : 0) : tier === 3 ? 2 : 0;
+  for (let i = 0; i < escorts; i++) { const x = makeTiered(pick(W.foes), Math.max(1, lvl - (tier === 1 ? 1 : 4)), w, 1); x.kind = 'weak'; x.hp = x.max = Math.round(x.max * .75); enemies.push(x); }
   if (first) enemies.forEach(e => e.hp = Math.round(e.hp * .85));
-  beginBattle(w, null, enemies, false, first ? `You strike first! ${foe} reels.` : `${foe} ambushes you!`);
-  B.field = { id, foe, lvl };
-  B.again = () => startEncounter(w, foe, lvl, false, id);
+  const T = DV.FOE_TIERS[tier - 1], name = enemies[0].name;
+  beginBattle(w, null, enemies, false, first ? `You strike first! ${name} reels.` : `${name} ${tier >= 3 ? 'rises to meet you' : 'ambushes you'}!`);
+  if (tier > 1) say('warn', `${T.name} foe ${T.stars} · Lv ${lvl} · worth ${T.xp}× XP.`);
+  B.field = { id, foe, lvl, tier };
+  B.again = () => startEncounter(w, foe, lvl, false, id, tier);
   return B;
 }
 function beginBattle(w, s, enemies, boss, opener) {
@@ -278,14 +292,14 @@ function enemyPhase() {
     }
     strike(e, pickVictim(), mult, label);
     // A boss facing a full party gets a second, normal attack each round.
-    if (e.boss && B.party.length > 2 && aliveParty().length && alive(B.p)) strike(e, pickVictim(), 1, 'strikes');
+    if ((e.boss || e.tier === 4) && B.party.length > 2 && aliveParty().length && alive(B.p)) strike(e, pickVictim(), 1, 'strikes');
     if (e.traits.includes('swift') && Math.random() < .25 && aliveParty().length && alive(B.p)) { say('foe', `${e.name} moves again!`); strike(e, pickVictim(), 1, 'strikes'); }
   }
   // end of round
   B.enemies.forEach((e, i) => {
     if (e.hp <= 0) return;
     e.dots = e.dots.filter(d => { e.hp = Math.max(0, e.hp - d.dmg); B.fx.push({ to:'e' + i, v:d.dmg, dot:true }); return --d.turns > 0; });
-    if (e.traits.includes('regen') && e.hp > 0) e.hp = Math.min(e.max, e.hp + Math.round(e.max * (e.boss ? .01 : .04)));
+    if (e.traits.includes('regen') && e.hp > 0) e.hp = Math.min(e.max, e.hp + Math.round(e.max * (e.boss || e.tier >= 3 ? .01 : .04)));
     if (e.debuff && --e.debuff.turns <= 0) e.debuff = null;
   });
   B.party.forEach((u, i) => {
@@ -303,7 +317,6 @@ function tickCds() { B.party.forEach(u => { for (const id in u.cds) if (u.cds[id
 // Carry HP out of battle. Fallen companions get back up at 10%; a defeated hero wakes in town at 25%.
 function saveVitals(outcome) {
   B.party.forEach(u => { setVit(u.key, u.isHero && outcome === 'lose' ? .25 : u.hp <= 0 ? .1 : u.hp / u.st.hp); setMp(u.key, u.mp / u.st.mp); });
-  S.mpAt = Date.now();
   if (outcome === 'lose') S.party.forEach(k => setVit(k, Math.max(vitOf(k), .25)));
   save();
 }
@@ -318,22 +331,26 @@ function checkEnd() {
 function grantRewards() {
   const m = mods(), field = !!B.field, key = field ? null : stageKey(B.w, B.s), first = !field && !S.cleared[key];
   let xp = 0, gold = 0;
-  B.enemies.forEach(e => { const k = { boss:4, weak:.7, add:.5 }[e.kind] || 1; xp += (12 + 10 * e.lvl) * k; gold += (10 + 4 * e.lvl) * k; });
+  // XP and gold follow a foe's power: its level, its role, and its tier (Veteran 2.5×, Champion 5×, Dread 12× XP).
+  B.enemies.forEach(e => { const k = { boss:4, weak:.7, add:.5 }[e.kind] || 1, T = DV.FOE_TIERS[(e.tier || 1) - 1]; xp += (12 + 10 * e.lvl) * k * T.xp; gold += (10 + 4 * e.lvl) * k * T.gold; });
   xp = Math.round(xp * (1 + M(m, 'xp'))); gold = Math.round(gold * (1 + M(m, 'gold')));
+  const tier = field ? B.field.tier || 1 : 0, TT = DV.FOE_TIERS[Math.max(0, tier - 1)];
   let dia = (first ? (B.boss ? 60 : 15) : 0) + M(m, 'dia');
+  let firstSlay = false;   // first time beating a given Champion or Dread foe
+  if (tier >= 3 && B.field.id) { S.slain = S.slain || {}; firstSlay = !S.slain[B.field.id]; S.slain[B.field.id] = (S.slain[B.field.id] || 0) + 1; if (firstSlay) dia += tier === 4 ? 30 : 8; }
   S.gold += gold; S.lifetimeGold += gold; S.dia += dia;
   if (!field) S.cleared[key] = (S.cleared[key] || 0) + 1;
   let worldDone = false, recruited = [];
   if (B.boss && first && S.worldsCleared < B.w) { S.worldsCleared = B.w; worldDone = true; recruited = syncRecruits(); }
   const drops = [];
-  const chance = (B.boss ? 1 : field ? .25 : .35) + M(m, 'drop');
-  if (Math.random() < chance) drops.push(makeItem(pick(DV.SLOTS), B.w, rollRarity(B.boss ? [0, 50, 35, 13, 2] : [60, 28, 9, 2.6, .4], M(m, 'rarityUp'))));
+  const chance = (B.boss ? 1 : field ? TT.drop : .35) + M(m, 'drop');
+  if (Math.random() < chance) drops.push(makeItem(pick(DV.SLOTS), B.w, rollRarity(B.boss ? [0, 50, 35, 13, 2] : field ? TT.rarity : [60, 28, 9, 2.6, .4], M(m, 'rarityUp'))));
   drops.forEach(d => S.inv.push(d));
   const found = [];
   if (Math.random() < M(m, 'harvest')) { S.potions.hp++; found.push('Facet Tonic'); }
   if (Math.random() < M(m, 'catch')) { S.potions.mp++; found.push('Mana Shard'); }
   const avgLvl = B.enemies.reduce((t, e) => t + e.lvl, 0) / B.enemies.length;
-  const jxp = S.job ? Math.round((8 + avgLvl * 2) * (B.boss ? 3 : 1)) : 0;
+  const jxp = S.job ? Math.round((8 + avgLvl * 2) * (B.boss ? 3 : tier > 1 ? Math.sqrt(TT.xp) : 1)) : 0;
   const jobUp = gainJobXp(jxp);
   const bondUps = addBondWins();
   let quest = null;
@@ -343,5 +360,5 @@ function grantRewards() {
   if (S.party.length >= DV.PARTY_MAX) track('bond');
   const lv = gainXp(xp);
   save();
-  return { xp, gold, dia, drops, found, jxp, jobUp, bondUps, quest, bounty, recruited, first, worldDone, ...lv };
+  return { xp, gold, dia, drops, found, jxp, jobUp, bondUps, quest, bounty, recruited, first, worldDone, tier, firstSlay, ...lv };
 }

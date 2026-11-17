@@ -6,7 +6,7 @@ const TABS = [['world','World'],['story','Story'],['party','Party'],['hero','Her
 function render() {
   if (!S.created) return;
   const st = calcStats();
-  $('#app').classList.toggle('wide', tab === 'world');
+  $('#app').classList.toggle('world', tab === 'world');
   $('#topbar').innerHTML = `
     <div style="width:38px;flex:none">${avatarSVG(S.look, S.cls, 38)}</div>
     <div class="who"><b>${esc(S.name)}</b><small class="num">Lv ${S.level} ${esc(dualTitle())}${S.job ? ' · ' + DV.JOBS[S.job].name : ''}</small></div>

@@ -37,10 +37,10 @@ const Realm = (() => {
   const CELL = 50, VIEW = 175, IDENT = [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1], WHITE = [1, 1, 1], alphaQ = [];   // draw culling: static objects are bucketed in 50-unit cells; draw those within 175 units
 
   let ok = null, canvas, wrap, labelsBox, mini;
-  let statics = [], buckets = new Map(), chunks = [], colliders = [], ents = [], enemies = [], pools = [], PATH = [], shrinePos = [], nextPos = [0, -259], towns = [], flats = [], amp = 6;
+  let statics = [], buckets = new Map(), chunks = [], colliders = [], ents = [], enemies = [], pools = [], PATH = [], shrinePos = [], nextPos = [0, -259], towns = [], flats = [], lairs = [], amp = 6;
   const inTown = (x, z, pad = 0) => towns.some(t => dist(x, z, t.x, t.z) < t.r + pad);
   const townAt = (x, z) => towns.find(t => dist(x, z, t.x, t.z) < t.r);
-  const R = { w:1, px:0, pz:0, py:0, ry:Math.PI, yaw:0, moving:0, t:0, grace:2, log:[], keys:new Set(), jx:0, jy:0, near:null, foe:null, lastSave:0, lastNet:0, region:'' };
+  const R = { w:1, px:0, pz:0, py:0, ry:Math.PI, yaw:0, moving:0, t:0, grace:2, zoom:1, rot:false, log:[], keys:new Set(), jx:0, jy:0, near:null, foe:null, lastSave:0, lastNet:0, region:'' };
 
   const seeded = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
   const dist = (ax, az, bx, bz) => Math.hypot(ax - bx, az - bz);
@@ -159,13 +159,33 @@ const Realm = (() => {
       if (Math.hypot(x, z) > RADIUS - 25 || nearPath(x, z) < s + 10 || marks.some(m => dist(x, z, m.x, m.z) < s + 14) || inTown(x, z, s + 10) || ents.some(e => e.kind === 'waystone' && dist(x, z, e.x, e.z) < s + 8)) continue;
       i++; pools.push([x, z, s]); colliders.push([x, z, s * .5]); flats.push([x, z, s / 2 + 1, s / 2 + 7]);
     }
+    // Dread lairs: two hidden hollows near the edge of the realm, far from roads and landmarks
+    lairs = [];
+    for (let tries = 0; lairs.length < 2 && tries < 2000; tries++) {
+      const a = lairs.length ? Math.atan2(lairs[0].z, lairs[0].x) + Math.PI * (.6 + rand() * .8) : rand() * Math.PI * 2, r = RADIUS - 42 - rand() * 30;
+      const x = Math.cos(a) * r, z = Math.sin(a) * r;
+      if (nearPath(x, z) < 60 || marks.some(m => dist(x, z, m.x, m.z) < 50) || inTown(x, z, 40) || pools.some(p => dist(x, z, p[0], p[1]) < p[2] + 16) || lairs.some(l => dist(x, z, l.x, l.z) < 120)) continue;
+      lairs.push({ x, z, i:lairs.length }); flats.push([x, z, 10, 22]);
+    }
     buildTowns(W, T, TI, rand, marks[0]);
+    lairs.forEach(L => {
+      addStatic({ mesh:'disc', x:L.x, y:.04, z:L.z, sx:15, sy:.02, sz:15, color:'#140a18' });
+      addStatic({ mesh:'disc', x:L.x, y:.06, z:L.z, sx:6, sy:.02, sz:6, color:'#ffd166', e:.5, a:.35 });
+      for (let i = 0; i < 9; i++) {
+        const a = i / 9 * Math.PI * 2, x = L.x + Math.cos(a) * 8.5, z = L.z + Math.sin(a) * 8.5, h = 4 + rand() * 4;
+        addStatic({ mesh:'gem8', x, z, y:-.5, ry:rand() * 6, rz:(rand() - .5) * .3, sx:1.6, sy:h, sz:1.6, color:'#1e1226' });
+        addStatic({ mesh:'gem', x, z, y:h - .9, sx:.5, sy:.8, sz:.5, color:'#ffd166', e:.9 });
+        colliders.push([x, z, .9]);
+      }
+      for (let i = 0; i < 7; i++) { const a = rand() * 6.28, r = 2 + rand() * 5; addStatic({ mesh:'cyl', x:L.x + Math.cos(a) * r, z:L.z + Math.sin(a) * r, y:.15, rz:Math.PI / 2, ry:rand() * 6, sx:.18, sy:1 + rand(), sz:.18, color:'#e8e2d6' }); }
+      ents.push({ kind:'lair', i:L.i, x:L.x, z:L.z, r:0, label:'Dread lair' });
+    });
     pools.forEach(([x, z, s]) => addStatic({ mesh:'disc', x, y:.06, z, sx:s, sy:.04, sz:s, color:T.hazard, e:.45 }));
     // vegetation, rocks and crystals
     const kinds = T.props;
     for (let i = 0, tries = 0; i < 1900 && tries < 30000; tries++) {
       const r = Math.sqrt(rand()) * (RADIUS - 8), t = rand() * Math.PI * 2, x = Math.cos(t) * r, z = Math.sin(t) * r;
-      if (nearPath(x, z) < 5.5 || inTown(x, z, 3) || marks.some(m => dist(x, z, m.x, m.z) < 8) || pools.some(p => dist(x, z, p[0], p[1]) < p[2] * .6 + 1.5)) continue;
+      if (nearPath(x, z) < 5.5 || inTown(x, z, 3) || marks.some(m => dist(x, z, m.x, m.z) < 8) || lairs.some(l => dist(x, z, l.x, l.z) < 13) || pools.some(p => dist(x, z, p[0], p[1]) < p[2] * .6 + 1.5)) continue;
       i++;
       const s = .7 + rand() * 1.1;
       prop(kinds[Math.floor(rand() * kinds.length)], x, z, s, rand, T, W);
@@ -190,8 +210,19 @@ const Realm = (() => {
     if (w > 1) ents.push({ kind:'portal', dir:-1, x:BACK_POS[0], z:BACK_POS[1], r:2.4, label:`Gate to ${DV.WORLDS[w - 2].name}` });
     // boundary peaks
     for (let i = 0; i < 160; i++) { const t = i / 160 * Math.PI * 2, r = RADIUS + 6 + rand() * 18, s = 6 + rand() * 7; addStatic({ mesh:'gem8', x:Math.cos(t) * r, z:Math.sin(t) * r, y:-2, ry:rand() * 6, sx:s, sy:s * (1.5 + rand() * 1.5), sz:s, color:T.stone }); }
-    // roaming foes: along the road and around landmarks, levelled to the nearest shrine
+    // Roaming foes in four tiers (DV.FOE_TIERS). Levels are fixed per realm: rotspawn match the nearest shrine; veterans,
+    // champions and Dread foes sit 2, 5 and 9 levels above the realm's boss, and keep further from the roads.
     const er = seeded(w * 104729); enemies = [];
+    const bossLvl = stageLevel(w, 4), spot = (test, tries = 600) => { for (let n = 0; n < tries; n++) { const r = Math.sqrt(er()) * (RADIUS - 40), a = er() * 6.28, x = Math.cos(a) * r, z = Math.sin(a) * r; if (test(x, z)) return [x, z]; } return null; };
+    const clear = (x, z, pad) => !inTown(x, z, pad) && !pools.some(p => dist(x, z, p[0], p[1]) < p[2] * .6 + 3) && !colliders.some(c => dist(x, z, c[0], c[1]) < c[2] + 1.5);
+    const addFoe = (tier, foe, lvl, hx, hz) => enemies.push({ id:`${w}-t${tier}-${enemies.length}`, tier, foe, name: tier > 1 ? `${DV.FOE_TIERS[tier - 1].title} ${foe}` : foe, lvl, hx, hz, x:hx, z:hz, tx:hx, tz:hz, ry:er() * 6, dead:0, seen:false });
+    // tier 2: veterans guard each landmark and roam the open country
+    marks.slice(1).forEach(m => { for (let k = 0; k < 3; k++) { const a = er() * 6.28, r = 15 + er() * 8, x = m.x + Math.cos(a) * r, z = m.z + Math.sin(a) * r; if (clear(x, z, 10)) addFoe(2, W.foes[2 + (k % 2)], bossLvl + 2, x, z); } });
+    for (let k = 0; k < 4; k++) { const p = spot((x, z) => nearPath(x, z) > 35 && nearPath(x, z) < 90 && clear(x, z, 20)); if (p) addFoe(2, W.foes[1 + Math.floor(er() * 3)], bossLvl + 2, ...p); }
+    // tier 3: champions deep in the wilds
+    for (let k = 0; k < 5; k++) { const p = spot((x, z) => nearPath(x, z) > 70 && Math.hypot(x, z) < RADIUS - 45 && !marks.some(m => dist(x, z, m.x, m.z) < 35) && !lairs.some(l => dist(x, z, l.x, l.z) < 40) && !enemies.some(e => e.tier === 3 && dist(x, z, e.hx, e.hz) < 80) && clear(x, z, 30)); if (p) addFoe(3, W.foes[(k + w) % 4], bossLvl + 5, ...p); }
+    // tier 4: a Dread foe in each lair
+    lairs.forEach(L => addFoe(4, W.foes[L.i ? 2 : 3], bossLvl + 9, L.x, L.z));
     const nearestStage = (x, z) => { let b = 0, d = Infinity; shrinePos.forEach((p, s) => { const q = dist(x, z, p[0], p[1]); if (q < d) { d = q; b = s; } }); return Math.min(3, b); };
     const homes = [];
     for (let i = 0; i < 30; i++) {
@@ -203,7 +234,7 @@ const Realm = (() => {
     homes.forEach(([hx, hz], i) => {
       towns.forEach(t => { const d = dist(hx, hz, t.x, t.z); if (d < t.r + 8) { hx = t.x + (hx - t.x) / (d || 1) * (t.r + 8); hz = t.z + (hz - t.z) / (d || 1) * (t.r + 8); } });
       const stage = nearestStage(hx, hz), lvl = Math.max(1, stageLevel(w, stage) - (er() < .5 ? 1 : 0));
-      enemies.push({ id:`${w}-e${i}`, foe:W.foes[Math.min(3, Math.floor(er() * (stage + 2)))], lvl, hx, hz, x:hx, z:hz, tx:hx, tz:hz, ry:0, dead:0, seen:false });
+      addFoe(1, W.foes[Math.min(3, Math.floor(er() * (stage + 2)))], lvl, hx, hz);
     });
     ents.forEach(n => n.y = H(n.x, n.z));
     bakeBuckets(); buildTerrain(T, W);
@@ -261,6 +292,12 @@ const Realm = (() => {
   }
   const ROLE = { warden:'Town Warden', elder:'Elder', merchant:'Merchant', innkeeper:'Innkeeper', citizen:'Townsperson', keeper:'Waystation Keeper', trader:'Road Trader' };
   const ROLE_COLOR = { warden:'#ff7a59', elder:'#c3a6ff', merchant:'#ffc145', innkeeper:'#8fe3b0', citizen:'#9aa3b5', keeper:'#5fb3ff', trader:'#ffd166' };
+  // per-tier roaming behaviour: sight range, leash from home, speeds, wander radius
+  const FOE_BEHAVIOR = [
+    { aggro:8, leash:16, walk:1.6, chase:3.6, wander:6 }, { aggro:9, leash:18, walk:1.5, chase:3.9, wander:7 },
+    { aggro:7, leash:14, walk:1.2, chase:3.6, wander:6 }, { aggro:6, leash:9, walk:.8, chase:3.2, wander:3 }];
+  const TIER_COLOR = ['#ff4d7a', '#ffb347', '#7ef2ff', '#ffd166'];
+  const lairFound = n => !!(n && S.lairs && S.lairs[`${R.w}-${n.i}`]);
   function reqFor(n) { const T = townInfo(R.w); return n.role === 'warden' ? T.bounty : n.role === 'elder' ? T.errand : null; }
 
   // ---------- regions & fast travel ----------
@@ -387,6 +424,7 @@ const Realm = (() => {
     // discovery: landmarks, waystones, errands, region name
     ents.forEach(n => {
       if (n.kind === 'waystone' && !attuned(n) && dist(n.x, n.z, R.px, R.pz) < 16) attune(n.id);
+      if (n.kind === 'lair' && !lairFound(n) && dist(n.x, n.z, R.px, R.pz) < 30) { S.lairs = S.lairs || {}; S.lairs[`${R.w}-${n.i}`] = 1; save(); say('You find a Dread lair. Something ancient sleeps here.', 'foe'); toast('Dread lair discovered'); }
       if (n.kind !== 'mark' || dist(n.x, n.z, R.px, R.pz) > 9) return;
       if (!S.marks[markKey(R.w, n.i)]) { visitMark(R.w, n.i); say(`Discovered: ${n.name}.`, 'you'); toast(`Landmark discovered: ${n.name}`); const q = checkQuest(R.w); if (q) questDone(q); }
       const e = tqReachMark(R.w, n.i); if (e) { say(`You deliver ${e.item} at ${n.name}. Return to ${e.giver} in ${townInfo(R.w).town}.`, 'you'); toast('Errand delivered. Return to town.'); }
@@ -398,23 +436,26 @@ const Realm = (() => {
     for (const e of enemies) {
       if (e.dead) { if (Date.now() > e.dead) { e.dead = 0; e.x = e.hx; e.z = e.hz; } else continue; }
       const dp = dist(e.x, e.z, R.px, R.pz); if (dp > 160) continue;   // far-away foes rest
-      const dh = dist(e.x, e.z, e.hx, e.hz);
-      let sp = 1.6;
-      if (dp < 8 && dh < 16 && R.grace <= 0 && !R.town) { e.tx = R.px; e.tz = R.pz; sp = 3.6; }
-      else if (dist(e.x, e.z, e.tx, e.tz) < .5 || dh > 16) { const a = Math.random() * 6.28, r = Math.random() * 6; e.tx = e.hx + Math.cos(a) * r; e.tz = e.hz + Math.sin(a) * r; }
+      const dh = dist(e.x, e.z, e.hx, e.hz), B8 = FOE_BEHAVIOR[e.tier - 1];
+      let sp = B8.walk;
+      if (dp < B8.aggro && dh < B8.leash && R.grace <= 0 && !R.town) { e.tx = R.px; e.tz = R.pz; sp = B8.chase; }
+      else if (dist(e.x, e.z, e.tx, e.tz) < .5 || dh > B8.leash) { const a = Math.random() * 6.28, r = Math.random() * B8.wander; e.tx = e.hx + Math.cos(a) * r; e.tz = e.hz + Math.sin(a) * r; }
       const dx = e.tx - e.x, dz = e.tz - e.z, l = Math.hypot(dx, dz);
       if (l > .1) { e.x += dx / l * sp * dt; e.z += dz / l * sp * dt; e.ry = Math.atan2(dx, dz); }
       towns.forEach(t => { const d = dist(e.x, e.z, t.x, t.z); if (d < t.r + 1) { e.x = t.x + (e.x - t.x) / (d || 1) * (t.r + 1); e.z = t.z + (e.z - t.z) / (d || 1) * (t.r + 1); e.tx = e.hx; e.tz = e.hz; } });
-      if (dp < 10 && !e.seen) { e.seen = true; say(`You encounter a ${e.foe}! (Lv ${e.lvl})`, 'foe'); }
-      if (dp > 18) e.seen = false;
+      if (dp < (e.tier > 1 ? 22 : 10) && !e.seen) {
+        e.seen = true; const TT = DV.FOE_TIERS[e.tier - 1], danger = e.lvl >= S.level + 6 ? ' Far stronger than you.' : '';
+        say(e.tier > 1 ? `You spot ${TT.stars} ${e.name} (Lv ${e.lvl}, ${TT.xp}× XP).${danger}` : `You encounter a ${e.foe}! (Lv ${e.lvl})`, 'foe');
+      }
+      if (dp > (e.tier > 1 ? 34 : 18)) e.seen = false;
       if (dp < foeD) { foe = e; foeD = dp; }
-      if (dp < 1.3 && R.grace <= 0) { engage(e, false); return; }
+      if (dp < 1.1 + .35 * foeScale(e) && R.grace <= 0) { engage(e, false); return; }
     }
     let near = null, nd = Infinity;
-    ents.forEach(n => { if (n.kind === 'mark' || n.kind === 'sign' || (n.kind === 'hidden' && compJoined(n.id))) return; const d = dist(n.x, n.z, R.px, R.pz) - n.r; if (d < 2.4 && d < nd) { near = n; nd = d; } });
+    ents.forEach(n => { if (n.kind === 'mark' || n.kind === 'sign' || n.kind === 'lair' || (n.kind === 'hidden' && compJoined(n.id))) return; const d = dist(n.x, n.z, R.px, R.pz) - n.r; if (d < 2.4 && d < nd) { near = n; nd = d; } });
     if (near !== R.near || foe !== R.foe) { R.near = near; R.foe = foe; updateButtons(); }
     // draw: sky, terrain chunks and static objects near the camera, then entities and characters
-    const D = 11, Hc = 5.8, eye = [R.px + Math.sin(R.yaw) * D, R.py + Hc, R.pz + Math.cos(R.yaw) * D];
+    const D = 11 * R.zoom, Hc = 5.8 * R.zoom, eye = [R.px + Math.sin(R.yaw) * D, R.py + Hc, R.pz + Math.cos(R.yaw) * D];
     Gfx.frame(eye, [R.px, R.py + 1.9, R.pz], { top:T.sky || T.fog, horizon:T.fog }, [70, VIEW]);
     const fx = -Math.sin(R.yaw), fz = -Math.cos(R.yaw);
     const behind = (x, z, pad) => { const dx = x - R.px, dz = z - R.pz, d = Math.hypot(dx, dz); return d > pad && (dx * fx + dz * fz) / d < -.45; };
@@ -446,6 +487,7 @@ const Realm = (() => {
     if (n.kind === 'villager') { if (d > 6) return null; const q = reqFor(n), st = q && tqState(q.key).st;
       return `${n.label} · ${ROLE[n.role]}${st === 'new' ? ' · Request' : st === 'return' ? ' · Turn in' : ''}`; }
     if (n.kind === 'chest') return null;
+    if (n.kind === 'lair') return d < 45 ? n.label : null;
     return n.label;
   }
   function drawLabels() {
@@ -453,7 +495,7 @@ const Realm = (() => {
     ents.forEach((n, i) => {
       const d = dist(n.x, n.z, R.px, R.pz); if (d > 60) return;
       const text = labelFor(n); if (!text) return;
-      const h = (n.y || 0) + (n.kind === 'shrine' ? (n.s === 4 ? 6.4 : 4.6) : n.kind === 'mark' ? 9 : n.kind === 'portal' ? 4.4 : n.kind === 'sign' ? 3.4 : n.kind === 'waystone' ? 4.8 : 2.8);
+      const h = (n.y || 0) + (n.kind === 'shrine' ? (n.s === 4 ? 6.4 : 4.6) : n.kind === 'mark' ? 9 : n.kind === 'portal' ? 4.4 : n.kind === 'sign' ? 3.4 : n.kind === 'waystone' ? 4.8 : n.kind === 'lair' ? 9 : 2.8);
       const p = Gfx.project(n.x, h, n.z); if (!p || p.y < 26) return;
       let el = labelEls.get(i);
       if (!el) { el = document.createElement('div'); el.className = 'rw-label'; labelsBox.appendChild(el); labelEls.set(i, el); }
@@ -462,6 +504,19 @@ const Realm = (() => {
       el.style.transform = `translate(${p.x.toFixed(0)}px, ${p.y.toFixed(0)}px) translate(-50%, -100%)`;
       el.style.opacity = d > 45 ? (60 - d) / 15 : 1;
       el.hidden = false; seen.add(i);
+    });
+    enemies.forEach((e, i) => {
+      if (e.dead) return;
+      const d = dist(e.x, e.z, R.px, R.pz); if (d > (e.tier > 1 ? 26 : 12)) return;
+      const p = Gfx.project(e.x, H(e.x, e.z) + 2.3 * foeScale(e) + .4, e.z); if (!p || p.y < 26) return;
+      const key = 'f' + i, TT = DV.FOE_TIERS[e.tier - 1], text = `${TT.stars ? TT.stars + ' ' : ''}${e.name} · Lv ${e.lvl}`;
+      let el = labelEls.get(key);
+      if (!el) { el = document.createElement('div'); labelsBox.appendChild(el); labelEls.set(key, el); }
+      el.className = `rw-label foe t${e.tier}${e.lvl >= S.level + 6 ? ' danger' : ''}`;
+      if (el.textContent !== text) el.textContent = text;
+      el.style.transform = `translate(${p.x.toFixed(0)}px, ${p.y.toFixed(0)}px) translate(-50%, -100%)`;
+      el.style.opacity = d > 18 ? Math.max(0, (26 - d) / 8) : 1;
+      el.hidden = false; seen.add(key);
     });
     labelEls.forEach((el, i) => { if (!seen.has(i)) el.hidden = true; });
   }
@@ -495,7 +550,13 @@ const Realm = (() => {
       else if (n.kind === 'lore' && S.lore[R.w]) { g.fillStyle = '#ffe08a'; g.beginPath(); g.arc(a, b, full ? 3 : 2, 0, Math.PI * 2); g.fill(); }
     });
     if (full) towns.forEach(t => { const [a, b] = P(t.x, t.z); text(t.name, a, b - Math.max(8, t.r * k) - 4); });
-    enemies.forEach(e => { if (e.dead || (!full && dist(e.x, e.z, R.px, R.pz) > 90)) return; const [a, b] = P(e.x, e.z); g.fillStyle = '#ff4d7a'; g.beginPath(); g.arc(a, b, full ? 2 : 2.2, 0, Math.PI * 2); g.fill(); });
+    enemies.forEach(e => {
+      if (e.dead || (!full && dist(e.x, e.z, R.px, R.pz) > 90)) return;
+      if (e.tier === 4 && !lairFound(ents.find(n => n.kind === 'lair' && dist(n.x, n.z, e.hx, e.hz) < 1))) return;   // hidden until found
+      const [a, b] = P(e.x, e.z); g.fillStyle = TIER_COLOR[e.tier - 1]; g.beginPath(); g.arc(a, b, (full ? 2 : 2.2) + (e.tier - 1) * .8, 0, Math.PI * 2); g.fill();
+      if (e.tier > 1) { g.strokeStyle = '#0a0c19'; g.lineWidth = 1; g.stroke(); }
+    });
+    ents.forEach(n => { if (n.kind !== 'lair' || !lairFound(n)) return; const [a, b] = P(n.x, n.z); g.strokeStyle = '#ffd166'; g.lineWidth = 1.5; g.beginPath(); g.arc(a, b, full ? 9 : 6, 0, Math.PI * 2); g.stroke(); });
     const [px, pz] = P(R.px, R.pz), s = full ? 9 : 6;
     g.save(); g.translate(px, pz); g.rotate(-R.ry + Math.PI);
     g.fillStyle = '#ffffff'; g.strokeStyle = '#0a0c19'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(0, -s); g.lineTo(s * .7, s * .7); g.lineTo(0, s * .3); g.lineTo(-s * .7, s * .7); g.closePath(); g.fill(); g.stroke();
@@ -517,7 +578,7 @@ const Realm = (() => {
   // ---------- actions ----------
   function engage(e, first) {
     savePos(); R.keys.clear(); R.jx = R.jy = 0;
-    startEncounter(R.w, e.foe, e.lvl, first, e.id);
+    startEncounter(R.w, e.foe, e.lvl, first, e.id, e.tier);
     openBattle();
   }
   function attack() {
@@ -583,7 +644,7 @@ const Realm = (() => {
     }
     if (field) {
       const e = enemies.find(x => x.id === field.id);
-      if (e && outcome === 'win') { e.dead = Date.now() + 60000; say(`${field.foe} is cleansed. More Rot will gather here in a minute.`, 'you'); }
+      if (e && outcome === 'win') { const sec = DV.FOE_TIERS[e.tier - 1].respawn; e.dead = Date.now() + sec * 1000; say(`${e.name} is cleansed. ${e.tier > 1 ? `Another will claim this ground in about ${Math.round(sec / 60)} minutes.` : 'More Rot will gather here in a minute.'}`, 'you'); }
       else if (e) { e.x = e.hx; e.z = e.hz; e.tx = e.hx; e.tz = e.hz; say(outcome === 'flee' ? 'You slip away.' : 'You stagger back, battered but alive.', 'sys'); }
     } else if (outcome === 'win') say('The shrine glows clean.', 'you');
   }
@@ -631,16 +692,17 @@ const Realm = (() => {
     if (b) b.style.width = Math.round(f * 100) + '%';
     const mf = mpOf('hero'), mt = $('#rwMpText'), mb = $('#rwMpBar');
     if (mt) mt.textContent = `${Math.round(st.mp * mf)}/${st.mp}`; if (mb) mb.style.width = Math.round(mf * 100) + '%';
-    const ms = $('#rwMana'); if (ms) { ms.disabled = !S.potions.mp || mf >= 1; ms.textContent = `Mana Shard (${S.potions.mp})`; }
+    const ms = $('#rwMana'); if (ms) { ms.disabled = !S.potions.mp || mf >= 1; ms.querySelector('small').textContent = S.potions.mp; }
+    const xb = $('#rwXpBar'); if (xb) xb.style.width = Math.min(100, Math.round(S.xp / xpNeed(S.level) * 100)) + '%';
     const pp = $('#rwPartyHp'); if (pp) pp.textContent = S.party.map(k => `${DV.COMPANIONS[k].name} ${Math.round(vitOf(k) * 100)}%`).join(' · ');
-    const c = $('#rwTown'); if (c) { c.hidden = !R.town; c.textContent = R.town ? `In ${R.town.name}: healing 1%/s` : ''; }
-    const tb = $('#rwTonic'); if (tb) { tb.disabled = !S.potions.hp || f >= 1; tb.textContent = `Drink Tonic (${S.potions.hp})`; }
+    const c = $('#rwTown'); if (c) { c.hidden = !R.town; c.textContent = R.town ? `In town · healing 1%/s` : ''; }
+    const tb = $('#rwTonic'); if (tb) { tb.disabled = !S.potions.hp || f >= 1; tb.querySelector('small').textContent = S.potions.hp; }
   }
 
   // ---------- HUD ----------
   function updateButtons() {
     const a = $('#rwAttack'), i = $('#rwInteract'); if (!a) return;
-    a.querySelector('small').textContent = R.foe ? `${R.foe.foe} · Lv ${R.foe.lvl}` : 'No foe in reach';
+    a.querySelector('small').textContent = R.foe ? `${R.foe.name} · Lv ${R.foe.lvl}` : 'No foe in reach';
     a.classList.toggle('ready', !!R.foe);
     const n = R.near;
     i.querySelector('small').textContent = !n ? 'Nothing nearby'
@@ -659,22 +721,42 @@ const Realm = (() => {
   }
 
   // ---------- mount / input ----------
+  // The World view fills the screen with the HUD drawn over the scene. On a phone held upright it is turned sideways
+  // (wide screen) unless the player switches that off in the menu; a phone held sideways or a computer shows it as is.
+  // Rotated, the frame's "up" points to the right edge of the screen, so touch movement is turned back to frame axes.
+  const toFrame = (dx, dy) => R.rot ? [dy, -dx] : [dx, dy];
+  function layoutStage() {
+    const st = $('#rwStage'), fr = $('#rwFrame'); if (!st || !fr) return;
+    const w = st.clientWidth || window.innerWidth, h = window.innerHeight;
+    const phone = matchMedia('(pointer: coarse)').matches || w < 640;
+    R.rot = S.settings.wide !== false && h > w * 1.05 && phone;
+    st.style.height = h + 'px'; st.classList.toggle('rot', R.rot);
+    fr.style.width = (R.rot ? h : w) + 'px'; fr.style.height = (R.rot ? w : h) + 'px';
+    fr.style.setProperty('--fw', (R.rot ? h : w) + 'px');
+    fr.classList.toggle('compact', (R.rot ? w : h) < 520);
+    fr.classList.toggle('touch', phone); fr.classList.toggle('narrow', (R.rot ? h : w) < 1000);
+  }
+  window.addEventListener('resize', () => { if (tab === 'world') layoutStage(); });
   function ensure() {
     if (ok !== null) return ok;
     wrap = document.createElement('div'); wrap.className = 'rw-canvas-wrap';
     canvas = document.createElement('canvas'); canvas.className = 'rw-canvas'; canvas.setAttribute('aria-label', 'Open world view');
     labelsBox = document.createElement('div'); labelsBox.className = 'rw-labels';
     mini = document.createElement('canvas'); mini.className = 'rw-mini'; mini.setAttribute('aria-label', 'Minimap. Tap to open the full map.');
-    const mapBtn = document.createElement('button'); mapBtn.className = 'btn sm rw-mapbtn'; mapBtn.textContent = 'Map';
-    wrap.append(canvas, labelsBox, mini, mapBtn);
+    wrap.append(canvas, labelsBox, mini);
     ok = Gfx.init(canvas);
     if (!ok) return false;
-    mini.onclick = mapBtn.onclick = mapSheet;
+    mini.onclick = mapSheet;
     let drag = null;
-    canvas.addEventListener('pointerdown', e => { drag = { id:e.pointerId, x:e.clientX }; canvas.setPointerCapture(e.pointerId); });
-    canvas.addEventListener('pointermove', e => { if (drag && drag.id === e.pointerId) { R.yaw -= (e.clientX - drag.x) * .009; drag.x = e.clientX; } });
+    canvas.addEventListener('pointerdown', e => { drag = { id:e.pointerId, x:e.clientX, y:e.clientY }; canvas.setPointerCapture(e.pointerId); });
+    canvas.addEventListener('pointermove', e => {
+      if (!drag || drag.id !== e.pointerId) return;
+      const [dx] = toFrame(e.clientX - drag.x, e.clientY - drag.y);
+      R.yaw -= dx * .009; drag.x = e.clientX; drag.y = e.clientY;
+    });
     const end = e => { if (drag && drag.id === e.pointerId) drag = null; };
     canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
+    canvas.addEventListener('wheel', e => { e.preventDefault(); R.zoom = clamp(R.zoom * (e.deltaY > 0 ? 1.08 : .93), .6, 1.8); }, { passive:false });
     window.addEventListener('keydown', e => {
       if (!active() || /input|textarea/i.test(e.target.tagName)) return;
       const k = e.key.toLowerCase();
@@ -682,7 +764,11 @@ const Realm = (() => {
       else if (k === ' ' || k === 'f') { e.preventDefault(); attack(); }
       else if (k === 'e' || k === 'enter') { e.preventDefault(); interact(); }
       else if (k === 'm') mapSheet();
+      else if (k === 'b' || k === 'i') toggleBag();
+      else if (k === 'l') toggleLog();
+      else if (k === 'escape') menuSheet();
       else if (k === 'q') R.yaw += .3; else if (k === 'r') R.yaw -= .3;
+      else if (k === '-' || k === '_') R.zoom = clamp(R.zoom * 1.1, .6, 1.8); else if (k === '=' || k === '+') R.zoom = clamp(R.zoom / 1.1, .6, 1.8);
     });
     window.addEventListener('keyup', e => R.keys.delete(e.key.toLowerCase()));
     window.addEventListener('blur', () => R.keys.clear());
@@ -692,17 +778,51 @@ const Realm = (() => {
     requestAnimationFrame(loop);
     return true;
   }
+  function toggleBag(force) { const b = $('#rwBag'); if (!b) return; b.hidden = force != null ? !force : !b.hidden; $('#rwBagBtn').classList.toggle('on', !b.hidden); }
+  function toggleLog() { const l = $('#rwLogBox'); if (!l) return; l.classList.toggle('min'); try { localStorage.setItem('dv.logmin', l.classList.contains('min') ? '1' : ''); } catch (e) {} }
+  function menuSheet() {
+    const TABS_ALL = [['story','Story'],['party','Party'],['hero','Hero'],['class','Class'],['skills','Skills'],['gear','Gear'],['shop','Bazaar']];
+    const fs = !!document.fullscreenElement;
+    openSheet(`<div class="eyebrow">Menu</div><h2>${esc(S.name)} <span class="muted num" style="font-size:15px">Lv ${S.level}</span></h2>
+      <div class="menu-grid">${TABS_ALL.map(([id, n]) => `<button class="opt" data-go="${id}"><b>${n}</b></button>`).join('')}
+        <button class="opt" id="mDaily"><b>Daily${dailyPending() ? ' •' : ''}</b></button><button class="opt" id="mAcct"><b>☁ Account</b></button></div>
+      <h3>Display</h3>
+      <label class="row small"><input type="checkbox" id="mWide" ${S.settings.wide !== false ? 'checked' : ''}> Wide screen on phones (turn the World view sideways when the phone is upright)</label>
+      ${document.fullscreenEnabled ? `<button class="btn" id="mFull">${fs ? 'Exit full screen' : 'Full screen'}</button>` : ''}
+      <div class="small muted">Keyboard: WASD or arrows move · drag or Q/R turn · mouse wheel or +/− zoom · Space attack · E interact · M map · B bag · L log · Esc menu</div>`, el => {
+      el.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { closeSheet(); tab = b.dataset.go; render(); window.scrollTo(0, 0); });
+      el.querySelector('#mDaily').onclick = () => dailySheet(false);
+      el.querySelector('#mAcct').onclick = () => Account.sheet();
+      el.querySelector('#mWide').onchange = e => { S.settings.wide = e.target.checked; save(); };
+      const f = el.querySelector('#mFull');
+      if (f) f.onclick = async () => {
+        try {
+          if (document.fullscreenElement) await document.exitFullscreen();
+          else { await document.documentElement.requestFullscreen(); try { await screen.orientation.lock('landscape'); } catch (e) {} }
+        } catch (e) { toast('Full screen is not available here.'); }
+        closeSheet();
+      };
+    });
+  }
   function mount() {
     const box = $('#rwScene');
+    layoutStage();
     if (!ensure()) { box.innerHTML = '<div class="rw-nogl">This device could not start the 3D view (WebGL is turned off or unsupported). The Story tab still has every stage.</div>'; return; }
     box.appendChild(wrap);
-    const joy = $('#rwJoy'), knob = joy.querySelector('i'); let jid = null;
-    const upd = e => { const r = joy.getBoundingClientRect(), R0 = r.width / 2 - 8; let dx = e.clientX - r.left - r.width / 2, dy = e.clientY - r.top - r.height / 2; const l = Math.hypot(dx, dy); if (l > R0) { dx *= R0 / l; dy *= R0 / l; } R.jx = dx / R0; R.jy = dy / R0; knob.style.transform = `translate(${dx}px, ${dy}px)`; };
-    joy.onpointerdown = e => { jid = e.pointerId; joy.setPointerCapture(e.pointerId); upd(e); };
+    const joy = $('#rwJoy'), knob = joy.querySelector('i'); let jid = null, c0 = null;
+    const upd = e => {
+      const R0 = joy.offsetWidth / 2 - 8; let [dx, dy] = toFrame(e.clientX - c0[0], e.clientY - c0[1]);
+      const l = Math.hypot(dx, dy); if (l > R0) { dx *= R0 / l; dy *= R0 / l; }
+      R.jx = dx / R0; R.jy = dy / R0; knob.style.transform = `translate(${dx}px, ${dy}px)`;
+    };
+    joy.onpointerdown = e => { jid = e.pointerId; joy.setPointerCapture(e.pointerId); const r = joy.getBoundingClientRect(); c0 = [r.left + r.width / 2, r.top + r.height / 2]; upd(e); };
     joy.onpointermove = e => { if (e.pointerId === jid) upd(e); };
     joy.onpointerup = joy.onpointercancel = e => { if (e.pointerId !== jid) return; jid = null; R.jx = R.jy = 0; knob.style.transform = ''; };
     $('#rwAttack').onclick = attack; $('#rwInteract').onclick = interact;
-    $('#rwTravel').onclick = travelSheet; $('#rwMap').onclick = mapSheet;
+    $('#rwTravel').onclick = travelSheet; $('#rwMap').onclick = mapSheet; $('#rwMenu').onclick = menuSheet;
+    $('#rwBagBtn').onclick = () => toggleBag(); $('#rwBagX').onclick = () => toggleBag(false);
+    $('#rwLogToggle').onclick = toggleLog;
+    try { if (localStorage.getItem('dv.logmin')) $('#rwLogBox').classList.add('min'); } catch (e) {}
     $('#rwTonic').onclick = () => { const err = drinkTonic(); if (err) return toast(err); updateVitals(); say('You drink a Facet Tonic.', 'you'); };
     $('#rwMana').onclick = () => { const err = drinkManaShard(); if (err) return toast(err); updateVitals(); say('You crush a Mana Shard. Your MP surges.', 'you'); };
     R.town = townAt(R.px, R.pz); updateVitals(); R.region = regionName(); const rg = $('#rwRegion'); if (rg) rg.textContent = R.region;
@@ -725,7 +845,9 @@ const Realm = (() => {
   return { mount, afterBattle, updateVitals, fastTravel, reload, get region() { return R.region || regionName(); }, get world() { ensure(); return R.w; }, say, get _state() { return { R, enemies, ents, towns, build, H, RADIUS, statics, chunks, attune }; } };
 })();
 
-// ---------- World screen (mirrors the wireframe) ----------
+// ---------- World screen ----------
+// Everything from the wireframe sits on top of the scene: character, HP/MP/XP and stats (Bag), inventory, action log
+// and controls. The rest of the app is one tap away in the Menu.
 SCREENS.world = st => {
   Realm.world;
   const W = DV.WORLDS[Realm.world - 1], o = DV.LOOK.origin.find(x => x.id === S.origin), at = a => S.attrs[a] + (o.bonus[a] || 0);
@@ -733,39 +855,51 @@ SCREENS.world = st => {
     return `<li style="color:${DV.RARITY[it.rarity].color}">${esc(it.name)}${it.plus ? ' +' + it.plus : ''} <span class="muted">· ${DV.SLOT_NAME[sl]}</span></li>`; });
   inv.push(`<li>Facet Tonic ×${S.potions.hp}</li>`, `<li>Mana Shard ×${S.potions.mp}</li>`, `<li>Upgrade shards ×${S.shards}</li>`);
   if (S.inv.length) inv.push(`<li class="muted">${S.inv.length} unequipped item${S.inv.length > 1 ? 's' : ''} in Gear</li>`);
-  const q = questState(W.id);
-  $('#screen').innerHTML = `<div class="rw">
-    <header class="rw-head" style="--wh:${W.hue}"><div class="grow"><div class="eyebrow num">Realm ${W.id} · ${realmStatus(W.id)}</div>
-      <h2>${esc(W.name)}</h2><div class="small muted">${esc(W.sub)} · ${esc(W.people[0])}</div><div class="small rw-region">Region: <b id="rwRegion">${esc(Realm.region)}</b></div></div>
-      <button class="btn sm" id="rwMap">Map · Fast travel</button><button class="btn sm" id="rwTravel">Travel</button></header>
-    <section class="rw-char rw-panel">
-      <div class="rw-name"><b>${esc(S.name)}</b> <span class="muted num">(Lv ${S.level})</span></div>
-      <div class="rw-bars">
-        <div><div class="rw-stat"><span>HP</span><b class="num" id="rwHpText">${Math.round(st.hp * vitOf('hero'))}/${st.hp}</b></div><div class="bar hp" style="height:5px"><i id="rwHpBar" style="width:${Math.round(vitOf('hero') * 100)}%"></i></div></div>
-        <div><div class="rw-stat"><span>MP</span><b class="num" id="rwMpText">${Math.round(st.mp * mpOf('hero'))}/${st.mp}</b></div><div class="bar mp" style="height:5px"><i id="rwMpBar" style="width:${Math.round(mpOf('hero') * 100)}%"></i></div></div>
+  const q = questState(W.id), hp = vitOf('hero'), mp = mpOf('hero');
+  $('#screen').innerHTML = `<div class="rw-stage" id="rwStage"><div class="rw-frame" id="rwFrame" style="--wh:${W.hue}">
+    <section class="rw-scene" id="rwScene" aria-label="Open world"></section>
+    <div class="hud">
+      <div class="hud-tl"><div class="hud-char hud-glass">
+        <div class="row" style="gap:8px"><div style="width:34px;flex:none">${avatarSVG(S.look, S.cls, 34)}</div>
+          <div class="grow"><div class="rw-name"><b>${esc(S.name)}</b> <span class="muted num">Lv ${S.level}</span>${S.attrPts ? ` <span class="pts">+${S.attrPts}</span>` : ''}</div>
+            <div class="hud-bar hp"><i id="rwHpBar" style="width:${Math.round(hp * 100)}%"></i><span>HP <b class="num" id="rwHpText">${Math.round(st.hp * hp)}/${st.hp}</b></span></div>
+            <div class="hud-bar mp"><i id="rwMpBar" style="width:${Math.round(mp * 100)}%"></i><span>MP <b class="num" id="rwMpText">${Math.round(st.mp * mp)}/${st.mp}</b></span></div>
+            <div class="hud-bar xp"><i id="rwXpBar" style="width:${Math.min(100, Math.round(S.xp / xpNeed(S.level) * 100))}%"></i></div></div></div>
+        <div class="small rw-party"><span id="rwPartyHp" class="num"></span>${S.party.length ? '' : '<span class="muted">No companions yet</span>'}</div>
+        <span class="chip pure" id="rwTown" hidden></span>
       </div>
-      <div class="rw-stats">
-        <div><span><i class="lg">Strength</i><i class="sm">STR</i></span><b class="num">${at('str')}</b><small class="num">ATK ${st.atk}</small></div>
-        <div><span><i class="lg">Agility</i><i class="sm">AGI</i></span><b class="num">${at('agi')}</b><small class="num">SPD ${st.spd}</small></div>
-        <div><span><i class="lg">Intelligence</i><i class="sm">INT</i></span><b class="num">${at('int')}</b><small class="num">MAG ${st.mag}</small></div>
-        <div><span>XP</span><b class="num">${fmtK(S.xp)}/${fmtK(xpNeed(S.level))}</b></div>
-        <div><span>Level</span><b class="num">${S.level}</b>${S.attrPts ? `<small style="color:var(--gold)">${S.attrPts} pts to spend</small>` : ''}</div>
+      <div class="hud-realm"><div class="eyebrow num">Realm ${W.id} · ${realmStatus(W.id)}</div><b>${esc(W.name)}</b><div class="small rw-region" id="rwRegion">${esc(Realm.region)}</div></div></div>
+      <div class="hud-top-btns">
+        <button class="hud-btn" id="rwMenu" aria-label="Menu">☰<small>Menu</small></button>
+        <button class="hud-btn" id="rwBagBtn" aria-label="Character and inventory">◈<small>Bag</small></button>
+        <button class="hud-btn" id="rwMap" aria-label="Map and fast travel">◎<small>Map</small></button>
+        <button class="hud-btn" id="rwTravel" aria-label="Travel between realms">⟁<small>Realms</small></button>
       </div>
-      <div class="small rw-party">Party HP: <span id="rwPartyHp" class="num"></span>${S.party.length ? '' : '<span class="muted">no companions yet</span>'}</div>
-      <div class="row" style="flex-wrap:wrap;gap:6px"><span class="chip pure" id="rwTown" hidden></span><button class="btn sm" id="rwTonic">Drink Tonic</button><button class="btn sm" id="rwMana">Mana Shard</button></div>
-      <div class="small rw-quest">Quest: <b>${esc(W.quest.title)}</b> ${q.done ? '<span class="chip pure">Done</span>' : `<span class="muted num">${esc(questGoalText(W.id))} (${q.prog}/${q.need})</span>`}</div>
-    </section>
-    <section class="rw-scene rw-panel" id="rwScene"></section>
-    <section class="rw-log rw-panel"><div class="row"><h3 class="grow">Action log</h3><span class="small muted num" id="rwLogCount"></span></div><div class="log" id="rwLog" aria-live="polite" tabindex="0"></div></section>
-    <section class="rw-inv rw-panel"><h3>Inventory</h3><ul>${inv.join('')}</ul></section>
-    <section class="rw-ctrl rw-panel"><h3>Controls</h3>
-      <div class="rw-ctrl-row">
-        <div class="rw-joy" id="rwJoy" role="application" aria-label="Move: drag to walk"><i></i><span>Move</span></div>
-        <button class="act rw-btn" id="rwAttack"><b>Attack</b><small>No foe in reach</small></button>
-        <button class="act rw-btn" id="rwInteract"><b>Interact</b><small>Nothing nearby</small></button>
+      <div class="hud-log hud-glass" id="rwLogBox">
+        <button class="hud-log-head" id="rwLogToggle" aria-label="Show or hide the action log"><span>Action log</span><span class="small muted num" id="rwLogCount"></span></button>
+        <div class="log" id="rwLog" aria-live="polite" tabindex="0"></div>
       </div>
-      <div class="small muted">Drag the scene to turn the camera. Keyboard: WASD or arrows to move, Space to attack, E to interact, M for the map.</div>
-    </section>
-  </div>`;
+      <div class="rw-joy" id="rwJoy" role="application" aria-label="Move: drag to walk"><i></i></div>
+      <div class="hud-acts">
+        <button class="act rw-btn hud-attack" id="rwAttack"><b>Attack</b><small>No foe in reach</small></button>
+        <button class="act rw-btn hud-interact" id="rwInteract"><b>Interact</b><small>Nothing nearby</small></button>
+        <button class="hud-pot hp" id="rwTonic" aria-label="Drink a Facet Tonic">✚<small>${S.potions.hp}</small></button>
+        <button class="hud-pot mp" id="rwMana" aria-label="Use a Mana Shard">✦<small>${S.potions.mp}</small></button>
+      </div>
+      <div class="hud-keys small">WASD move · drag to look · wheel zoom · Space attack · E interact · M map · B bag · Esc menu</div>
+      <aside class="hud-bag hud-glass" id="rwBag" hidden>
+        <div class="row"><h3 class="grow">${esc(S.name)} · Lv ${S.level}</h3><button class="btn sm" id="rwBagX">Close</button></div>
+        <div class="rw-stats">
+          <div><span>Strength</span><b class="num">${at('str')}</b><small class="num">ATK ${st.atk}</small></div>
+          <div><span>Agility</span><b class="num">${at('agi')}</b><small class="num">SPD ${st.spd}</small></div>
+          <div><span>Intelligence</span><b class="num">${at('int')}</b><small class="num">MAG ${st.mag}</small></div>
+          <div><span>XP</span><b class="num">${fmtK(S.xp)}/${fmtK(xpNeed(S.level))}</b></div>
+          <div><span>Level</span><b class="num">${S.level}</b>${S.attrPts ? `<small style="color:var(--gold)">${S.attrPts} pts to spend</small>` : ''}</div>
+        </div>
+        <h3>Inventory</h3><ul class="rw-inv">${inv.join('')}</ul>
+        <div class="small rw-quest">Quest: <b>${esc(W.quest.title)}</b> ${q.done ? '<span class="chip pure">Done</span>' : `<span class="muted num">${esc(questGoalText(W.id))} (${q.prog}/${q.need})</span>`}</div>
+      </aside>
+    </div>
+  </div></div>`;
   Realm.mount();
 };

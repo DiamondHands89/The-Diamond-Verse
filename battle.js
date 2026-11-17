@@ -34,9 +34,9 @@ let autoTimer = null;
 function stopAuto() { clearTimeout(autoTimer); autoTimer = null; }
 function renderBattle() {
   const W = DV.WORLDS[B.w - 1], p = B.p;
-  const foes = B.enemies.map((e, i) => `<button class="foe ${e.boss ? 'boss' : ''} ${i === B.target && e.hp > 0 ? 'tgt' : ''} ${e.hp <= 0 ? 'dead' : ''}" data-t="${i}" id="e${i}" ${e.hp <= 0 ? 'disabled' : ''} aria-label="Target ${esc(e.name)}">
-      ${enemySVG(e.name, W.hue, e.boss, e.boss ? 84 : 52)}
-      <span class="nm">${esc(e.name)}</span><span class="small muted num">Lv ${e.lvl}</span>
+  const foes = B.enemies.map((e, i) => `<button class="foe ${e.boss ? 'boss' : ''} ${e.tier > 1 ? 'ft' + e.tier : ''} ${i === B.target && e.hp > 0 ? 'tgt' : ''} ${e.hp <= 0 ? 'dead' : ''}" data-t="${i}" id="e${i}" ${e.hp <= 0 ? 'disabled' : ''} aria-label="Target ${esc(e.name)}">
+      ${enemySVG(e.base || e.name, W.hue, e.boss, e.boss ? 84 : e.tier >= 3 ? 70 : 52, e.tier)}
+      <span class="nm">${esc(e.name)}</span><span class="small muted num">${e.tier > 1 ? `<span class="tier t${e.tier}">${DV.FOE_TIERS[e.tier - 1].stars}</span> ` : ''}Lv ${e.lvl}</span>
       ${bar('hp', e.hp, e.max, 6)}<span class="small num">${e.hp} / ${e.max}</span><div>${foeChips(e)}</div></button>`).join('');
   const log = B.log.map(([t, m]) => `<div class="${t === 'foe' ? 'foe-l' : t}">${esc(m)}</div>`).join('');
   const skillBtn = id => {
@@ -46,7 +46,7 @@ function renderBattle() {
       <b>${k.name}</b><small class="num">${cd > 0 ? `Ready in ${cd}` : cost ? `${cost} MP` : 'Free'}${S.skills[id] ? ' · R' + S.skills[id] : ''}</small></button>`;
   };
   const potLeft = B.potMax - B.potUsed;
-  const title = B.field ? 'Wild encounter' : stageName(B.w, B.s);
+  const title = B.field ? (B.field.tier > 1 ? `${DV.FOE_TIERS[B.field.tier - 1].name} encounter` : 'Wild encounter') : stageName(B.w, B.s);
   const actions = B.over ? resultHTML() : `<div class="actions">
       ${skillBtn('basic')}${S.loadout.filter(id => DV.SKILLS[id]).map(skillBtn).join('')}
       <button class="act" data-pot="hp" ${S.potions.hp && potLeft && !autoTimer ? '' : 'disabled'}><b>Facet Tonic</b><small class="num">${S.potions.hp} owned · ${potLeft} uses</small></button>
@@ -99,6 +99,7 @@ function resultHTML() {
     ${r.bondUps.map(b => `<div class="small" style="color:var(--ok)">Bond with ${DV.COMPANIONS[b.id].name} deepened to ${b.lv}. A new chapter of their story is open in the Party tab.</div>`).join('')}
     ${r.quest ? `<div class="small" style="color:var(--gold)">Side quest complete: <b>${esc(r.quest.title)}</b>.</div>` : ''}
     ${r.bounty ? `<div class="small" style="color:var(--gold)">Bounty done. Return to ${esc(r.bounty.giver)} in ${esc(townInfo(B.w).town)} for your reward.</div>` : ''}
+    ${r.tier > 1 ? `<div class="small"><span class="tier t${r.tier}">${DV.FOE_TIERS[r.tier - 1].stars} ${DV.FOE_TIERS[r.tier - 1].name}</span> foe: ${DV.FOE_TIERS[r.tier - 1].xp}× XP${r.firstSlay ? ' · first defeat bonus Diamonds' : ''}.</div>` : ''}
     <div class="small muted num">Carried out of battle: ${B.party.map(u => `${u.isHero ? 'You' : esc(u.name)} ${Math.round(vitOf(u.key) * 100)}% HP, ${Math.round(mpOf(u.key) * 100)}% MP`).join(' · ')}</div>
     ${r.drops.map(d => `<div class="small">Found: <b style="color:${DV.RARITY[d.rarity].color}">${DV.RARITY[d.rarity].name} ${esc(d.name)}</b></div>`).join('')}
     ${r.worldDone ? `<div class="small" style="color:var(--ok)">${esc(W.god.pure)} is ${W.god.corrupted ? 'free of the Rot' : 'safe'}. Blessing: ${esc(W.bless[2])} (${blessText(W)}).</div>` : ''}
@@ -123,17 +124,6 @@ function bindResult() {
 // Lets the open world react when a battle ends (remove a beaten foe, give a grace period after a loss).
 function battleClosed(field, outcome, w) { stopAuto(); if (typeof Realm !== 'undefined') Realm.afterBattle(field, outcome, w); }
 
-// MP recharges outside battle wherever you are (and the World view shows it live).
-let outsideTicker = null;
-function startOutsideTicker() {
-  clearInterval(outsideTicker);
-  outsideTicker = setInterval(() => {
-    if (!S || !S.created) return;
-    if (B && !B.over) { S.mpAt = Date.now(); return; }
-    if (tickOutsideBattle() && typeof Realm !== 'undefined') Realm.updateVitals();
-  }, 1000);
-}
-
 // ---------- Boot ----------
 function boot(saved) {
   S = migrate(saved || load() || newState());
@@ -143,8 +133,7 @@ function boot(saved) {
     playDialogue(DV.PROLOGUE, () => openCreator(false));
     return;
   }
-  syncRecruits(); ensureDaily(); tickOutsideBattle(); save();
-  startOutsideTicker();
+  syncRecruits(); ensureDaily(); save();
   render();
   if (!loginStatus().claimed) dailySheet(true);
 }
