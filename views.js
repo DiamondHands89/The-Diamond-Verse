@@ -19,7 +19,7 @@ function render() {
     const dot = (id === 'hero' && S.attrPts) || (id === 'skills' && S.skillPts) ? ' •' : '';
     return `<button class="${tab === id ? 'on' : ''}" data-tab="${id}" aria-label="${n}"><i></i>${n}${dot}</button>`;
   }).join('');
-  $('#tabs').querySelectorAll('button').forEach(b => b.onclick = () => { tab = b.dataset.tab; render(); window.scrollTo(0, 0); });
+  $('#tabs').querySelectorAll('button').forEach(b => b.onclick = () => { tab = b.dataset.tab; render(); scrollTop(0); });
   SCREENS[tab](st);
 }
 
@@ -54,7 +54,7 @@ function openCreator(edit) {
     return `<button class="opt ${c.cls === id ? 'on' : ''}" data-cls="${id}" style="border-left:4px solid ${k.color}">
       <b>${k.name} <span class="muted small">· ${k.role}</span></b><span class="small muted">${k.desc}</span>
       <div class="small num" style="margin-top:4px">HP ${k.base.hp} · ATK ${k.base.atk} · MAG ${k.base.mag} · DEF ${k.base.def} · SPD ${k.base.spd}</div></button>`; }).join('');
-  $('#layer').innerHTML = `<div class="layer"><div class="inner">
+  $('#layer').innerHTML = `<div class="layer"><div class="inner creator">
     <div class="eyebrow">${edit ? 'Redesign your vessel' : 'Rebirth · Choose your vessel'}</div>
     <h2>${edit ? 'Change your look' : 'Who walks into the Diamondverse?'}</h2>
     <div class="avatar-wrap" id="cprev">${avatarSVG(c.look, c.cls, 150)}</div>

@@ -37,7 +37,7 @@ const Account = (() => {
   function refresh() {
     let f = document.getElementById('acctFloat');
     const want = online && !user && (!S || !S.created);
-    if (want && !f) { f = document.createElement('button'); f.id = 'acctFloat'; f.className = 'btn sm acct-float'; f.textContent = '☁ Sign in'; f.onclick = sheet; document.body.appendChild(f); }
+    if (want && !f) { f = document.createElement('button'); f.id = 'acctFloat'; f.className = 'btn sm acct-float'; f.textContent = '☁ Sign in'; f.onclick = sheet; $('#root').appendChild(f); }
     if (!want && f) f.remove();
     const b = document.getElementById('acctBtn'); if (b) { b.textContent = user ? '☁ ' + user.username : '☁'; b.classList.toggle('on', !!user); }
   }

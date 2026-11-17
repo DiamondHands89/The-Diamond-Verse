@@ -52,7 +52,7 @@ function renderBattle() {
       <button class="act" data-pot="hp" ${S.potions.hp && potLeft && !autoTimer ? '' : 'disabled'}><b>Facet Tonic</b><small class="num">${S.potions.hp} owned · ${potLeft} uses</small></button>
       <button class="act" data-pot="mp" ${S.potions.mp && potLeft && !autoTimer ? '' : 'disabled'}><b>Mana Shard</b><small class="num">${S.potions.mp} owned</small></button>
     </div>`;
-  $('#layer').innerHTML = `<div class="layer" style="background:radial-gradient(ellipse at 50% 0,${W.hue}22,var(--void) 60%)"><div class="inner">
+  $('#layer').innerHTML = `<div class="layer" style="background:radial-gradient(ellipse at 50% 0,${W.hue}22,var(--void) 60%)"><div class="inner battle">
     <div class="row"><div class="grow"><div class="eyebrow num">${esc(W.name)} · ${title} · Round ${B.round}</div></div>
       ${B.over ? '' : `<button class="btn sm ${autoTimer ? 'primary' : ''}" id="auto" aria-pressed="${!!autoTimer}">${autoTimer ? 'Auto: on' : 'Auto'}</button><button class="btn sm" id="flee">Retreat</button>`}</div>
     <div class="foes">${foes}</div>
@@ -127,6 +127,7 @@ function battleClosed(field, outcome, w) { stopAuto(); if (typeof Realm !== 'und
 // ---------- Boot ----------
 function boot(saved) {
   S = migrate(saved || load() || newState());
+  orient();
   applyEntitlements();
   if (!S.created) {
     $('#topbar').innerHTML = ''; $('#tabs').innerHTML = ''; $('#screen').innerHTML = '';

@@ -566,12 +566,12 @@ const Realm = (() => {
     const W = DV.WORLDS[R.w - 1], found = W.marks.filter((_, i) => S.marks[markKey(R.w, i)]).length;
     const opened = ents.filter(n => n.kind === 'chest' && S.chests[n.key]).length, stones = ents.filter(n => n.kind === 'waystone');
     openSheet(`<div class="eyebrow num">Realm ${W.id} · Map</div><h2>${esc(W.name)}</h2>
-      <canvas class="rw-bigmap" id="bigMap" aria-label="Map of ${esc(W.name)}"></canvas>
+      <div class="map-cols"><canvas class="rw-bigmap" id="bigMap" aria-label="Map of ${esc(W.name)}"></canvas><div class="stack">
       <div class="small muted map-key"><span><i class="k-mark"></i>Landmark (outline: unexplored)</span><span><i class="k-shrine"></i>Shrine</span><span><i class="k-way"></i>Waystone</span><span><i class="k-chest"></i>Chest</span><span><i class="k-town"></i>Town (heals)</span><span><i class="k-gate"></i>Gate</span><span><i class="k-foe"></i>Foe</span></div>
       <div class="small">Landmarks <b class="num">${found}/4</b> · Chests <b class="num">${opened}/12</b> · Regions <b class="num">${stones.filter(attuned).length}/${stones.length}</b>${W.lore ? ` · Hidden story ${S.lore[R.w] ? '<b>found</b>' : '<span class="muted">not found</span>'}` : ''}${W.hidden ? ` · Someone is hiding here: ${compJoined(W.hidden) ? '<b>found</b>' : '<span class="muted">not found</span>'}` : ''}</div>
       <h3>Fast travel</h3>
       <div class="small muted">Walk near a waystone to attune it. Attuned waystones are listed here.</div>
-      <div class="ft-list">${stones.map(n => `<button class="opt ${attuned(n) ? '' : 'sealed'}" data-ft="${n.id}" ${attuned(n) ? '' : 'disabled'}><b>${attuned(n) ? esc(n.name) : 'Unexplored region'}</b><span class="small muted">${attuned(n) ? `${Math.round(dist(n.x, n.z, R.px, R.pz))} m away` : 'Find its waystone'}</span></button>`).join('')}</div>`,
+      <div class="ft-list">${stones.map(n => `<button class="opt ${attuned(n) ? '' : 'sealed'}" data-ft="${n.id}" ${attuned(n) ? '' : 'disabled'}><b>${attuned(n) ? esc(n.name) : 'Unexplored region'}</b><span class="small muted">${attuned(n) ? `${Math.round(dist(n.x, n.z, R.px, R.pz))} m away` : 'Find its waystone'}</span></button>`).join('')}</div></div></div>`,
       el => { requestAnimationFrame(() => drawMap($('#bigMap'), true)); el.querySelectorAll('[data-ft]').forEach(b => b.onclick = () => fastTravel(b.dataset.ft)); });
   }
 
@@ -724,17 +724,17 @@ const Realm = (() => {
   // The World view fills the screen with the HUD drawn over the scene. On a phone held upright it is turned sideways
   // (wide screen) unless the player switches that off in the menu; a phone held sideways or a computer shows it as is.
   // Rotated, the frame's "up" points to the right edge of the screen, so touch movement is turned back to frame axes.
-  const toFrame = (dx, dy) => R.rot ? [dy, -dx] : [dx, dy];
+  const toFrame = (dx, dy) => ROT ? [dy, -dx] : [dx, dy];
   function layoutStage() {
     const st = $('#rwStage'), fr = $('#rwFrame'); if (!st || !fr) return;
-    const w = st.clientWidth || window.innerWidth, h = window.innerHeight;
-    const phone = matchMedia('(pointer: coarse)').matches || w < 640;
-    R.rot = S.settings.wide !== false && h > w * 1.05 && phone;
-    st.style.height = h + 'px'; st.classList.toggle('rot', R.rot);
-    fr.style.width = (R.rot ? h : w) + 'px'; fr.style.height = (R.rot ? w : h) + 'px';
-    fr.style.setProperty('--fw', (R.rot ? h : w) + 'px');
-    fr.classList.toggle('compact', (R.rot ? w : h) < 520);
-    fr.classList.toggle('touch', phone); fr.classList.toggle('narrow', (R.rot ? h : w) < 1000);
+    orient();   // the whole game turns sideways on upright phones (art.js); the World view just fills the game area
+    const w = viewW(), h = viewH(), phone = isPhone();
+    R.rot = ROT;
+    st.style.height = h + 'px';
+    fr.style.width = w + 'px'; fr.style.height = h + 'px';
+    fr.style.setProperty('--fw', w + 'px');
+    fr.classList.toggle('compact', h < 520);
+    fr.classList.toggle('touch', phone); fr.classList.toggle('narrow', w < 1000);
   }
   window.addEventListener('resize', () => { if (tab === 'world') layoutStage(); });
   function ensure() {
@@ -787,13 +787,13 @@ const Realm = (() => {
       <div class="menu-grid">${TABS_ALL.map(([id, n]) => `<button class="opt" data-go="${id}"><b>${n}</b></button>`).join('')}
         <button class="opt" id="mDaily"><b>Daily${dailyPending() ? ' •' : ''}</b></button><button class="opt" id="mAcct"><b>☁ Account</b></button></div>
       <h3>Display</h3>
-      <label class="row small"><input type="checkbox" id="mWide" ${S.settings.wide !== false ? 'checked' : ''}> Wide screen on phones (turn the World view sideways when the phone is upright)</label>
+      <label class="row small"><input type="checkbox" id="mWide" ${S.settings.wide !== false ? 'checked' : ''}> Landscape on phones (turn the whole game sideways when the phone is held upright)</label>
       ${document.fullscreenEnabled ? `<button class="btn" id="mFull">${fs ? 'Exit full screen' : 'Full screen'}</button>` : ''}
       <div class="small muted">Keyboard: WASD or arrows move · drag or Q/R turn · mouse wheel or +/− zoom · Space attack · E interact · M map · B bag · L log · Esc menu</div>`, el => {
-      el.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { closeSheet(); tab = b.dataset.go; render(); window.scrollTo(0, 0); });
+      el.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { closeSheet(); tab = b.dataset.go; render(); scrollTop(0); });
       el.querySelector('#mDaily').onclick = () => dailySheet(false);
       el.querySelector('#mAcct').onclick = () => Account.sheet();
-      el.querySelector('#mWide').onchange = e => { S.settings.wide = e.target.checked; save(); };
+      el.querySelector('#mWide').onchange = e => { S.settings.wide = e.target.checked; save(); closeSheet(); orient(); render(); };
       const f = el.querySelector('#mFull');
       if (f) f.onclick = async () => {
         try {

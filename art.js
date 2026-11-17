@@ -9,13 +9,32 @@ function toast(msg) {
 // Every view lives in normal page flow (no fixed, internally scrolling layers), so it scrolls
 // and taps the same way inside any app frame. While a full-screen view (#layer) or a panel (#sheet)
 // is showing, the main app is hidden.
+// Landscape everywhere: on a phone held upright (and while the player keeps the setting on) the whole game is drawn
+// turned 90° inside #root, which then scrolls instead of the page. ROT says whether that is happening; viewW/viewH
+// are the game's own width and height either way.
+let ROT = false;
+const isPhone = () => matchMedia('(pointer: coarse)').matches || Math.min(innerWidth, innerHeight) < 600;
+const viewW = () => ROT ? innerHeight : innerWidth, viewH = () => ROT ? innerWidth : innerHeight;
+function orient() {
+  const want = (typeof S === 'undefined' || !S || !S.settings || S.settings.wide !== false) && isPhone() && innerHeight > innerWidth * 1.05;
+  const r = $('#root'); ROT = want; document.documentElement.classList.toggle('rot', want);
+  r.style.width = want ? innerHeight + 'px' : ''; r.style.height = want ? innerWidth + 'px' : '';
+  // short and wide (any phone in landscape, turned or held sideways): side tab rail, two-column battles, wider panels
+  document.documentElement.classList.toggle('land', viewW() > viewH() && viewH() < 560);
+  document.documentElement.style.setProperty('--vh', viewH() + 'px');
+}
+const scroller = () => ROT ? $('#root') : document.scrollingElement;
+function scrollTop(y) { if (y == null) return scroller().scrollTop; scroller().scrollTop = y; }
+window.addEventListener('resize', () => { const was = ROT; orient(); if (was !== ROT && typeof render === 'function' && typeof S !== 'undefined' && S && S.created) render(); });
+window.addEventListener('orientationchange', () => setTimeout(() => window.dispatchEvent(new Event('resize')), 200));
+orient();
 let appScroll = 0, viewOpen = false;
 function syncViews() {
   const open = !!($('#layer').innerHTML || $('#sheet').innerHTML);
   if (open === viewOpen) return;
-  if (open) appScroll = window.scrollY;
+  if (open) appScroll = scrollTop();
   viewOpen = open; $('#app').hidden = open;
-  window.scrollTo(0, open ? 0 : appScroll);
+  scrollTop(open ? 0 : appScroll);
 }
 new MutationObserver(syncViews).observe($('#layer'), { childList:true });
 new MutationObserver(syncViews).observe($('#sheet'), { childList:true });

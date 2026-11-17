@@ -31,9 +31,10 @@ real players sign in.
   12 chests, lore stones, ~50 roaming foes in four tiers, two hidden Dread lairs, a local minimap and a full map.
 - **World screen**: the scene fills the screen and the HUD sits on top: character (HP, MP, XP, party), realm and region,
   Menu / Bag / Map / Realms buttons, minimap, a collapsible action log (last 100 entries), a joystick, and Attack, Interact,
-  Tonic and Mana buttons. Bag shows Strength, Agility, Intelligence, XP, level, inventory and the side quest. On a phone held
-  upright the view turns sideways so it is always wide (switch off in Menu → Display); a phone held sideways, a tablet or a
-  computer shows it as is. Computers: WASD/arrows move, drag or Q/R turn, mouse wheel or +/− zoom, Space attack, E interact,
+  Tonic and Mana buttons. Bag shows Strength, Agility, Intelligence, XP, level, inventory and the side quest.
+- **Landscape on phones**: the whole game plays horizontally. On a phone held upright every screen (prologue, creator, tabs,
+  battles, menus, the World view) is drawn turned sideways; switch this off in Menu → Display. Short, wide screens get a side
+  tab rail, two-column battles, a two-column character creator and a side-by-side map. Tablets and computers are unchanged. Computers: WASD/arrows move, drag or Q/R turn, mouse wheel or +/− zoom, Space attack, E interact,
   M map, B bag, L log, Esc menu. Menu also offers full screen (and landscape lock where the browser allows it).
 - **Foe tiers**: roaming foes have fixed levels set by their realm and tier, never by the hero's level.
 
