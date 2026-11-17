@@ -1,0 +1,654 @@
+[
+  {
+    "Name": "mira",
+    "DisplayName": "Mira",
+    "Class": "guardian",
+    "Species": "Prismari farmer",
+    "JoinRealm": 1,
+    "Join": "story",
+    "HiddenAt": "",
+    "Bio": "A farmer who replanted a god's fields and then followed the one who saved them.",
+    "StatMultipliers": {
+      "hp": 1.1,
+      "def": 1.1
+    },
+    "Signature": {
+      "name": "Harvest Ward",
+      "mp": 14,
+      "cd": 4,
+      "kind": "shieldAll",
+      "pow": 2,
+      "stat": "def",
+      "desc": "Shield the party with packed earth and glass wheat."
+    },
+    "Look": {
+      "sex": 1,
+      "race": 0,
+      "skin": 1,
+      "hair": 3,
+      "eyes": 4,
+      "outfit": 2,
+      "hairStyle": 3,
+      "physique": 1,
+      "height": 1
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "brann",
+    "DisplayName": "Brann",
+    "Class": "warrior",
+    "Species": "Emberkin smith",
+    "JoinRealm": 2,
+    "Join": "story",
+    "HiddenAt": "",
+    "Bio": "A smith who kept his forge cold for nine years rather than make weapons for a tyrant.",
+    "StatMultipliers": {
+      "atk": 1.1,
+      "hp": 1.05
+    },
+    "Signature": {
+      "name": "Quench-Oath Strike",
+      "mp": 18,
+      "cd": 3,
+      "kind": "hit",
+      "pow": 2.6,
+      "stat": "atk",
+      "debuff": {
+        "stat": "def",
+        "amt": 0.25,
+        "turns": 3
+      },
+      "desc": "A blow sworn on his honor. −25% DEF."
+    },
+    "Look": {
+      "sex": 0,
+      "race": 4,
+      "skin": 5,
+      "hair": 9,
+      "eyes": 1,
+      "outfit": 3,
+      "hairStyle": 10,
+      "physique": 2,
+      "height": 0
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "isla",
+    "DisplayName": "Isla",
+    "Class": "mage",
+    "Species": "Merrow tide-singer",
+    "JoinRealm": 3,
+    "Join": "hidden",
+    "HiddenAt": "Drowned Lighthouse",
+    "Bio": "A Merrow who hid in the Drowned Lighthouse keeping the last verse of the tide-song alive.",
+    "StatMultipliers": {
+      "mag": 1.1,
+      "mp": 1.1
+    },
+    "Signature": {
+      "name": "Tidecall",
+      "mp": 20,
+      "cd": 3,
+      "kind": "aoe",
+      "pow": 1.8,
+      "stat": "mag",
+      "stun": 0.25,
+      "desc": "A crushing wave over every foe."
+    },
+    "Look": {
+      "sex": 1,
+      "race": 1,
+      "skin": 10,
+      "hair": 7,
+      "eyes": 6,
+      "outfit": 0,
+      "hairStyle": 1,
+      "physique": 0,
+      "height": 1
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "riku",
+    "DisplayName": "Riku",
+    "Class": "assassin",
+    "Species": "Aerin skyferry pilot",
+    "JoinRealm": 4,
+    "Join": "story",
+    "HiddenAt": "",
+    "Bio": "A skyferry pilot who ran the Tempest Queen's blockade every night for passengers who could not pay.",
+    "StatMultipliers": {
+      "spd": 1.15,
+      "crit": 1.1
+    },
+    "Signature": {
+      "name": "Skydive",
+      "mp": 16,
+      "cd": 3,
+      "kind": "hit",
+      "pow": 2.4,
+      "stat": "atk",
+      "critBonus": 30,
+      "desc": "Plunge from above; +30% crit."
+    },
+    "Look": {
+      "sex": 1,
+      "race": 2,
+      "skin": 2,
+      "hair": 5,
+      "eyes": 1,
+      "outfit": 4,
+      "hairStyle": 6,
+      "physique": 1,
+      "height": 0
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "talo",
+    "DisplayName": "Talo Venn",
+    "Class": "mage",
+    "Species": "Quorin gate-engineer",
+    "JoinRealm": 7,
+    "Join": "story",
+    "HiddenAt": "",
+    "Bio": "A Quorin engineer who believes science and faith are two instruments playing one song.",
+    "StatMultipliers": {
+      "mag": 1.12
+    },
+    "Signature": {
+      "name": "Phase Lock",
+      "mp": 22,
+      "cd": 4,
+      "kind": "aoe",
+      "pow": 1.4,
+      "stat": "mag",
+      "debuff": {
+        "stat": "def",
+        "amt": 0.35,
+        "turns": 3
+      },
+      "desc": "Out-of-phase every foe. −35% DEF."
+    },
+    "Look": {
+      "sex": 0,
+      "race": 1,
+      "skin": 8,
+      "hair": 4,
+      "eyes": 0,
+      "outfit": 5,
+      "hairStyle": 5,
+      "physique": 0,
+      "height": 2
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "kesh",
+    "DisplayName": "Kesh",
+    "Class": "assassin",
+    "Species": "Dunemar navigator",
+    "JoinRealm": 9,
+    "Join": "hidden",
+    "HiddenAt": "Sunken Sundial",
+    "Bio": "A Dunemar navigator who vanished into the Sunken Sundial chasing the Mirage Tyrant alone.",
+    "StatMultipliers": {
+      "atk": 1.1,
+      "spd": 1.1
+    },
+    "Signature": {
+      "name": "Sand-Song Ambush",
+      "mp": 18,
+      "cd": 3,
+      "kind": "multi",
+      "hits": 3,
+      "pow": 0.9,
+      "stat": "atk",
+      "stun": 0.3,
+      "desc": "Three strikes from the dunes; may stun."
+    },
+    "Look": {
+      "sex": 0,
+      "race": 3,
+      "skin": 4,
+      "hair": 1,
+      "eyes": 1,
+      "outfit": 7,
+      "hairStyle": 2,
+      "physique": 1,
+      "height": 1
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "hrolf",
+    "DisplayName": "Hrolf",
+    "Class": "guardian",
+    "Species": "Hrimfolk giant",
+    "JoinRealm": 10,
+    "Join": "story",
+    "HiddenAt": "",
+    "Bio": "A giant who never refuses anyone a seat at his fire, including enemies.",
+    "StatMultipliers": {
+      "hp": 1.2,
+      "def": 1.05
+    },
+    "Signature": {
+      "name": "Hearth Guard",
+      "mp": 16,
+      "cd": 4,
+      "kind": "shield",
+      "pow": 3,
+      "stat": "def",
+      "taunt": 2,
+      "desc": "Plant himself in front of everyone. Draws attacks."
+    },
+    "Look": {
+      "sex": 0,
+      "race": 0,
+      "skin": 2,
+      "hair": 4,
+      "eyes": 6,
+      "outfit": 4,
+      "hairStyle": 9,
+      "physique": 3,
+      "height": 2
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "seven",
+    "DisplayName": "Seven",
+    "Class": "guardian",
+    "Species": "Cogborn unit",
+    "JoinRealm": 11,
+    "Join": "hidden",
+    "HiddenAt": "Scrapyard Maze",
+    "Bio": "A small Cogborn unit lost in the Scrapyard Maze who decided you are its new Winding Day partner.",
+    "StatMultipliers": {
+      "def": 1.2
+    },
+    "Signature": {
+      "name": "Overclock",
+      "mp": 18,
+      "cd": 5,
+      "kind": "buff",
+      "buff": {
+        "stat": "spd",
+        "amt": 0.4,
+        "turns": 3,
+        "party": true
+      },
+      "desc": "Overclock the party. +40% SPD."
+    },
+    "Look": {
+      "sex": 0,
+      "race": 4,
+      "skin": 9,
+      "hair": 11,
+      "eyes": 0,
+      "outfit": 7,
+      "hairStyle": 10,
+      "physique": 3,
+      "height": 0
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "calavera",
+    "DisplayName": "Sister Calavera",
+    "Class": "priest",
+    "Species": "Ossuar monk",
+    "JoinRealm": 16,
+    "Join": "story",
+    "HiddenAt": "",
+    "Bio": "A skeletal monk who decided the living needed her more than the dead.",
+    "StatMultipliers": {
+      "mag": 1.08,
+      "hp": 1.05
+    },
+    "Signature": {
+      "name": "Bone-Read Blessing",
+      "mp": 22,
+      "cd": 4,
+      "kind": "healAll",
+      "pow": 1.8,
+      "stat": "mag",
+      "desc": "The ancestors mend the party."
+    },
+    "Look": {
+      "sex": 1,
+      "race": 0,
+      "skin": 0,
+      "hair": 4,
+      "eyes": 2,
+      "outfit": 6,
+      "hairStyle": 11,
+      "physique": 0,
+      "height": 1
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "ysra",
+    "DisplayName": "Ysra",
+    "Class": "assassin",
+    "Species": "Arachnae weaver",
+    "JoinRealm": 17,
+    "Join": "hidden",
+    "HiddenAt": "Snapped Bridge",
+    "Bio": "A weaver who went to mend the Snapped Bridge alone and stayed to hold it together with her own silk.",
+    "StatMultipliers": {
+      "atk": 1.08,
+      "crit": 1.15
+    },
+    "Signature": {
+      "name": "Silk Garrote",
+      "mp": 20,
+      "cd": 3,
+      "kind": "hit",
+      "pow": 2,
+      "stat": "atk",
+      "dot": {
+        "pct": 0.5,
+        "turns": 3
+      },
+      "stun": 0.4,
+      "desc": "Bind and bleed a foe."
+    },
+    "Look": {
+      "sex": 1,
+      "race": 1,
+      "skin": 8,
+      "hair": 8,
+      "eyes": 3,
+      "outfit": 1,
+      "hairStyle": 4,
+      "physique": 0,
+      "height": 1
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "nimra",
+    "DisplayName": "Nimra",
+    "Class": "priest",
+    "Species": "Vulpari tea-priestess",
+    "JoinRealm": 24,
+    "Join": "hidden",
+    "HiddenAt": "Nine-Tail Grove",
+    "Bio": "A fox-priestess who broke a tea-vow to fight the Wilting Herald, and fled in shame.",
+    "StatMultipliers": {
+      "mag": 1.1,
+      "spd": 1.05
+    },
+    "Signature": {
+      "name": "Ninefold Tea",
+      "mp": 20,
+      "cd": 3,
+      "kind": "healAll",
+      "pow": 1.5,
+      "stat": "mag",
+      "mpGift": 0.1,
+      "desc": "Heal the party and restore 10% MP."
+    },
+    "Look": {
+      "sex": 1,
+      "race": 2,
+      "skin": 1,
+      "hair": 9,
+      "eyes": 1,
+      "outfit": 5,
+      "hairStyle": 1,
+      "physique": 0,
+      "height": 0
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "vask",
+    "DisplayName": "Vask",
+    "Class": "warrior",
+    "Species": "Gor'Khan warlord",
+    "JoinRealm": 27,
+    "Join": "story",
+    "HiddenAt": "",
+    "Bio": "A warlord who wanted to see the realms and found the perfect excuse.",
+    "StatMultipliers": {
+      "atk": 1.15
+    },
+    "Signature": {
+      "name": "Scar-Gift",
+      "mp": 20,
+      "cd": 4,
+      "kind": "buff",
+      "buff": {
+        "stat": "atk",
+        "amt": 0.4,
+        "turns": 3,
+        "party": true
+      },
+      "healPct": 0.1,
+      "desc": "War-shout. +40% ATK to the whole party."
+    },
+    "Look": {
+      "sex": 0,
+      "race": 3,
+      "skin": 9,
+      "hair": 0,
+      "eyes": 3,
+      "outfit": 3,
+      "hairStyle": 7,
+      "physique": 2,
+      "height": 2
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "ember",
+    "DisplayName": "Ember",
+    "Class": "mage",
+    "Species": "Cindrel phoenix",
+    "JoinRealm": 29,
+    "Join": "story",
+    "HiddenAt": "",
+    "Bio": "A phoenix who has burned once and been reborn, and is impatient to see everything before the next time.",
+    "StatMultipliers": {
+      "mag": 1.1,
+      "hp": 1.05
+    },
+    "Signature": {
+      "name": "Rebirth Flame",
+      "mp": 26,
+      "cd": 6,
+      "kind": "revive",
+      "revive": 0.5,
+      "stat": "mag",
+      "desc": "Revive a fallen ally in fire at 50% HP."
+    },
+    "Look": {
+      "sex": 1,
+      "race": 3,
+      "skin": 3,
+      "hair": 9,
+      "eyes": 1,
+      "outfit": 3,
+      "hairStyle": 9,
+      "physique": 1,
+      "height": 1
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "kael",
+    "DisplayName": "Kael'thar",
+    "Class": "mage",
+    "Species": "Penitent god",
+    "JoinRealm": 33,
+    "Join": "hidden",
+    "HiddenAt": "The Crater's Eye",
+    "Bio": "The Eldest Facet who broke the Heart, now a hooded wanderer mending what the Rot breaks.",
+    "StatMultipliers": {
+      "mag": 1.15,
+      "mp": 1.1
+    },
+    "Signature": {
+      "name": "Obsidian Penance",
+      "mp": 30,
+      "cd": 4,
+      "kind": "aoe",
+      "pow": 2.4,
+      "stat": "mag",
+      "pierce": 0.4,
+      "desc": "Shards of his old throne strike every foe."
+    },
+    "Look": {
+      "sex": 0,
+      "race": 1,
+      "skin": 7,
+      "hair": 0,
+      "eyes": 2,
+      "outfit": 6,
+      "hairStyle": 1,
+      "physique": 0,
+      "height": 2
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "tock",
+    "DisplayName": "Old Tock",
+    "Class": "guardian",
+    "Species": "Chronari watchmaker",
+    "JoinRealm": 37,
+    "Join": "hidden",
+    "HiddenAt": "Tock's Workshop",
+    "Bio": "A watchmaker stuck in a loop for forty years, now very keen to catch up on everything.",
+    "StatMultipliers": {
+      "def": 1.1,
+      "spd": 1.1
+    },
+    "Signature": {
+      "name": "Rewind",
+      "mp": 24,
+      "cd": 5,
+      "kind": "healAll",
+      "pow": 1.6,
+      "stat": "def",
+      "desc": "Rewind the party's wounds a few seconds."
+    },
+    "Look": {
+      "sex": 0,
+      "race": 4,
+      "skin": 3,
+      "hair": 4,
+      "eyes": 5,
+      "outfit": 7,
+      "hairStyle": 5,
+      "physique": 3,
+      "height": 0
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  },
+  {
+    "Name": "seraphine",
+    "DisplayName": "Seraphine",
+    "Class": "priest",
+    "Species": "Seraph",
+    "JoinRealm": 44,
+    "Join": "story",
+    "HiddenAt": "",
+    "Bio": "A seraph who lost half her choir to the Rot and swore a feather-vow to the Facetborn.",
+    "StatMultipliers": {
+      "mag": 1.12,
+      "hp": 1.1
+    },
+    "Signature": {
+      "name": "Wing-Vow",
+      "mp": 28,
+      "cd": 5,
+      "kind": "shieldAll",
+      "pow": 3,
+      "stat": "mag",
+      "desc": "Six wings over the party. Large shield."
+    },
+    "Look": {
+      "sex": 1,
+      "race": 1,
+      "skin": 0,
+      "hair": 3,
+      "eyes": 5,
+      "outfit": 5,
+      "hairStyle": 1,
+      "physique": 1,
+      "height": 2
+    },
+    "BondWins": [
+      8,
+      25,
+      50
+    ]
+  }
+]

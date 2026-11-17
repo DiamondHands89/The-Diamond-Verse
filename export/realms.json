@@ -1,0 +1,2662 @@
+[
+  {
+    "Name": "R1",
+    "Id": 1,
+    "Arc": 1,
+    "DisplayName": "Prismara",
+    "Subtitle": "Realm of Crystal Dawn",
+    "Biome": "meadow",
+    "Hue": "#8fe3b0",
+    "People": "Prismari",
+    "PeopleText": "Farmers whose skin catches light like cut glass.",
+    "Custom": "The Chime Harvest: wheat is rung like bells at dawn before it is cut.",
+    "God": "Vaelith",
+    "GodTitle": "Vaelith, God of Harvest",
+    "GodCorrupted": true,
+    "Boss": "Vaelith, the Rotbloom Sovereign",
+    "Guide": "Mira",
+    "Foes": [
+      "Thornwolf",
+      "Blight Sprite",
+      "Rotroot Brute",
+      "Hollow Shepherd"
+    ],
+    "Landmarks": [
+      "Chime Fields",
+      "Sunken Granary",
+      "Old Windmill",
+      "Glasswillow"
+    ],
+    "Blessing": {
+      "Stat": "hp",
+      "Amount": 0.05,
+      "Name": "Harvest's Return"
+    },
+    "Recruit": "mira",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Weeding the Black",
+      "giver": "Mira",
+      "text": "Rot sprouts keep creeping out of the fields. Put down 6 roaming foes so we can replant.",
+      "goal": [
+        "foes",
+        6
+      ],
+      "reward": {
+        "gold": 120,
+        "dia": 10,
+        "shards": 4
+      },
+      "done": "The wheat rings clean again. Thank you."
+    },
+    "Lore": {
+      "Landmark": 2,
+      "Title": "The Miller's Last Ledger",
+      "Skill": "h1"
+    }
+  },
+  {
+    "Name": "R2",
+    "Id": 2,
+    "Arc": 1,
+    "DisplayName": "Ashenreach",
+    "Subtitle": "Realm of the Endless Forge",
+    "Biome": "volcanic",
+    "Hue": "#ff8a5b",
+    "People": "Emberkin",
+    "PeopleText": "Stout smiths with coal-dark skin and veins that glow when they lie.",
+    "Custom": "Quench-oaths: a promise is made by plunging your hand into the cooling barrel.",
+    "God": "Pyrrhos",
+    "GodTitle": "Pyrrhos, God of the Forge",
+    "GodCorrupted": true,
+    "Boss": "Pyrrhos, the Cinder Tyrant",
+    "Guide": "Brann",
+    "Foes": [
+      "Ember Imp",
+      "Slag Brute",
+      "Ash Wraith",
+      "Magma Wyrmling"
+    ],
+    "Landmarks": [
+      "Quench Barrels",
+      "Slag River",
+      "Anvil of Oaths",
+      "The Great Bellows"
+    ],
+    "Blessing": {
+      "Stat": "atk",
+      "Amount": 0.04,
+      "Name": "Forgefire"
+    },
+    "Recruit": "brann",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Oath Unbroken",
+      "giver": "Brann",
+      "text": "Before he fell, Pyrrhos hid his last honest blade by the Anvil of Oaths. Find it.",
+      "goal": [
+        "mark",
+        2
+      ],
+      "reward": {
+        "gold": 200,
+        "dia": 10,
+        "shards": 6
+      },
+      "done": "An unbroken blade. Proof he was good once."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R3",
+    "Id": 3,
+    "Arc": 1,
+    "DisplayName": "Thalassine Deep",
+    "Subtitle": "Realm of Drowned Crowns",
+    "Biome": "ocean",
+    "Hue": "#4fc3f7",
+    "People": "Merrow",
+    "PeopleText": "Gill-necked singers who live in palaces of pearl.",
+    "Custom": "Tide-songs: every family owns one verse of the song that pulls the tide in.",
+    "God": "Nereon",
+    "GodTitle": "Nereon, Lord of Tides",
+    "GodCorrupted": true,
+    "Boss": "Nereon, the Drowned King",
+    "Guide": "Coralline Elder",
+    "Foes": [
+      "Abyssal Eel",
+      "Coral Husk",
+      "Siren of Silt",
+      "Leviathan Spawn"
+    ],
+    "Landmarks": [
+      "Pearl Gate",
+      "Drowned Lighthouse",
+      "Kelp Cathedral",
+      "The Silent Shell"
+    ],
+    "Blessing": {
+      "Stat": "mp",
+      "Amount": 0.06,
+      "Name": "Tidal Grace"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "isla",
+    "SideQuest": {
+      "title": "The Missing Verses",
+      "giver": "Coralline Elder",
+      "text": "Our tide-song lost verses when families fled. Open the 4 sunken chests where they hid their scrolls.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 260,
+        "dia": 15,
+        "shards": 6
+      },
+      "done": "The song is whole. The tide will come home."
+    },
+    "Lore": {
+      "Landmark": 3,
+      "Title": "Song of the Undertow",
+      "Skill": "h2"
+    }
+  },
+  {
+    "Name": "R4",
+    "Id": 4,
+    "Arc": 1,
+    "DisplayName": "Skyreach Spires",
+    "Subtitle": "Realm of the Broken Sky",
+    "Biome": "sky",
+    "Hue": "#c3a6ff",
+    "People": "Aerin",
+    "PeopleText": "Hollow-boned windriders who never touch the ground twice in a day.",
+    "Custom": "First-flight: children leap from the Spire of Firsts on their tenth birthday.",
+    "God": "Zephyra",
+    "GodTitle": "Zephyra, Goddess of Storms",
+    "GodCorrupted": true,
+    "Boss": "Zephyra, the Tempest Queen",
+    "Guide": "Riku",
+    "Foes": [
+      "Gale Harpy",
+      "Thunder Roc",
+      "Storm Golem",
+      "Sky Reaver"
+    ],
+    "Landmarks": [
+      "Skyferry Dock",
+      "Spire of Firsts",
+      "Chainstorm Bridge",
+      "Eye of the Gale"
+    ],
+    "Blessing": {
+      "Stat": "spd",
+      "Amount": 0.05,
+      "Name": "Wind Step"
+    },
+    "Recruit": "riku",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Grounded Flock",
+      "giver": "Riku",
+      "text": "Storm-beasts keep the young Aerin from their first flight. Clear 8 of them out of the sky lanes.",
+      "goal": [
+        "foes",
+        8
+      ],
+      "reward": {
+        "gold": 320,
+        "dia": 15,
+        "shards": 8
+      },
+      "done": "Six kids flew today. Six!"
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R5",
+    "Id": 5,
+    "Arc": 1,
+    "DisplayName": "Umbravale",
+    "Subtitle": "Realm of Waking Nightmares",
+    "Biome": "nightmare",
+    "Hue": "#9b8cff",
+    "People": "the Dreamless",
+    "PeopleText": "Shades who sold their sleep and now cannot stop seeing.",
+    "Custom": "Naming: you are not an adult until you say your worst nightmare aloud.",
+    "God": "Nyxos",
+    "GodTitle": "Nyxos, God of Dreams",
+    "GodCorrupted": true,
+    "Boss": "Nyxos, the Nightmare Weaver",
+    "Guide": "A Dreamless child",
+    "Foes": [
+      "Dread Moth",
+      "Mirror Shade",
+      "Sleepless Knight",
+      "Hollow Self"
+    ],
+    "Landmarks": [
+      "Your Old Street",
+      "The Naming Stone",
+      "Clock Without Hands",
+      "Lullaby Well"
+    ],
+    "Blessing": {
+      "Stat": "mpCostCut",
+      "Amount": 0.05,
+      "Name": "Lucid Mind"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Say It Aloud",
+      "giver": "A Dreamless child",
+      "text": "I am too scared to go to the Naming Stone alone. Will you stand there for me?",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 380,
+        "dia": 15,
+        "shards": 8
+      },
+      "done": "I said it. It was smaller out loud."
+    },
+    "Lore": {
+      "Landmark": 1,
+      "Title": "The Name of Dread",
+      "Skill": "h3"
+    }
+  },
+  {
+    "Name": "R6",
+    "Id": 6,
+    "Arc": 1,
+    "DisplayName": "The Fractured Crown",
+    "Subtitle": "Heart of the First Lattice",
+    "Biome": "obsidian",
+    "Hue": "#e8f4ff",
+    "People": "Facet Sentinels",
+    "PeopleText": "Animate shards of the Heart, loyal to whoever holds the most light.",
+    "Custom": "None remain. The Crown has been silent since the Heart broke.",
+    "God": "Kael'thar",
+    "GodTitle": "Kael'thar, the Eldest Facet",
+    "GodCorrupted": true,
+    "Boss": "Kael'thar, the Obsidian Sovereign",
+    "Guide": "lumeria",
+    "Foes": [
+      "Obsidian Sentinel",
+      "Rot Seraph",
+      "Fragment Golem",
+      "Fallen Facet"
+    ],
+    "Landmarks": [
+      "Shard Orbit",
+      "Throne Stair",
+      "Mirror of Nine",
+      "The Torn Gate"
+    ],
+    "Blessing": {
+      "Stat": "all",
+      "Amount": 0.03,
+      "Name": "Crown Shard"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Nine Reflections",
+      "giver": "lumeria",
+      "text": "The Mirror of Nine still shows the Heart as it was. Go look into it, and remember what we are saving.",
+      "goal": [
+        "mark",
+        2
+      ],
+      "reward": {
+        "gold": 450,
+        "dia": 20,
+        "shards": 10
+      },
+      "done": "Whole. It was so beautiful whole."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R7",
+    "Id": 7,
+    "Arc": 1,
+    "DisplayName": "Meridian Observatory",
+    "Subtitle": "Realm of Measured Stars",
+    "Biome": "crystal",
+    "Hue": "#7ef2ff",
+    "People": "Quorin",
+    "PeopleText": "Four-armed scholars who mapped the Lattice and built the first Rift Gates.",
+    "Custom": "Every Quorin child is given a star to measure for life.",
+    "God": "Aurelis",
+    "GodTitle": "Aurelis, Goddess of Measure",
+    "GodCorrupted": false,
+    "Boss": "The Tear-Wraith",
+    "Guide": "Talo Venn",
+    "Foes": [
+      "Static Wisp",
+      "Gate Leech",
+      "Rift Hound",
+      "Unmade Engineer"
+    ],
+    "Landmarks": [
+      "Gate Array One",
+      "The Great Lens",
+      "Resonance Bells",
+      "Aurelis' Orrery"
+    ],
+    "Blessing": {
+      "Stat": "mag",
+      "Amount": 0.04,
+      "Name": "Measured Light"
+    },
+    "Recruit": "talo",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Bells Out of Tune",
+      "giver": "Talo Venn",
+      "text": "Rift creatures detune the Resonance Bells by gnawing on them. Clear out 8 so I can recalibrate.",
+      "goal": [
+        "foes",
+        8
+      ],
+      "reward": {
+        "gold": 520,
+        "dia": 20,
+        "shards": 10
+      },
+      "done": "Perfect pitch. Gates One through Eight now open on command."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R8",
+    "Id": 8,
+    "Arc": 1,
+    "DisplayName": "Verdant Maw",
+    "Subtitle": "Realm of Hungry Green",
+    "Biome": "jungle",
+    "Hue": "#7ad36b",
+    "People": "Sylvar",
+    "PeopleText": "Bark-skinned people who root at night and wander by day.",
+    "Custom": "Seed-naming: a newborn is named after the first seed that sprouts in their cradle soil.",
+    "God": "Ysolde",
+    "GodTitle": "Ysolde, Thorn-Mother",
+    "GodCorrupted": true,
+    "Boss": "Ysolde, the Strangling Bloom",
+    "Guide": "Elder Oakhollow",
+    "Foes": [
+      "Vine Strangler",
+      "Spore Hound",
+      "Mantis Reaver",
+      "Bloom Horror"
+    ],
+    "Landmarks": [
+      "Cradle Grove",
+      "The Gullet",
+      "Sunshaft Clearing",
+      "Heartwood"
+    ],
+    "Blessing": {
+      "Stat": "hp",
+      "Amount": 0.04,
+      "Name": "Thorn-Mother's Grace"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Cradle Soil",
+      "giver": "Elder Oakhollow",
+      "text": "Our cradle seeds were stolen to feed the Maw. Recover the 4 hidden seed caches.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 600,
+        "dia": 20,
+        "shards": 12
+      },
+      "done": "Four hundred names, saved."
+    },
+    "Lore": {
+      "Landmark": 3,
+      "Title": "Heartwood Rings",
+      "Skill": "h4"
+    }
+  },
+  {
+    "Name": "R9",
+    "Id": 9,
+    "Arc": 1,
+    "DisplayName": "Saltglass Expanse",
+    "Subtitle": "Realm of the Mirrored Dunes",
+    "Biome": "desert",
+    "Hue": "#ffd166",
+    "People": "Dunemar",
+    "PeopleText": "Lizard-folk nomads who navigate by the songs of the sand.",
+    "Custom": "Water-debt: a cup of water given is a debt owed for a generation.",
+    "God": "Sahrem",
+    "GodTitle": "Sahrem, Sun-Judge",
+    "GodCorrupted": false,
+    "Boss": "The Mirage Tyrant",
+    "Guide": "Caravan-Mother Ezzi",
+    "Foes": [
+      "Glass Scorpion",
+      "Dune Wraith",
+      "Sun-Bleached Ghoul",
+      "Mirage Stalker"
+    ],
+    "Landmarks": [
+      "Oasis of Debts",
+      "Sunken Sundial",
+      "The Glass Sea",
+      "Sahrem's Gaze"
+    ],
+    "Blessing": {
+      "Stat": "critFlat",
+      "Amount": 2,
+      "Name": "Sun-Judge's Eye"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "kesh",
+    "SideQuest": {
+      "title": "The Sundial's Shadow",
+      "giver": "Caravan-Mother Ezzi",
+      "text": "Our old navigator vanished near the Sunken Sundial. Find out what happened.",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 680,
+        "dia": 25,
+        "shards": 12
+      },
+      "done": "Kesh is alive? That stubborn lizard!"
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R10",
+    "Id": 10,
+    "Arc": 1,
+    "DisplayName": "Hollowfrost",
+    "Subtitle": "Realm of the Long Winter",
+    "Biome": "tundra",
+    "Hue": "#bfe6ff",
+    "People": "Hrimfolk",
+    "PeopleText": "Shaggy giants who carve their histories into glaciers.",
+    "Custom": "Fire-sharing: no Hrim may refuse a stranger a seat at the hearth.",
+    "God": "Sigrun",
+    "GodTitle": "Sigrun, Boreal Mother",
+    "GodCorrupted": true,
+    "Boss": "Sigrun, the Winter Without End",
+    "Guide": "Hrolf",
+    "Foes": [
+      "Rime Wolf",
+      "Frost Revenant",
+      "Glacier Troll",
+      "Whiteout Wraith"
+    ],
+    "Landmarks": [
+      "Hearth of Strangers",
+      "Glacier Chronicle",
+      "Frozen Falls",
+      "The Aurora Throne"
+    ],
+    "Blessing": {
+      "Stat": "def",
+      "Amount": 0.05,
+      "Name": "Boreal Mother's Mantle"
+    },
+    "Recruit": "hrolf",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Chronicle in the Ice",
+      "giver": "Hrolf",
+      "text": "The Glacier Chronicle names every Hrim who died this winter. Read it, so someone remembers.",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 760,
+        "dia": 25,
+        "shards": 14
+      },
+      "done": "Now they are remembered by someone who will leave this place. That matters."
+    },
+    "Lore": {
+      "Landmark": 3,
+      "Title": "Aurora Verse",
+      "Skill": "h5"
+    }
+  },
+  {
+    "Name": "R11",
+    "Id": 11,
+    "Arc": 2,
+    "DisplayName": "Gearwright Bastion",
+    "Subtitle": "Realm of the Wound Clock",
+    "Biome": "clockwork",
+    "Hue": "#d9a441",
+    "People": "Cogborn",
+    "PeopleText": "Brass automatons who believe they were dreamed into being by their god.",
+    "Custom": "Winding Day: once a year, every Cogborn winds another's heart-spring by hand.",
+    "God": "Oriel",
+    "GodTitle": "Oriel, the Patient Machine",
+    "GodCorrupted": false,
+    "Boss": "The Rust Leviathan",
+    "Guide": "Foreman Ticktavius",
+    "Foes": [
+      "Rust Mite",
+      "Scrap Knight",
+      "Corroded Hulk",
+      "Oil Wraith"
+    ],
+    "Landmarks": [
+      "Mainspring Plaza",
+      "Scrapyard Maze",
+      "The Great Escapement",
+      "Oriel's Workshop"
+    ],
+    "Blessing": {
+      "Stat": "def",
+      "Amount": 0.03,
+      "Name": "Patient Plating"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "seven",
+    "SideQuest": {
+      "title": "Lost Spring",
+      "giver": "Foreman Ticktavius",
+      "text": "A small unit went missing in the Scrapyard Maze before Winding Day. Please locate it.",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 840,
+        "dia": 25,
+        "shards": 14
+      },
+      "done": "Unit Seven is functional. Unit Seven is... insisting on following you."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R12",
+    "Id": 12,
+    "Arc": 2,
+    "DisplayName": "Mirelight Fens",
+    "Subtitle": "Realm of Lantern Bogs",
+    "Biome": "swamp",
+    "Hue": "#9fd36b",
+    "People": "Bogwyn",
+    "PeopleText": "Frog-folk who read fortunes in the patterns of swamp gas.",
+    "Custom": "Lantern-courting: you propose by catching someone a will-o-wisp.",
+    "God": "Morrowmaw",
+    "GodTitle": "Morrowmaw, Keeper of Still Waters",
+    "GodCorrupted": true,
+    "Boss": "Morrowmaw, the Drowning Gut",
+    "Guide": "Auntie Gloop",
+    "Foes": [
+      "Bog Lurker",
+      "Wisp Thief",
+      "Leech Matron",
+      "Swamp Colossus"
+    ],
+    "Landmarks": [
+      "Lantern Market",
+      "Gas Oracle",
+      "Sunken Shrine",
+      "The Gut"
+    ],
+    "Blessing": {
+      "Stat": "regen",
+      "Amount": 0.005,
+      "Name": "Still Water"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Wisps for Courting",
+      "giver": "Auntie Gloop",
+      "text": "Wisp Thieves stole every lantern for courting season. Clear 10 bog-beasts so the wisps come back.",
+      "goal": [
+        "foes",
+        10
+      ],
+      "reward": {
+        "gold": 900,
+        "dia": 25,
+        "shards": 14
+      },
+      "done": "Three proposals already! Fertile season."
+    },
+    "Lore": {
+      "Landmark": 1,
+      "Title": "What the Gas Said",
+      "Skill": "h6"
+    }
+  },
+  {
+    "Name": "R13",
+    "Id": 13,
+    "Arc": 2,
+    "DisplayName": "Cindral Archipelago",
+    "Subtitle": "Realm of Burning Isles",
+    "Biome": "volcanic",
+    "Hue": "#ff6a3d",
+    "People": "Drakkin",
+    "PeopleText": "Scaled sailors who sail lava seas in obsidian hulls.",
+    "Custom": "Burning-the-boat: a captain's first ship is always burned, so they never fear losing one.",
+    "God": "Ignara",
+    "GodTitle": "Ignara, Mother of Islands",
+    "GodCorrupted": true,
+    "Boss": "Ignara, the Caldera Queen",
+    "Guide": "Captain Rasha",
+    "Foes": [
+      "Lava Skimmer",
+      "Cinder Drake",
+      "Basalt Brute",
+      "Smoke Siren"
+    ],
+    "Landmarks": [
+      "Obsidian Harbor",
+      "Burning-Boat Beach",
+      "The Steam Vents",
+      "Caldera Crown"
+    ],
+    "Blessing": {
+      "Stat": "atk",
+      "Amount": 0.03,
+      "Name": "Island Fire"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Ashore",
+      "giver": "Captain Rasha",
+      "text": "Drag 4 salvage chests up the beach before the tide of magma takes them.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 980,
+        "dia": 25,
+        "shards": 16
+      },
+      "done": "Good haul. You could sail with us any day."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R14",
+    "Id": 14,
+    "Arc": 2,
+    "DisplayName": "Glimmerdeep Caverns",
+    "Subtitle": "Realm of Underground Stars",
+    "Biome": "crystal",
+    "Hue": "#b07cff",
+    "People": "Gloamkin",
+    "PeopleText": "Blind mole-folk who see by the singing of crystals.",
+    "Custom": "Echo-names: you are named by the echo your first cry makes.",
+    "God": "Lithos",
+    "GodTitle": "Lithos, the Deep Patience",
+    "GodCorrupted": false,
+    "Boss": "The Hollow Choir-Mother",
+    "Guide": "Delver Skree",
+    "Foes": [
+      "Crystal Crawler",
+      "Echo Bat",
+      "Geode Golem",
+      "Choir Shade"
+    ],
+    "Landmarks": [
+      "Echo Hall",
+      "Crystal Lake",
+      "The Singing Vein",
+      "Lithos' Throne"
+    ],
+    "Blessing": {
+      "Stat": "mag",
+      "Amount": 0.03,
+      "Name": "Deep Patience"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "The Singing Vein",
+      "giver": "Delver Skree",
+      "text": "The Singing Vein went quiet. Go listen, and tell me what you hear.",
+      "goal": [
+        "mark",
+        2
+      ],
+      "reward": {
+        "gold": 1060,
+        "dia": 30,
+        "shards": 16
+      },
+      "done": "A heartbeat? Lithos is dreaming. Good dream or bad?"
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R15",
+    "Id": 15,
+    "Arc": 2,
+    "DisplayName": "Aurora Steppe",
+    "Subtitle": "Realm of Endless Grass",
+    "Biome": "meadow",
+    "Hue": "#a0f0c0",
+    "People": "Varrani",
+    "PeopleText": "Centaur herders who follow the aurora across the grasslands.",
+    "Custom": "The Long Ride: grief is carried by galloping until the sun rises.",
+    "God": "Rhosa",
+    "GodTitle": "Rhosa, Lady of Herds",
+    "GodCorrupted": true,
+    "Boss": "Rhosa, the Stampede",
+    "Guide": "Khan Tamur",
+    "Foes": [
+      "Rot Stallion",
+      "Grass Stalker",
+      "Thunderhoof",
+      "Aurora Wraith"
+    ],
+    "Landmarks": [
+      "Herd Camp",
+      "Standing Stones",
+      "The Endless Grass",
+      "Aurora Gate"
+    ],
+    "Blessing": {
+      "Stat": "spd",
+      "Amount": 0.04,
+      "Name": "Herd Rhythm"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "The Long Ride",
+      "giver": "Khan Tamur",
+      "text": "Thundering beasts scattered our foals. Put down 10 so the herd can gather.",
+      "goal": [
+        "foes",
+        10
+      ],
+      "reward": {
+        "gold": 1140,
+        "dia": 30,
+        "shards": 18
+      },
+      "done": "We will ride for the lost tonight, and sing for you after."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R16",
+    "Id": 16,
+    "Arc": 2,
+    "DisplayName": "Bonewind Wastes",
+    "Subtitle": "Realm of Honored Dead",
+    "Biome": "wasteland",
+    "Hue": "#e8e2d6",
+    "People": "Ossuar",
+    "PeopleText": "Skeletal monks who keep their ancestors' bones as a library.",
+    "Custom": "Bone-reading: the dead are consulted by touching their knuckles.",
+    "God": "Mortessa",
+    "GodTitle": "Mortessa, Keeper of Endings",
+    "GodCorrupted": false,
+    "Boss": "The Soul-Thief Herald",
+    "Guide": "Sister Calavera",
+    "Foes": [
+      "Bone Vulture",
+      "Soul Leech",
+      "Grave Colossus",
+      "Hollow Pilgrim"
+    ],
+    "Landmarks": [
+      "Library of Knuckles",
+      "Wind Ossuary",
+      "The Long Road",
+      "Mortessa's Gate"
+    ],
+    "Blessing": {
+      "Stat": "hp",
+      "Amount": 0.04,
+      "Name": "Honest Ending"
+    },
+    "Recruit": "calavera",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Knuckle Library",
+      "giver": "Sister Calavera",
+      "text": "Four reliquaries were scattered by the Herald. Return them to their places.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 1220,
+        "dia": 30,
+        "shards": 18
+      },
+      "done": "The ancestors have their voices back. They say you are very loud."
+    },
+    "Lore": {
+      "Landmark": 3,
+      "Title": "The Last Door",
+      "Skill": "h7"
+    }
+  },
+  {
+    "Name": "R17",
+    "Id": 17,
+    "Arc": 2,
+    "DisplayName": "Silkspire Canopy",
+    "Subtitle": "Realm of the Woven Sky",
+    "Biome": "jungle",
+    "Hue": "#e0b3ff",
+    "People": "Arachnae",
+    "PeopleText": "Six-limbed weavers who live in a city strung between tree-tops.",
+    "Custom": "Thread-contracts: agreements are woven, and broken by cutting.",
+    "God": "Anansa",
+    "GodTitle": "Anansa, the Story-Weaver",
+    "GodCorrupted": true,
+    "Boss": "Anansa, the Web of Lies",
+    "Guide": "Weaver Thessaly",
+    "Foes": [
+      "Silk Stalker",
+      "Cocoon Horror",
+      "Web Drifter",
+      "Lie-Spinner"
+    ],
+    "Landmarks": [
+      "Thread Market",
+      "The Great Loom",
+      "Snapped Bridge",
+      "Anansa's Cocoon"
+    ],
+    "Blessing": {
+      "Stat": "critFlat",
+      "Amount": 2,
+      "Name": "True Thread"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "ysra",
+    "SideQuest": {
+      "title": "The Snapped Bridge",
+      "giver": "Weaver Thessaly",
+      "text": "My sister went to mend the Snapped Bridge and has not returned.",
+      "goal": [
+        "mark",
+        2
+      ],
+      "reward": {
+        "gold": 1300,
+        "dia": 30,
+        "shards": 20
+      },
+      "done": "Ysra! You found her. She says she is coming with you, which is very like her."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R18",
+    "Id": 18,
+    "Arc": 2,
+    "DisplayName": "Tidecall Shoals",
+    "Subtitle": "Realm of Singing Reefs",
+    "Biome": "ocean",
+    "Hue": "#3ddbd9",
+    "People": "Selkie",
+    "PeopleText": "Seal-folk who shed their skins to walk the shore at night.",
+    "Custom": "Skin-trust: lovers swap seal-skins for a night.",
+    "God": "Pelagia",
+    "GodTitle": "Pelagia, the Open Sea",
+    "GodCorrupted": false,
+    "Boss": "The Brine Herald",
+    "Guide": "Murin",
+    "Foes": [
+      "Reef Shark",
+      "Brine Hag",
+      "Salt Golem",
+      "Tide Phantom"
+    ],
+    "Landmarks": [
+      "Skin-Shore",
+      "Reef Cathedral",
+      "Wreck of the Venn",
+      "Pelagia's Pool"
+    ],
+    "Blessing": {
+      "Stat": "mp",
+      "Amount": 0.05,
+      "Name": "Open Sea"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Skins for the Shore",
+      "giver": "Murin",
+      "text": "Recover 4 chests of stolen seal-skins.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 1380,
+        "dia": 30,
+        "shards": 20
+      },
+      "done": "Tonight, everyone swims."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R19",
+    "Id": 19,
+    "Arc": 2,
+    "DisplayName": "Stormforge Peaks",
+    "Subtitle": "Realm of Thunder Anvils",
+    "Biome": "storm",
+    "Hue": "#7fb3ff",
+    "People": "Thunderborn",
+    "PeopleText": "Giants who forge lightning into tools.",
+    "Custom": "Strike-marks: a giant's age is counted by lightning scars.",
+    "God": "Tharos",
+    "GodTitle": "Tharos, the Thunder-Smith",
+    "GodCorrupted": true,
+    "Boss": "Tharos, the Storm Unending",
+    "Guide": "Forge-Giant Hulda",
+    "Foes": [
+      "Spark Elemental",
+      "Thunder Ram",
+      "Storm Giant Thrall",
+      "Lightning Wyrm"
+    ],
+    "Landmarks": [
+      "Strike Plateau",
+      "Anvil Peak",
+      "Rain Bellows",
+      "Tharos' Forge"
+    ],
+    "Blessing": {
+      "Stat": "atk",
+      "Amount": 0.03,
+      "Name": "Thunder Temper"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Storm Census",
+      "giver": "Forge-Giant Hulda",
+      "text": "Too many storm-beasts. The forges cannot get lightning. Clear 12.",
+      "goal": [
+        "foes",
+        12
+      ],
+      "reward": {
+        "gold": 1460,
+        "dia": 35,
+        "shards": 22
+      },
+      "done": "The anvils ring again. That is the best music."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R20",
+    "Id": 20,
+    "Arc": 2,
+    "DisplayName": "The Rift Between",
+    "Subtitle": "Wound in the Lattice",
+    "Biome": "void",
+    "Hue": "#ff4d7a",
+    "People": "the Unmoored",
+    "PeopleText": "Travelers lost between realms, half-real and fading.",
+    "Custom": "Anchoring: the Unmoored hold hands to remember they exist.",
+    "God": "Kael'thar",
+    "GodTitle": "Kael'thar, Penitent",
+    "GodCorrupted": true,
+    "Boss": "Kael'thar, Rift-Bound",
+    "Guide": "lumeria",
+    "Foes": [
+      "Rift Shade",
+      "Fading Pilgrim",
+      "Void Mantis",
+      "Lattice Breaker"
+    ],
+    "Landmarks": [
+      "Anchor Circle",
+      "Shattered Gate",
+      "Mirror Rift",
+      "Kael's Prison"
+    ],
+    "Blessing": {
+      "Stat": "all",
+      "Amount": 0.03,
+      "Name": "Rift Seal"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Hold Their Hands",
+      "giver": "lumeria",
+      "text": "The Unmoored are fading. Open 4 anchor-caches so they can tether themselves.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 1600,
+        "dia": 40,
+        "shards": 24
+      },
+      "done": "They are holding on. So are we."
+    },
+    "Lore": {
+      "Landmark": 3,
+      "Title": "Kael's Confession",
+      "Skill": "h8"
+    }
+  },
+  {
+    "Name": "R21",
+    "Id": 21,
+    "Arc": 3,
+    "DisplayName": "Lanternhold",
+    "Subtitle": "Realm of the Unending Night",
+    "Biome": "night",
+    "Hue": "#ffc145",
+    "People": "Lumen",
+    "PeopleText": "Moth-winged lamplighters who have never seen a sunrise.",
+    "Custom": "Wick-day: each Lumen lights one lantern a year for someone they lost.",
+    "God": "Ithra",
+    "GodTitle": "Ithra, Keeper of Lanterns",
+    "GodCorrupted": false,
+    "Boss": "The Wick-Eater",
+    "Guide": "Lamplighter Pell",
+    "Foes": [
+      "Shade Moth",
+      "Gutter Wraith",
+      "Lampless Knight",
+      "Dark Swallower"
+    ],
+    "Landmarks": [
+      "Hall of Wicks",
+      "Oil Bazaar",
+      "Snuffed District",
+      "Ithra's Beacon"
+    ],
+    "Blessing": {
+      "Stat": "mag",
+      "Amount": 0.03,
+      "Name": "Lantern Grace"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Relight the District",
+      "giver": "Lamplighter Pell",
+      "text": "The Snuffed District is dark. Clear 12 shadows so we can relight it.",
+      "goal": [
+        "foes",
+        12
+      ],
+      "reward": {
+        "gold": 1700,
+        "dia": 35,
+        "shards": 24
+      },
+      "done": "Every window, glowing."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R22",
+    "Id": 22,
+    "Arc": 3,
+    "DisplayName": "Rotroot Hollow",
+    "Subtitle": "Realm of the Sick Forest",
+    "Biome": "forest",
+    "Hue": "#7bb36b",
+    "People": "Dryads",
+    "PeopleText": "Tree-spirits bound to a single tree each.",
+    "Custom": "Grafting: two dryads who love each other graft a branch between their trees.",
+    "God": "Sylvaine",
+    "GodTitle": "Sylvaine, the Green Heart",
+    "GodCorrupted": true,
+    "Boss": "Sylvaine, the Rotting Crown",
+    "Guide": "Dryad Wen",
+    "Foes": [
+      "Rot Treant",
+      "Fungal Lurker",
+      "Blight Stag",
+      "Hollow Dryad"
+    ],
+    "Landmarks": [
+      "Grafted Glade",
+      "The Sick Spring",
+      "Charcoal Ring",
+      "Green Heart"
+    ],
+    "Blessing": {
+      "Stat": "hp",
+      "Amount": 0.04,
+      "Name": "Green Heart"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "The Sick Spring",
+      "giver": "Dryad Wen",
+      "text": "The spring that feeds our roots runs black. Find its source.",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 1780,
+        "dia": 35,
+        "shards": 26
+      },
+      "done": "Clear water. I can feel my leaves again."
+    },
+    "Lore": {
+      "Landmark": 2,
+      "Title": "Charcoal Ring",
+      "Skill": "h9"
+    }
+  },
+  {
+    "Name": "R23",
+    "Id": 23,
+    "Arc": 3,
+    "DisplayName": "Brassmoor",
+    "Subtitle": "Realm of Steam and Greed",
+    "Biome": "clockwork",
+    "Hue": "#c98b4a",
+    "People": "Tinkerfolk",
+    "PeopleText": "Tiny gnomes who measure worth in patents.",
+    "Custom": "Patent-feasts: a new invention is celebrated by everyone eating off it.",
+    "God": "Ferrum",
+    "GodTitle": "Ferrum, God of Making",
+    "GodCorrupted": true,
+    "Boss": "Ferrum, the Golden Engine",
+    "Guide": "Inventor Pip Wrenly",
+    "Foes": [
+      "Steam Golem",
+      "Coin Swarm",
+      "Debt Collector Automaton",
+      "Furnace Hulk"
+    ],
+    "Landmarks": [
+      "Patent Office",
+      "Boiler Row",
+      "The Mint",
+      "Ferrum's Engine"
+    ],
+    "Blessing": {
+      "Stat": "def",
+      "Amount": 0.03,
+      "Name": "Maker's Gift"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Back Pay",
+      "giver": "Pip Wrenly",
+      "text": "The Mint is hoarding wages. Crack 4 vault chests and give the workers their due.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 1900,
+        "dia": 35,
+        "shards": 26
+      },
+      "done": "Payday! First in nine years."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R24",
+    "Id": 24,
+    "Arc": 3,
+    "DisplayName": "Petalfall Isles",
+    "Subtitle": "Realm of Eternal Spring",
+    "Biome": "blossom",
+    "Hue": "#ff9ec7",
+    "People": "Vulpari",
+    "PeopleText": "Fox-folk with many tails who brew tea as a form of prayer.",
+    "Custom": "Tea-vows: a promise sworn over tea cannot be broken without losing a tail.",
+    "God": "Hanami",
+    "GodTitle": "Hanami, the First Blossom",
+    "GodCorrupted": false,
+    "Boss": "The Wilting Herald",
+    "Guide": "Tea-Master Saiko",
+    "Foes": [
+      "Petal Specter",
+      "Thorn Fox",
+      "Ink Oni",
+      "Wither Moth"
+    ],
+    "Landmarks": [
+      "Teahouse Bridge",
+      "Lantern Shrine",
+      "Nine-Tail Grove",
+      "Hanami's Tree"
+    ],
+    "Blessing": {
+      "Stat": "spd",
+      "Amount": 0.03,
+      "Name": "First Blossom"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "nimra",
+    "SideQuest": {
+      "title": "The Ninth Tail",
+      "giver": "Tea-Master Saiko",
+      "text": "My student Nimra broke a tea-vow to fight the Herald and fled in shame. Search the Nine-Tail Grove.",
+      "goal": [
+        "mark",
+        2
+      ],
+      "reward": {
+        "gold": 2000,
+        "dia": 40,
+        "shards": 28
+      },
+      "done": "A broken vow to save others is kept in spirit. Tell her she can come home."
+    },
+    "Lore": {
+      "Landmark": 1,
+      "Title": "The Lantern Shrine Sutra",
+      "Skill": "h10"
+    }
+  },
+  {
+    "Name": "R25",
+    "Id": 25,
+    "Arc": 3,
+    "DisplayName": "Duneheart Sanctum",
+    "Subtitle": "Realm of Sleeping Pyramids",
+    "Biome": "desert",
+    "Hue": "#e8b04a",
+    "People": "Anubari",
+    "PeopleText": "Jackal-headed priests who weigh hearts against feathers.",
+    "Custom": "Heart-weighing: every Anubari's heart is weighed at sunset, and the light ones sing.",
+    "God": "Sethra",
+    "GodTitle": "Sethra, Lord of Sandstorms",
+    "GodCorrupted": true,
+    "Boss": "Sethra, the Devouring Storm",
+    "Guide": "Priestess Neferu",
+    "Foes": [
+      "Sand Djinn",
+      "Mummified Guard",
+      "Scarab Swarm",
+      "Sphinx Revenant"
+    ],
+    "Landmarks": [
+      "Hall of Scales",
+      "Buried Obelisk",
+      "Sand-Sea",
+      "The Sleeping Pyramid"
+    ],
+    "Blessing": {
+      "Stat": "critFlat",
+      "Amount": 2,
+      "Name": "Light Heart"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Weigh the Scarabs",
+      "giver": "Priestess Neferu",
+      "text": "Scarab swarms are eating the feathers of judgment. Destroy 12.",
+      "goal": [
+        "foes",
+        12
+      ],
+      "reward": {
+        "gold": 2100,
+        "dia": 40,
+        "shards": 28
+      },
+      "done": "Light hearts tonight."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R26",
+    "Id": 26,
+    "Arc": 3,
+    "DisplayName": "Coralcrown",
+    "Subtitle": "Realm of the Naga Throne",
+    "Biome": "ocean",
+    "Hue": "#2fb3a6",
+    "People": "Naga",
+    "PeopleText": "Serpent-bodied nobles of an ancient sea empire.",
+    "Custom": "Shed-crowning: a ruler crowns the heir with their own shed skin.",
+    "God": "Thalassa",
+    "GodTitle": "Thalassa, Empress of the Deep",
+    "GodCorrupted": true,
+    "Boss": "Thalassa, the Abyssal Crown",
+    "Guide": "Prince Ssevrin",
+    "Foes": [
+      "Naga Myrmidon",
+      "Sea-Hag",
+      "Pressure Wraith",
+      "Kraken Spawn"
+    ],
+    "Landmarks": [
+      "Coral Court",
+      "Shed Vault",
+      "The Abyss Lip",
+      "Throne of Tides"
+    ],
+    "Blessing": {
+      "Stat": "mp",
+      "Amount": 0.04,
+      "Name": "Abyssal Calm"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "The Shed Vault",
+      "giver": "Prince Ssevrin",
+      "text": "The Shed Vault holds every crown of our line. Something has broken in. Look inside.",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 2200,
+        "dia": 40,
+        "shards": 30
+      },
+      "done": "The crowns are safe. You have my gratitude, and the Empire's."
+    },
+    "Lore": {
+      "Landmark": 2,
+      "Title": "The Abyss Lip",
+      "Skill": "h11"
+    }
+  },
+  {
+    "Name": "R27",
+    "Id": 27,
+    "Arc": 3,
+    "DisplayName": "Ironveil Citadel",
+    "Subtitle": "Realm of the Eternal War",
+    "Biome": "wasteland",
+    "Hue": "#b0b8c8",
+    "People": "Gor'Khan",
+    "PeopleText": "Orc clans for whom honor is counted in scars freely given.",
+    "Custom": "Scar-gift: a warrior thanks a rival by letting them land the first blow.",
+    "God": "Vaskar",
+    "GodTitle": "Vaskar, the War-Father",
+    "GodCorrupted": false,
+    "Boss": "Vaskar's Champion",
+    "Guide": "Warlord Vask",
+    "Foes": [
+      "Iron Berserker",
+      "Siege Hound",
+      "War Totem",
+      "Rot-Turned Veteran"
+    ],
+    "Landmarks": [
+      "The Proving Ring",
+      "Scar Wall",
+      "Gate of Truce",
+      "Vaskar's Altar"
+    ],
+    "Blessing": {
+      "Stat": "atk",
+      "Amount": 0.03,
+      "Name": "War-Father's Nod"
+    },
+    "Recruit": "vask",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Scar Wall",
+      "giver": "Warlord Vask",
+      "text": "Rot-Turned Veterans shame the clans. Give 12 of them an honest end.",
+      "goal": [
+        "foes",
+        12
+      ],
+      "reward": {
+        "gold": 2300,
+        "dia": 40,
+        "shards": 30
+      },
+      "done": "Their names go back on the Scar Wall. With honor."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R28",
+    "Id": 28,
+    "Arc": 3,
+    "DisplayName": "Mirrormere",
+    "Subtitle": "Realm of the Twin Lake",
+    "Biome": "crystal",
+    "Hue": "#cfe3ff",
+    "People": "Mirrorkin",
+    "PeopleText": "People who exist in pairs, one in the world and one in the lake.",
+    "Custom": "Twin-bonding: each Mirrorkin must say good morning to their reflection, or it goes missing.",
+    "God": "Vel",
+    "GodTitle": "Vel, the Twin-Faced",
+    "GodCorrupted": true,
+    "Boss": "Vel, the Broken Reflection",
+    "Guide": "Ilsa (and Asli)",
+    "Foes": [
+      "Reflection Thief",
+      "Mirror Golem",
+      "Inverted Knight",
+      "Glass Serpent"
+    ],
+    "Landmarks": [
+      "Morning Shore",
+      "Upside-Down Spire",
+      "The Still Point",
+      "Vel's Double Throne"
+    ],
+    "Blessing": {
+      "Stat": "mag",
+      "Amount": 0.03,
+      "Name": "Twin Sight"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Good Morning",
+      "giver": "Ilsa (and Asli)",
+      "text": "Reflections are going missing. Visit the Still Point where they are kept.",
+      "goal": [
+        "mark",
+        2
+      ],
+      "reward": {
+        "gold": 2400,
+        "dia": 40,
+        "shards": 32
+      },
+      "done": "Everyone said good morning today. Everyone."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R29",
+    "Id": 29,
+    "Arc": 3,
+    "DisplayName": "Emberwild",
+    "Subtitle": "Realm of the Phoenix Prairie",
+    "Biome": "volcanic",
+    "Hue": "#ff9a3d",
+    "People": "Cindrel",
+    "PeopleText": "Phoenix-folk who burn and are reborn once a lifetime.",
+    "Custom": "Ash-gifts: the reborn give their old ashes to someone they love.",
+    "God": "Phenra",
+    "GodTitle": "Phenra, the Endless Return",
+    "GodCorrupted": false,
+    "Boss": "The Ash-Without-Fire",
+    "Guide": "Ember",
+    "Foes": [
+      "Ash Wolf",
+      "Burnt Wraith",
+      "Cinder Golem",
+      "Cold Flame"
+    ],
+    "Landmarks": [
+      "Rebirth Pyre",
+      "Ash Fields",
+      "The Cold Hearth",
+      "Phenra's Nest"
+    ],
+    "Blessing": {
+      "Stat": "regen",
+      "Amount": 0.005,
+      "Name": "Endless Return"
+    },
+    "Recruit": "ember",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "The Cold Hearth",
+      "giver": "Ember",
+      "text": "A hearth that freezes fire. Find it and learn what is wrong.",
+      "goal": [
+        "mark",
+        2
+      ],
+      "reward": {
+        "gold": 2500,
+        "dia": 45,
+        "shards": 32
+      },
+      "done": "Nihilus' mark. It is reaching further."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R30",
+    "Id": 30,
+    "Arc": 3,
+    "DisplayName": "Nihil's Threshold",
+    "Subtitle": "Edge of the Hollow",
+    "Biome": "void",
+    "Hue": "#8a5cff",
+    "People": "the Hollow Choir",
+    "PeopleText": "Former mortals emptied by Nihilus, singing his silence.",
+    "Custom": "There are none. The Choir took them.",
+    "God": "Vorthane",
+    "GodTitle": "Vorthane, Voice Restored",
+    "GodCorrupted": true,
+    "Boss": "Vorthane, Voice of Nihilus",
+    "Guide": "lumeria",
+    "Foes": [
+      "Hollow Chorister",
+      "Silence Wraith",
+      "Echo Devourer",
+      "Unmade Saint"
+    ],
+    "Landmarks": [
+      "Last Lantern",
+      "Choir Stairs",
+      "The Mute Bell",
+      "Throat of the Hollow"
+    ],
+    "Blessing": {
+      "Stat": "all",
+      "Amount": 0.03,
+      "Name": "Voice Restored"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "The Mute Bell",
+      "giver": "lumeria",
+      "text": "Ring the Mute Bell and break the silence.",
+      "goal": [
+        "mark",
+        2
+      ],
+      "reward": {
+        "gold": 2700,
+        "dia": 50,
+        "shards": 34
+      },
+      "done": "It rang. Everyone in the Choir turned to listen."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R31",
+    "Id": 31,
+    "Arc": 4,
+    "DisplayName": "Skyglass Sea",
+    "Subtitle": "Realm of Floating Oceans",
+    "Biome": "sky",
+    "Hue": "#9fe7ff",
+    "People": "Nimbari",
+    "PeopleText": "Riders of cloud-whales who never set foot on land.",
+    "Custom": "Whale-songs: each family sings a whale-song so the herd knows them.",
+    "God": "Aeris",
+    "GodTitle": "Aeris, the Upper Tide",
+    "GodCorrupted": true,
+    "Boss": "Aeris, the Falling Sky",
+    "Guide": "Rider Oona",
+    "Foes": [
+      "Cloud Shark",
+      "Sky Kraken Spawn",
+      "Storm Wisp",
+      "Whale-Lice Swarm"
+    ],
+    "Landmarks": [
+      "Whale Harbor",
+      "Glass Shallows",
+      "Rain Spire",
+      "Aeris' Current"
+    ],
+    "Blessing": {
+      "Stat": "spd",
+      "Amount": 0.03,
+      "Name": "Upper Tide"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Calves Overboard",
+      "giver": "Rider Oona",
+      "text": "Whale-lice swarms are bleeding the calves. Clear 14.",
+      "goal": [
+        "foes",
+        14
+      ],
+      "reward": {
+        "gold": 2800,
+        "dia": 45,
+        "shards": 34
+      },
+      "done": "Listen. The whole herd is singing."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R32",
+    "Id": 32,
+    "Arc": 4,
+    "DisplayName": "Thornveil Barony",
+    "Subtitle": "Realm of the Velvet Night",
+    "Biome": "nightmare",
+    "Hue": "#d24d6b",
+    "People": "the Sanguine Court",
+    "PeopleText": "Pale aristocrats who drink red wine of roses, not blood. Mostly.",
+    "Custom": "Masquerades: no one shows their true face until a vow is made.",
+    "God": "Morvaine",
+    "GodTitle": "Morvaine, Lady of Masks",
+    "GodCorrupted": true,
+    "Boss": "Morvaine, the Faceless",
+    "Guide": "Countess Lirelle",
+    "Foes": [
+      "Thorn Bat",
+      "Masked Duelist",
+      "Crimson Hound",
+      "Faceless Noble"
+    ],
+    "Landmarks": [
+      "Rose Gate",
+      "Ballroom of Masks",
+      "Crypt Gardens",
+      "Morvaine's Manor"
+    ],
+    "Blessing": {
+      "Stat": "critFlat",
+      "Amount": 2,
+      "Name": "Velvet Edge"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "The Masquerade",
+      "giver": "Countess Lirelle",
+      "text": "Return 4 stolen masks hidden in the manor grounds.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 2900,
+        "dia": 45,
+        "shards": 36
+      },
+      "done": "Tonight, we unmask. Together."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R33",
+    "Id": 33,
+    "Arc": 4,
+    "DisplayName": "Starfall Crater",
+    "Subtitle": "Realm of the Fallen Star",
+    "Biome": "crater",
+    "Hue": "#ffe08a",
+    "People": "Stoneborn",
+    "PeopleText": "Golems born from meteor-stone who hum with starlight.",
+    "Custom": "Sky-watching: the Stoneborn take turns staying awake to watch for falling kin.",
+    "God": "Astrael",
+    "GodTitle": "Astrael, the Falling Star",
+    "GodCorrupted": false,
+    "Boss": "The Crater Wyrm",
+    "Guide": "Watcher Gneiss",
+    "Foes": [
+      "Meteor Beetle",
+      "Crater Wyrmling",
+      "Stardust Wraith",
+      "Glass Golem"
+    ],
+    "Landmarks": [
+      "Watcher's Rest",
+      "Impact Ring",
+      "The Crater's Eye",
+      "Astrael's Fall"
+    ],
+    "Blessing": {
+      "Stat": "mag",
+      "Amount": 0.03,
+      "Name": "Star-Touched"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "kael",
+    "SideQuest": {
+      "title": "The Hooded Wanderer",
+      "giver": "Watcher Gneiss",
+      "text": "The wanderer camps at the Crater's Eye. He asked to meet the Facetborn, if they ever came.",
+      "goal": [
+        "mark",
+        2
+      ],
+      "reward": {
+        "gold": 3000,
+        "dia": 50,
+        "shards": 36
+      },
+      "done": "He went with you? Good. He looked lonely."
+    },
+    "Lore": {
+      "Landmark": 3,
+      "Title": "Fall of Astrael",
+      "Skill": "h12"
+    }
+  },
+  {
+    "Name": "R34",
+    "Id": 34,
+    "Arc": 4,
+    "DisplayName": "Myriad Bazaar",
+    "Subtitle": "Realm of All Roads",
+    "Biome": "bazaar",
+    "Hue": "#ff7a59",
+    "People": "Everyone",
+    "PeopleText": "Traders from a hundred realms who came through old gates and never left.",
+    "Custom": "Haggling is sacred. Paying full price is an insult.",
+    "God": "Mercato",
+    "GodTitle": "Mercato, God of Exchange",
+    "GodCorrupted": false,
+    "Boss": "The Debt Collector",
+    "Guide": "Auctioneer Zib",
+    "Foes": [
+      "Pickpocket Imp",
+      "Ledger Wraith",
+      "Collector Golem",
+      "Contract Devil"
+    ],
+    "Landmarks": [
+      "Grand Auction",
+      "Gate Row",
+      "Lost & Found",
+      "Mercato's Scales"
+    ],
+    "Blessing": {
+      "Stat": "def",
+      "Amount": 0.03,
+      "Name": "Fair Exchange"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Lost & Found",
+      "giver": "Auctioneer Zib",
+      "text": "A crate of travelers' heirlooms was stolen. Find the 4 hidden stashes.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 3200,
+        "dia": 50,
+        "shards": 38
+      },
+      "done": "Everyone gets their thing back. Unheard of! Wonderful!"
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R35",
+    "Id": 35,
+    "Arc": 4,
+    "DisplayName": "Wyrmrest Highlands",
+    "Subtitle": "Realm of the Elder Dragons",
+    "Biome": "tundra",
+    "Hue": "#6fe3a1",
+    "People": "Dragonkin",
+    "PeopleText": "Proud winged folk descended from dragons that took mortal shape.",
+    "Custom": "Hoard-giving: a Dragonkin's wealth is measured by what they give away.",
+    "God": "Draknor",
+    "GodTitle": "Draknor, Eldest Wing",
+    "GodCorrupted": true,
+    "Boss": "Draknor, the Rot-Wyrm",
+    "Guide": "Wingmaiden Seryth",
+    "Foes": [
+      "Drake Sentinel",
+      "Wyvern Raider",
+      "Rot Drake",
+      "Ancient Bone Dragon"
+    ],
+    "Landmarks": [
+      "Roost Cliffs",
+      "Hoard Hall",
+      "Wind Shelf",
+      "Draknor's Peak"
+    ],
+    "Blessing": {
+      "Stat": "atk",
+      "Amount": 0.03,
+      "Name": "Wing of the Eldest"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Wyvern Season",
+      "giver": "Wingmaiden Seryth",
+      "text": "Raiders harry the roosts. Clear 14.",
+      "goal": [
+        "foes",
+        14
+      ],
+      "reward": {
+        "gold": 3300,
+        "dia": 50,
+        "shards": 38
+      },
+      "done": "The young can fly again."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R36",
+    "Id": 36,
+    "Arc": 4,
+    "DisplayName": "Veilwood",
+    "Subtitle": "Realm of the Fae Courts",
+    "Biome": "forest",
+    "Hue": "#c3a6ff",
+    "People": "Fae",
+    "PeopleText": "Bargain-bound fairies who cannot lie but love a technicality.",
+    "Custom": "Name-keeping: true names are only told to the trusted.",
+    "God": "Maelis",
+    "GodTitle": "Maelis, Queen of Twilight",
+    "GodCorrupted": true,
+    "Boss": "Maelis, the Thorned Bargain",
+    "Guide": "Puck-of-Nine-Doors",
+    "Foes": [
+      "Thorn Sprite",
+      "Changeling",
+      "Bargain Hound",
+      "Wild Hunt Rider"
+    ],
+    "Landmarks": [
+      "Mushroom Ring",
+      "Court of Doors",
+      "The Endless Glade",
+      "Twilight Throne"
+    ],
+    "Blessing": {
+      "Stat": "spd",
+      "Amount": 0.03,
+      "Name": "Twilight Step"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Nine Doors",
+      "giver": "Puck-of-Nine-Doors",
+      "text": "Find the Court of Doors and pick the right one. Or the wrong one. Both are interesting.",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 3400,
+        "dia": 50,
+        "shards": 40
+      },
+      "done": "You picked the door that led back. Clever!"
+    },
+    "Lore": {
+      "Landmark": 2,
+      "Title": "The Endless Glade",
+      "Skill": "h13"
+    }
+  },
+  {
+    "Name": "R37",
+    "Id": 37,
+    "Arc": 4,
+    "DisplayName": "Chronoflux",
+    "Subtitle": "Realm of Broken Time",
+    "Biome": "crystal",
+    "Hue": "#a6c8ff",
+    "People": "Chronari",
+    "PeopleText": "People who age backward and forward depending on the hour.",
+    "Custom": "Birthday-on-demand: you celebrate whenever you happen to be younger.",
+    "God": "Tempus",
+    "GodTitle": "Tempus, Keeper of Hours",
+    "GodCorrupted": false,
+    "Boss": "The Stopped Clock",
+    "Guide": "Clockmistress Ava",
+    "Foes": [
+      "Paradox Hound",
+      "Echo Soldier",
+      "Rewind Wraith",
+      "Hour-Eater"
+    ],
+    "Landmarks": [
+      "Plaza of Hours",
+      "Tock's Workshop",
+      "The Frozen Second",
+      "Tempus' Dial"
+    ],
+    "Blessing": {
+      "Stat": "regen",
+      "Amount": 0.005,
+      "Name": "Flowing Hours"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "tock",
+    "SideQuest": {
+      "title": "Old Tock",
+      "giver": "Clockmistress Ava",
+      "text": "The watchmaker Tock is stuck in a loop at his workshop. Break him out.",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 3500,
+        "dia": 55,
+        "shards": 40
+      },
+      "done": "He made it out? He will need to catch up on several decades of news."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R38",
+    "Id": 38,
+    "Arc": 4,
+    "DisplayName": "Abyssal Trench",
+    "Subtitle": "Realm Beneath the Deepest Sea",
+    "Biome": "ocean",
+    "Hue": "#2b5bd1",
+    "People": "Anglerfolk",
+    "PeopleText": "Lantern-headed folk who live where sunlight is a myth.",
+    "Custom": "Lure-lighting: the brightest lure leads the family.",
+    "God": "Leviat",
+    "GodTitle": "Leviat, the Patient Deep",
+    "GodCorrupted": true,
+    "Boss": "Leviat, the Lightless Maw",
+    "Guide": "Lure-Elder Bulb",
+    "Foes": [
+      "Gulper Eel",
+      "Pressure Golem",
+      "Lightless Angler",
+      "Trench Horror"
+    ],
+    "Landmarks": [
+      "Lure Village",
+      "Black Smoker Vents",
+      "The Unlit Drop",
+      "Leviat's Maw"
+    ],
+    "Blessing": {
+      "Stat": "hp",
+      "Amount": 0.04,
+      "Name": "Patient Deep"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Lures for the Lost",
+      "giver": "Lure-Elder Bulb",
+      "text": "Recover 4 lure-caches from the vents.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 3700,
+        "dia": 55,
+        "shards": 42
+      },
+      "done": "Every family has light again."
+    },
+    "Lore": {
+      "Landmark": 2,
+      "Title": "The Unlit Drop",
+      "Skill": "h14"
+    }
+  },
+  {
+    "Name": "R39",
+    "Id": 39,
+    "Arc": 4,
+    "DisplayName": "Sunspire",
+    "Subtitle": "Realm of the Solar Throne",
+    "Biome": "celestial",
+    "Hue": "#ffd166",
+    "People": "Solari",
+    "PeopleText": "Golden-skinned folk who sleep only during eclipses.",
+    "Custom": "Dawn-greeting: every Solari salutes the sun before they speak.",
+    "God": "Solaris",
+    "GodTitle": "Solaris, the Morning Crown",
+    "GodCorrupted": true,
+    "Boss": "Solaris, the Burning Eye",
+    "Guide": "Sun-Herald Aten",
+    "Foes": [
+      "Glare Wraith",
+      "Solar Templar",
+      "Sunburnt Husk",
+      "Flare Serpent"
+    ],
+    "Landmarks": [
+      "Dawn Steps",
+      "Mirror Fields",
+      "The Eclipse Altar",
+      "Solar Throne"
+    ],
+    "Blessing": {
+      "Stat": "mag",
+      "Amount": 0.03,
+      "Name": "Morning Crown"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Eclipse",
+      "giver": "Sun-Herald Aten",
+      "text": "Clear 14 sun-creatures so we can reach the Eclipse Altar.",
+      "goal": [
+        "foes",
+        14
+      ],
+      "reward": {
+        "gold": 3800,
+        "dia": 55,
+        "shards": 42
+      },
+      "done": "Night! Real night! Everyone is asleep in the streets."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R40",
+    "Id": 40,
+    "Arc": 4,
+    "DisplayName": "The Unwritten",
+    "Subtitle": "Realm of Every Story",
+    "Biome": "library",
+    "Hue": "#e8e2d6",
+    "People": "Inkborn",
+    "PeopleText": "People made of ink and margin-notes who live inside books.",
+    "Custom": "Re-reading: a beloved story is re-lived once a year, word for word.",
+    "God": "Scriptor",
+    "GodTitle": "Scriptor, Author of Realms",
+    "GodCorrupted": false,
+    "Boss": "Lumeria's Shadow",
+    "Guide": "Librarian Folio",
+    "Foes": [
+      "Ink Wraith",
+      "Paper Golem",
+      "Plot Hole",
+      "Redacted Knight"
+    ],
+    "Landmarks": [
+      "Reading Room",
+      "Stacks of Lost Realms",
+      "The Blank Page",
+      "Scriptor's Desk"
+    ],
+    "Blessing": {
+      "Stat": "all",
+      "Amount": 0.03,
+      "Name": "Author's Margin"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "The Blank Page",
+      "giver": "Librarian Folio",
+      "text": "Find the Blank Page. It is where erased realms go.",
+      "goal": [
+        "mark",
+        2
+      ],
+      "reward": {
+        "gold": 4000,
+        "dia": 60,
+        "shards": 44
+      },
+      "done": "You read the erased realms aloud. Some of them came back."
+    },
+    "Lore": {
+      "Landmark": 1,
+      "Title": "Stacks of Lost Realms",
+      "Skill": "h15"
+    }
+  },
+  {
+    "Name": "R41",
+    "Id": 41,
+    "Arc": 5,
+    "DisplayName": "Ashen Remnant",
+    "Subtitle": "Realm That Died",
+    "Biome": "wasteland",
+    "Hue": "#9aa3b5",
+    "People": "the Last Embers",
+    "PeopleText": "Survivors of a realm whose god was eaten whole.",
+    "Custom": "Ember-keeping: the last fire is never allowed to go out.",
+    "God": "Orun",
+    "GodTitle": "Orun, the Remembered",
+    "GodCorrupted": false,
+    "Boss": "The Grave-Herald",
+    "Guide": "Keeper Ash",
+    "Foes": [
+      "Cinder Ghoul",
+      "Hollow Husk",
+      "Grave Wyrm",
+      "Remnant Wraith"
+    ],
+    "Landmarks": [
+      "The Last Fire",
+      "Godless Temple",
+      "Ash Sea",
+      "Orun's Grave"
+    ],
+    "Blessing": {
+      "Stat": "hp",
+      "Amount": 0.04,
+      "Name": "Remembered Warmth"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "The Last Fire",
+      "giver": "Keeper Ash",
+      "text": "Carry the Last Fire's embers to 4 old hearths so the realm stays warm.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 4200,
+        "dia": 60,
+        "shards": 46
+      },
+      "done": "Five fires now. Five!"
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R42",
+    "Id": 42,
+    "Arc": 5,
+    "DisplayName": "Frostfire Divide",
+    "Subtitle": "Realm Split in Two",
+    "Biome": "tundra",
+    "Hue": "#ff9ec7",
+    "People": "the Divided",
+    "PeopleText": "Twin nations of ice and flame who have not spoken in a thousand years.",
+    "Custom": "The Line: no one may cross the boundary stones, ever.",
+    "God": "Kaldra",
+    "GodTitle": "Kaldra, the Balanced",
+    "GodCorrupted": true,
+    "Boss": "Kaldra, the Sundered",
+    "Guide": "Envoy Ysa",
+    "Foes": [
+      "Frost Salamander",
+      "Fire Yeti",
+      "Steam Elemental",
+      "Divide Reaver"
+    ],
+    "Landmarks": [
+      "Boundary Stones",
+      "Hall of Ice",
+      "Hall of Flame",
+      "Kaldra's Scale"
+    ],
+    "Blessing": {
+      "Stat": "atk",
+      "Amount": 0.03,
+      "Name": "Balanced Edge"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Cross the Line",
+      "giver": "Envoy Ysa",
+      "text": "Visit both halls and carry word across. Start with the Hall of Flame.",
+      "goal": [
+        "mark",
+        2
+      ],
+      "reward": {
+        "gold": 4400,
+        "dia": 60,
+        "shards": 46
+      },
+      "done": "Our nations will meet. First time in a thousand years."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R43",
+    "Id": 43,
+    "Arc": 5,
+    "DisplayName": "Gloomspore Depths",
+    "Subtitle": "Realm of the Fungal Mind",
+    "Biome": "fungal",
+    "Hue": "#c08bff",
+    "People": "Myconids",
+    "PeopleText": "Mushroom-folk who share one dreaming mind.",
+    "Custom": "Spore-sharing: memories are passed on by breathing together.",
+    "God": "the Sporemother",
+    "GodTitle": "the Sporemother, Root of Minds",
+    "GodCorrupted": true,
+    "Boss": "the Sporemother, Hive of Hunger",
+    "Guide": "Speaker Puffcap",
+    "Foes": [
+      "Spore Drone",
+      "Fungal Brute",
+      "Mind Leech",
+      "Rot Bloom"
+    ],
+    "Landmarks": [
+      "Breathing Hall",
+      "Mycelium Bridge",
+      "The Glow Garden",
+      "Mother's Bed"
+    ],
+    "Blessing": {
+      "Stat": "mp",
+      "Amount": 0.04,
+      "Name": "Many Minds"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Weeding the Mind",
+      "giver": "Speaker Puffcap",
+      "text": "Rot Blooms poison the shared mind. Clear 16.",
+      "goal": [
+        "foes",
+        16
+      ],
+      "reward": {
+        "gold": 4600,
+        "dia": 60,
+        "shards": 48
+      },
+      "done": "We are thinking clearly. We think you are good."
+    },
+    "Lore": {
+      "Landmark": 2,
+      "Title": "Glow Garden Memory",
+      "Skill": "h16"
+    }
+  },
+  {
+    "Name": "R44",
+    "Id": 44,
+    "Arc": 5,
+    "DisplayName": "Celestine Gardens",
+    "Subtitle": "Realm of the Seraphs",
+    "Biome": "celestial",
+    "Hue": "#fff3c4",
+    "People": "Seraphs",
+    "PeopleText": "Six-winged guardians who tend gardens of living light.",
+    "Custom": "Wing-vow: a seraph gives a feather to anyone they swear to protect.",
+    "God": "Haloria",
+    "GodTitle": "Haloria, Lady of Mercy",
+    "GodCorrupted": false,
+    "Boss": "The Fallen Choir",
+    "Guide": "Seraphine",
+    "Foes": [
+      "Fallen Seraph",
+      "Light-Eater",
+      "Halo Wraith",
+      "Gilded Golem"
+    ],
+    "Landmarks": [
+      "Garden Gate",
+      "Fountain of Mercy",
+      "Feather Spire",
+      "Haloria's Bower"
+    ],
+    "Blessing": {
+      "Stat": "regen",
+      "Amount": 0.005,
+      "Name": "Mercy"
+    },
+    "Recruit": "seraphine",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Feathers Scattered",
+      "giver": "Seraphine",
+      "text": "The fallen scattered our vow-feathers. Collect the 4 caches.",
+      "goal": [
+        "chests"
+      ],
+      "reward": {
+        "gold": 4800,
+        "dia": 65,
+        "shards": 48
+      },
+      "done": "Every feather, home."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R45",
+    "Id": 45,
+    "Arc": 5,
+    "DisplayName": "Bloodmoon Steppes",
+    "Subtitle": "Realm of the Red Hunt",
+    "Biome": "nightmare",
+    "Hue": "#ff4d4d",
+    "People": "Lupari",
+    "PeopleText": "Wolf-folk who hunt under a moon that never sets.",
+    "Custom": "The Howl: a pack chooses its leader by whose howl the moon answers.",
+    "God": "Lunaxa",
+    "GodTitle": "Lunaxa, Mother Moon",
+    "GodCorrupted": true,
+    "Boss": "Lunaxa, the Blood Moon",
+    "Guide": "Packleader Rhen",
+    "Foes": [
+      "Red Wolf",
+      "Moonmad Hunter",
+      "Blood Stalker",
+      "Feral Alpha"
+    ],
+    "Landmarks": [
+      "Den of Howls",
+      "Red Grass",
+      "Moonwell",
+      "Lunaxa's Peak"
+    ],
+    "Blessing": {
+      "Stat": "critFlat",
+      "Amount": 2,
+      "Name": "Silver Moon"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Red Grass",
+      "giver": "Packleader Rhen",
+      "text": "Moonmad hunters roam the grass. Calm 16 of them.",
+      "goal": [
+        "foes",
+        16
+      ],
+      "reward": {
+        "gold": 5000,
+        "dia": 65,
+        "shards": 50
+      },
+      "done": "The packs are howling together."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R46",
+    "Id": 46,
+    "Arc": 5,
+    "DisplayName": "Clockwork Eternity",
+    "Subtitle": "Realm of the Final Machine",
+    "Biome": "clockwork",
+    "Hue": "#7ef2ff",
+    "People": "Axiomites",
+    "PeopleText": "Machine-people who calculated the end of the universe and found it boring.",
+    "Custom": "Error-day: once a year everyone makes a mistake on purpose.",
+    "God": "Axiom",
+    "GodTitle": "Axiom, the Proven",
+    "GodCorrupted": true,
+    "Boss": "Axiom, the Null Equation",
+    "Guide": "Unit Ninety-Nine",
+    "Foes": [
+      "Logic Drone",
+      "Proof Golem",
+      "Null Engine",
+      "Recursion Wraith"
+    ],
+    "Landmarks": [
+      "Error Plaza",
+      "The Infinite Hall",
+      "Calculation Engine",
+      "Axiom's Core"
+    ],
+    "Blessing": {
+      "Stat": "def",
+      "Amount": 0.03,
+      "Name": "Proven"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Deliberate Mistakes",
+      "giver": "Unit Ninety-Nine",
+      "text": "Visit the Infinite Hall and make an error.",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 5200,
+        "dia": 65,
+        "shards": 50
+      },
+      "done": "You walked the wrong way. Perfect."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R47",
+    "Id": 47,
+    "Arc": 5,
+    "DisplayName": "Dreamreach",
+    "Subtitle": "Realm of Kind Dreams",
+    "Biome": "celestial",
+    "Hue": "#b8a6ff",
+    "People": "Slumberkin",
+    "PeopleText": "Sleepy folk who build cities in shared dreams.",
+    "Custom": "Dream-guesting: you may visit anyone's dream if you bring a gift.",
+    "God": "Somna",
+    "GodTitle": "Somna, Sister of Dreams",
+    "GodCorrupted": false,
+    "Boss": "The Insomnia Herald",
+    "Guide": "Somna",
+    "Foes": [
+      "Wakeful Wraith",
+      "Nightmare Hound",
+      "Alarm Golem",
+      "Dread Lantern"
+    ],
+    "Landmarks": [
+      "Pillow Fields",
+      "Lullaby Tower",
+      "The Waking Edge",
+      "Somna's Bed"
+    ],
+    "Blessing": {
+      "Stat": "mp",
+      "Amount": 0.04,
+      "Name": "Kind Dreams"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "A Gift for a Dream",
+      "giver": "Somna",
+      "text": "Visit the Lullaby Tower and sing the children to sleep.",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 5400,
+        "dia": 70,
+        "shards": 52
+      },
+      "done": "Snoring. Lovely, lovely snoring."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R48",
+    "Id": 48,
+    "Arc": 5,
+    "DisplayName": "The Pale Expanse",
+    "Subtitle": "Realm of White Silence",
+    "Biome": "tundra",
+    "Hue": "#e8f4ff",
+    "People": "Pale Monks",
+    "PeopleText": "Silent monks who believe Nihilus is coming and must be met with peace.",
+    "Custom": "Vow of silence, broken once in a lifetime for the most important words.",
+    "God": "Silentia",
+    "GodTitle": "Silentia, the Quiet Mind",
+    "GodCorrupted": true,
+    "Boss": "Silentia, the Endless Hush",
+    "Guide": "Brother Wren",
+    "Foes": [
+      "Hush Wraith",
+      "Snow Revenant",
+      "Silent Knight",
+      "Void Snow"
+    ],
+    "Landmarks": [
+      "Monastery Gate",
+      "Bell of One Word",
+      "The White",
+      "Silentia's Rest"
+    ],
+    "Blessing": {
+      "Stat": "all",
+      "Amount": 0.02,
+      "Name": "Quiet Mind"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "One Word",
+      "giver": "Brother Wren",
+      "text": "Ring the Bell of One Word for the monks who cannot.",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 5600,
+        "dia": 70,
+        "shards": 52
+      },
+      "done": "(He writes:) Thank you."
+    },
+    "Lore": null
+  },
+  {
+    "Name": "R49",
+    "Id": 49,
+    "Arc": 5,
+    "DisplayName": "Lattice Core",
+    "Subtitle": "Heart of All Gates",
+    "Biome": "crystal",
+    "Hue": "#7ef2ff",
+    "People": "Elder Quorin",
+    "PeopleText": "The ancient builders who first tuned the Lattice.",
+    "Custom": "The Great Measure: every star in every realm, counted once an age.",
+    "God": "Prime Measure",
+    "GodTitle": "Prime Measure, Mother of Gates",
+    "GodCorrupted": true,
+    "Boss": "Prime Measure, the Shut Gate",
+    "Guide": "Talo Venn",
+    "Foes": [
+      "Gate Sentinel",
+      "Lattice Wraith",
+      "Phase Horror",
+      "Resonance Eater"
+    ],
+    "Landmarks": [
+      "First Gate",
+      "Tuning Chamber",
+      "The Great Array",
+      "Mother's Aperture"
+    ],
+    "Blessing": {
+      "Stat": "spd",
+      "Amount": 0.03,
+      "Name": "Mother of Gates"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "The Great Array",
+      "giver": "Talo Venn",
+      "text": "Calibrate the Great Array by clearing 18 phase-horrors from its rings.",
+      "goal": [
+        "foes",
+        18
+      ],
+      "reward": {
+        "gold": 6000,
+        "dia": 80,
+        "shards": 56
+      },
+      "done": "Calibrated. The last gate is ready."
+    },
+    "Lore": {
+      "Landmark": 1,
+      "Title": "The Tuning Chamber",
+      "Skill": "h17"
+    }
+  },
+  {
+    "Name": "R50",
+    "Id": 50,
+    "Arc": 5,
+    "DisplayName": "The Hollow Heart",
+    "Subtitle": "Beneath the Lattice",
+    "Biome": "void",
+    "Hue": "#ffffff",
+    "People": "the Devoured",
+    "PeopleText": "Echoes of every god and mortal Nihilus consumed.",
+    "Custom": "They have none. They are waiting to be remembered.",
+    "God": "Nihilus",
+    "GodTitle": "Nihilus, Remembered",
+    "GodCorrupted": true,
+    "Boss": "Nihilus, the Hollow Facet",
+    "Guide": "lumeria",
+    "Foes": [
+      "Devoured God",
+      "Hollow Titan",
+      "Unmade Facet",
+      "Hunger Incarnate"
+    ],
+    "Landmarks": [
+      "Echo Field",
+      "The Devoured Throng",
+      "Orun's Echo",
+      "The Hollow Throne"
+    ],
+    "Blessing": {
+      "Stat": "all",
+      "Amount": 0.05,
+      "Name": "Heart Restored"
+    },
+    "Recruit": "",
+    "HiddenCompanion": "",
+    "SideQuest": {
+      "title": "Remember Them",
+      "giver": "lumeria",
+      "text": "Visit the Devoured Throng, and remember their names.",
+      "goal": [
+        "mark",
+        1
+      ],
+      "reward": {
+        "gold": 7000,
+        "dia": 100,
+        "shards": 60
+      },
+      "done": "Every name, remembered."
+    },
+    "Lore": {
+      "Landmark": 2,
+      "Title": "Orun's Echo",
+      "Skill": "h18"
+    }
+  }
+]

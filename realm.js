@@ -237,7 +237,7 @@ const Realm = (() => {
       addFoe(1, W.foes[Math.min(3, Math.floor(er() * (stage + 2)))], lvl, hx, hz);
     });
     ents.forEach(n => n.y = H(n.x, n.z));
-    bakeBuckets(); buildTerrain(T, W);
+    try { bakeBuckets(); buildTerrain(T, W); } catch (err) { console.error(err); if (Gfx.name === 'Babylon.js') return Gfx.fail(); throw err; }
     attune('town', true);
     Online.presence.join(w);
   }
@@ -454,6 +454,7 @@ const Realm = (() => {
     let near = null, nd = Infinity;
     ents.forEach(n => { if (n.kind === 'mark' || n.kind === 'sign' || n.kind === 'lair' || (n.kind === 'hidden' && compJoined(n.id))) return; const d = dist(n.x, n.z, R.px, R.pz) - n.r; if (d < 2.4 && d < nd) { near = n; nd = d; } });
     if (near !== R.near || foe !== R.foe) { R.near = near; R.foe = foe; updateButtons(); }
+    try {
     // draw: sky, terrain chunks and static objects near the camera, then entities and characters
     const D = 11 * R.zoom, Hc = 5.8 * R.zoom, eye = [R.px + Math.sin(R.yaw) * D, R.py + Hc, R.pz + Math.cos(R.yaw) * D];
     Gfx.frame(eye, [R.px, R.py + 1.9, R.pz], { top:T.sky || T.fog, horizon:T.fog }, [70, VIEW]);
@@ -472,6 +473,8 @@ const Realm = (() => {
     enemies.forEach(e => { if (!e.dead && dist(e.x, e.z, R.px, R.pz) < VIEW) drawFoe(e, R.t, W.hue, H(e.x, e.z)); });
     Online.peers.forEach(p => drawCharacter(p.x, H(p.x, p.z), p.z, p.ry, p.look, { t:R.t, cls:p.cls }));
     drawCharacter(R.px, R.py, R.pz, R.ry, S.look, { cls:S.cls, moving:R.moving, t:R.t });
+    Gfx.end();
+    } catch (err) { console.error(err); if (Gfx.name === 'Babylon.js') return Gfx.fail(); throw err; }
     drawLabels();
     if (Math.floor(R.t * 6) !== Math.floor((R.t - dt) * 6)) drawMap(mini, false);
   }
@@ -788,11 +791,19 @@ const Realm = (() => {
         <button class="opt" id="mDaily"><b>Daily${dailyPending() ? ' •' : ''}</b></button><button class="opt" id="mAcct"><b>☁ Account</b></button></div>
       <h3>Display</h3>
       <label class="row small"><input type="checkbox" id="mWide" ${S.settings.wide !== false ? 'checked' : ''}> Landscape on phones (turn the whole game sideways when the phone is held upright)</label>
+      <div class="small">Renderer: <b>${Gfx.name}</b>${Gfx.name === 'Babylon.js' ? ` · quality <b>${GfxBabylon.quality}</b>` : Gfx.babylonAvailable ? '' : ' <span class="muted">(Babylon.js could not load here, so the classic renderer is used)</span>'}</div>
+      <div class="row" style="flex-wrap:wrap;gap:6px">
+        ${Gfx.babylonAvailable ? `<button class="btn sm ${S.settings.renderer !== 'classic' ? 'primary' : ''}" data-r="babylon">Babylon.js</button>` : ''}<button class="btn sm ${S.settings.renderer === 'classic' || !Gfx.babylonAvailable ? 'primary' : ''}" data-r="classic">Classic</button>
+        ${Gfx.name === 'Babylon.js' ? ['high','medium','low'].map(q => `<button class="btn sm ${GfxBabylon.quality === q ? 'primary' : ''}" data-q="${q}">${q[0].toUpperCase() + q.slice(1)}</button>`).join('') : ''}
+      </div>
+      <div class="small muted">High: sharp shadows, bloom and anti-aliasing. Medium suits most phones. Low turns shadows and effects off. Changes reload the game.</div>
       ${document.fullscreenEnabled ? `<button class="btn" id="mFull">${fs ? 'Exit full screen' : 'Full screen'}</button>` : ''}
       <div class="small muted">Keyboard: WASD or arrows move · drag or Q/R turn · mouse wheel or +/− zoom · Space attack · E interact · M map · B bag · L log · Esc menu</div>`, el => {
       el.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { closeSheet(); tab = b.dataset.go; render(); scrollTop(0); });
       el.querySelector('#mDaily').onclick = () => dailySheet(false);
       el.querySelector('#mAcct').onclick = () => Account.sheet();
+      el.querySelectorAll('[data-r]').forEach(b => b.onclick = () => { if ((S.settings.renderer || 'babylon') === b.dataset.r) return; S.settings.renderer = b.dataset.r; save(); try { sessionStorage.removeItem('dv.gfxreload'); } catch (e) {} location.reload(); });
+      el.querySelectorAll('[data-q]').forEach(b => b.onclick = () => { S.settings.gfx = b.dataset.q; save(); location.reload(); });
       el.querySelector('#mWide').onchange = e => { S.settings.wide = e.target.checked; save(); closeSheet(); orient(); render(); };
       const f = el.querySelector('#mFull');
       if (f) f.onclick = async () => {
@@ -825,6 +836,7 @@ const Realm = (() => {
     try { if (localStorage.getItem('dv.logmin')) $('#rwLogBox').classList.add('min'); } catch (e) {}
     $('#rwTonic').onclick = () => { const err = drinkTonic(); if (err) return toast(err); updateVitals(); say('You drink a Facet Tonic.', 'you'); };
     $('#rwMana').onclick = () => { const err = drinkManaShard(); if (err) return toast(err); updateVitals(); say('You crush a Mana Shard. Your MP surges.', 'you'); };
+    try { if (sessionStorage.getItem('dv.gfxfail')) { sessionStorage.removeItem('dv.gfxfail'); toast('Babylon.js hit an error, so the Classic renderer is on. Switch back in Menu.'); } } catch (e) {}
     R.town = townAt(R.px, R.pz); updateVitals(); R.region = regionName(); const rg = $('#rwRegion'); if (rg) rg.textContent = R.region;
     R.near = R.foe = undefined; updateHud(); requestAnimationFrame(() => drawMap(mini, false));
     const el = $('#rwLog'); el.scrollTop = el.scrollHeight;

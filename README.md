@@ -32,6 +32,9 @@ real players sign in.
 - **World screen**: the scene fills the screen and the HUD sits on top: character (HP, MP, XP, party), realm and region,
   Menu / Bag / Map / Realms buttons, minimap, a collapsible action log (last 100 entries), a joystick, and Attack, Interact,
   Tonic and Mana buttons. Bag shows Strength, Agility, Intelligence, XP, level, inventory and the side quest.
+- **Renderer**: the World view draws with Babylon.js (loaded from a CDN) with real-time shadows, HDR bloom, ACES tone mapping,
+  FXAA, fog and a gradient sky. Menu → Display switches between Babylon.js and the classic renderer and sets quality
+  (High, Medium for most phones, Low). If Babylon.js cannot load or hits an error, the game switches to Classic by itself.
 - **Landscape on phones**: the whole game plays horizontally. On a phone held upright every screen (prologue, creator, tabs,
   battles, menus, the World view) is drawn turned sideways; switch this off in Menu → Display. Short, wide screens get a side
   tab rail, two-column battles, a two-column character creator and a side-by-side map. Tablets and computers are unchanged. Computers: WASD/arrows move, drag or Q/R turn, mouse wheel or +/− zoom, Space attack, E interact,
@@ -81,6 +84,8 @@ real players sign in.
 | `payments.js` | Diamond Store: product catalog, entitlements, payment-provider adapter |
 | `online.js` | Online adapter hooks: presence, PvP, raids |
 | `art.js`, `gfx.js` | Helpers, and the dependency-free WebGL renderer (toon shading, ink outlines, terrain, baked scenery) |
+| `gfxb.js` | Babylon.js renderer for the World view (shadows, HDR bloom, tone mapping, sky dome), same API as `gfx.js`; falls back to the classic renderer if Babylon.js cannot load or errors |
+| `tools/export-content.js` | Exports story, realms, classes, skills, companions, jobs, gear and foe tiers as JSON for Unreal DataTables (`export/`) |
 | `chars.js`, `foes.js` | Anime character portraits and 3D models; enemy body types and portraits |
 | `account.js` | Sign-in UI and cloud-save sync |
 | `server/server.js` | Account server: scrypt-hashed passwords, bearer sessions, versioned cloud saves (SQLite), rate-limited sign-in |

@@ -1,0 +1,137 @@
+[
+  {
+    "Name": "assassin",
+    "DisplayName": "Assassin",
+    "Role": "Burst · Crits · Poison",
+    "Weapon": "Daggers",
+    "MainStat": "atk",
+    "Color": "#b07cff",
+    "Description": "Strikes first and leaves nothing standing. Fragile, fast, and lethal on critical hits.",
+    "Base": {
+      "hp": 90,
+      "mp": 40,
+      "atk": 14,
+      "mag": 5,
+      "def": 6,
+      "spd": 16,
+      "crit": 18
+    },
+    "Growth": {
+      "hp": 9,
+      "mp": 4,
+      "atk": 3,
+      "mag": 1,
+      "def": 1.2,
+      "spd": 1.5,
+      "crit": 0.4
+    }
+  },
+  {
+    "Name": "guardian",
+    "DisplayName": "Guardian",
+    "Role": "Shields · Stuns · Counter",
+    "Weapon": "Bastion Blade",
+    "MainStat": "atk",
+    "Color": "#5fb3ff",
+    "Description": "A living wall. Converts defense into damage and outlasts anything the gods throw.",
+    "Base": {
+      "hp": 150,
+      "mp": 30,
+      "atk": 10,
+      "mag": 4,
+      "def": 16,
+      "spd": 7,
+      "crit": 5
+    },
+    "Growth": {
+      "hp": 16,
+      "mp": 3,
+      "atk": 2,
+      "mag": 1,
+      "def": 3,
+      "spd": 0.6,
+      "crit": 0.1
+    }
+  },
+  {
+    "Name": "warrior",
+    "DisplayName": "Warrior",
+    "Role": "Cleave · Rage · Lifesteal",
+    "Weapon": "Greatsword",
+    "MainStat": "atk",
+    "Color": "#ff7a59",
+    "Description": "Heavy steel and heavier swings. Hits every enemy at once and drinks their strength.",
+    "Base": {
+      "hp": 125,
+      "mp": 30,
+      "atk": 15,
+      "mag": 3,
+      "def": 11,
+      "spd": 10,
+      "crit": 10
+    },
+    "Growth": {
+      "hp": 13,
+      "mp": 3,
+      "atk": 3.2,
+      "mag": 0.5,
+      "def": 2,
+      "spd": 1,
+      "crit": 0.2
+    }
+  },
+  {
+    "Name": "mage",
+    "DisplayName": "Mage",
+    "Role": "Elements · AoE · Control",
+    "Weapon": "Staff",
+    "MainStat": "mag",
+    "Color": "#3fd6c6",
+    "Description": "Bends fire, frost and raw prism-light. Huge area damage, thin robes.",
+    "Base": {
+      "hp": 80,
+      "mp": 80,
+      "atk": 4,
+      "mag": 17,
+      "def": 5,
+      "spd": 10,
+      "crit": 8
+    },
+    "Growth": {
+      "hp": 8,
+      "mp": 8,
+      "atk": 0.8,
+      "mag": 3.5,
+      "def": 1,
+      "spd": 1,
+      "crit": 0.2
+    }
+  },
+  {
+    "Name": "priest",
+    "DisplayName": "Priest",
+    "Role": "Heals · Wards · Holy",
+    "Weapon": "Scepter",
+    "MainStat": "mag",
+    "Color": "#ffd166",
+    "Description": "Channels the goddess directly. Heals, shields and smites with holy light.",
+    "Base": {
+      "hp": 95,
+      "mp": 70,
+      "atk": 6,
+      "mag": 13,
+      "def": 8,
+      "spd": 9,
+      "crit": 6
+    },
+    "Growth": {
+      "hp": 10,
+      "mp": 7,
+      "atk": 1,
+      "mag": 2.6,
+      "def": 1.5,
+      "spd": 0.9,
+      "crit": 0.15
+    }
+  }
+]

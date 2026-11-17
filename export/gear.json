@@ -1,0 +1,117 @@
+[
+  {
+    "Name": "rarity-common",
+    "Kind": "Rarity",
+    "DisplayName": "Common",
+    "Multiplier": 1,
+    "Color": "#9aa3b5"
+  },
+  {
+    "Name": "rarity-rare",
+    "Kind": "Rarity",
+    "DisplayName": "Rare",
+    "Multiplier": 1.35,
+    "Color": "#5fb3ff"
+  },
+  {
+    "Name": "rarity-epic",
+    "Kind": "Rarity",
+    "DisplayName": "Epic",
+    "Multiplier": 1.8,
+    "Color": "#b07cff"
+  },
+  {
+    "Name": "rarity-legendary",
+    "Kind": "Rarity",
+    "DisplayName": "Legendary",
+    "Multiplier": 2.4,
+    "Color": "#ffc145"
+  },
+  {
+    "Name": "rarity-mythic",
+    "Kind": "Rarity",
+    "DisplayName": "Mythic",
+    "Multiplier": 3.2,
+    "Color": "#7ef2ff"
+  },
+  {
+    "Name": "slot-weapon",
+    "Kind": "Slot",
+    "DisplayName": "Weapon"
+  },
+  {
+    "Name": "slot-helm",
+    "Kind": "Slot",
+    "DisplayName": "Helm"
+  },
+  {
+    "Name": "slot-armor",
+    "Kind": "Slot",
+    "DisplayName": "Armor"
+  },
+  {
+    "Name": "slot-charm",
+    "Kind": "Slot",
+    "DisplayName": "Charm"
+  },
+  {
+    "Name": "material-1",
+    "Kind": "Material",
+    "DisplayName": "Dawnglass",
+    "Tier": 1
+  },
+  {
+    "Name": "material-2",
+    "Kind": "Material",
+    "DisplayName": "Cinderforged",
+    "Tier": 2
+  },
+  {
+    "Name": "material-3",
+    "Kind": "Material",
+    "DisplayName": "Tidepearl",
+    "Tier": 3
+  },
+  {
+    "Name": "material-4",
+    "Kind": "Material",
+    "DisplayName": "Stormwoven",
+    "Tier": 4
+  },
+  {
+    "Name": "material-5",
+    "Kind": "Material",
+    "DisplayName": "Duskveil",
+    "Tier": 5
+  },
+  {
+    "Name": "material-6",
+    "Kind": "Material",
+    "DisplayName": "Starsteel",
+    "Tier": 6
+  },
+  {
+    "Name": "material-7",
+    "Kind": "Material",
+    "DisplayName": "Voidglass",
+    "Tier": 7
+  },
+  {
+    "Name": "material-8",
+    "Kind": "Material",
+    "DisplayName": "Seraphic",
+    "Tier": 8
+  },
+  {
+    "Name": "material-9",
+    "Kind": "Material",
+    "DisplayName": "Lattice",
+    "Tier": 9
+  },
+  {
+    "Name": "material-10",
+    "Kind": "Material",
+    "DisplayName": "Diamondheart",
+    "Tier": 10
+  }
+]

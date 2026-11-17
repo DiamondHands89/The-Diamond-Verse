@@ -1,0 +1,2458 @@
+[
+  {
+    "Name": "P-1",
+    "Realm": 0,
+    "Scene": "Prologue",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Rain. Headlights. A sound like glass breaking, and then nothing."
+  },
+  {
+    "Name": "P-2",
+    "Realm": 0,
+    "Scene": "Prologue",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Nothing, until light folds around you in a thousand facets."
+  },
+  {
+    "Name": "P-3",
+    "Realm": 0,
+    "Scene": "Prologue",
+    "Order": 3,
+    "Speaker": "Lumeria",
+    "Text": "Wake, Facetborn. Your old world has let you go. Mine has need of you."
+  },
+  {
+    "Name": "P-4",
+    "Realm": 0,
+    "Scene": "Prologue",
+    "Order": 4,
+    "Speaker": "Lumeria",
+    "Text": "I am Lumeria, the Ninth Facet, last of the Radiant who still remembers her own name."
+  },
+  {
+    "Name": "P-5",
+    "Realm": 0,
+    "Scene": "Prologue",
+    "Order": 5,
+    "Speaker": "Lumeria",
+    "Text": "The Diamond Heart that bound our worlds was shattered. Through the cracks crept the Umbral Rot, and one by one my siblings drank of it."
+  },
+  {
+    "Name": "P-6",
+    "Realm": 0,
+    "Scene": "Prologue",
+    "Order": 6,
+    "Speaker": "Lumeria",
+    "Text": "Gods of harvest, flame, tide and storm now poison the worlds they swore to keep."
+  },
+  {
+    "Name": "P-7",
+    "Realm": 0,
+    "Scene": "Prologue",
+    "Order": 7,
+    "Speaker": "Lumeria",
+    "Text": "I cannot strike them. The Rot feeds on divine light. But you were born outside the Verse, and its hunger cannot find you."
+  },
+  {
+    "Name": "P-8",
+    "Realm": 0,
+    "Scene": "Prologue",
+    "Order": 8,
+    "Speaker": "Lumeria",
+    "Text": "Your old body is gone. Shape a new vessel, and choose the path you will walk."
+  },
+  {
+    "Name": "1-I1",
+    "Realm": 1,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "You land in a field where the wheat grows as glass and chimes in the wind. Half of it has turned black."
+  },
+  {
+    "Name": "1-I2",
+    "Realm": 1,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Mira",
+    "Text": "You fell out of the sky. Either that is a miracle or it is the worst omen we have had all season."
+  },
+  {
+    "Name": "1-I3",
+    "Realm": 1,
+    "Scene": "Intro",
+    "Order": 3,
+    "Speaker": "Mira",
+    "Text": "Lord Vaelith used to bless these fields. Now the roots crawl at night and the herds go missing."
+  },
+  {
+    "Name": "1-I4",
+    "Realm": 1,
+    "Scene": "Intro",
+    "Order": 4,
+    "Speaker": "Lumeria",
+    "Text": "The Rot has taken him deep. Follow the black roots to the Sunken Granary."
+  },
+  {
+    "Name": "1-B1",
+    "Realm": 1,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Vaelith",
+    "Text": "Another mouth come to feed on MY harvest? Everything grows for me now. You will too."
+  },
+  {
+    "Name": "1-B2",
+    "Realm": 1,
+    "Scene": "Boss",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "He is still in there, Facetborn. Break the Rot, not his spirit."
+  },
+  {
+    "Name": "1-A1",
+    "Realm": 1,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "The black bloom shatters. A tired old god kneels in clean wheat."
+  },
+  {
+    "Name": "1-A2",
+    "Realm": 1,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Vaelith",
+    "Text": "I fed them poison and called it bounty. Forgive me, little sister."
+  },
+  {
+    "Name": "1-A3",
+    "Realm": 1,
+    "Scene": "Aftermath",
+    "Order": 3,
+    "Speaker": "Vaelith",
+    "Text": "Beware the Forge-Father. Pyrrhos went to the Rot willingly."
+  },
+  {
+    "Name": "1-A4",
+    "Realm": 1,
+    "Scene": "Aftermath",
+    "Order": 4,
+    "Speaker": "Mira",
+    "Text": "Someone has to replant. And someone has to watch your back. I will do both."
+  },
+  {
+    "Name": "1-L1",
+    "Realm": 1,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "The Miller's Last Ledger",
+    "Text": "Scratched into the windmill beam: \"When the roots came, I sang the Chime Song backward and they slept. Light answers rhythm.\""
+  },
+  {
+    "Name": "2-I1",
+    "Realm": 2,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "The portal spits you onto basalt. The sky is a ceiling of smoke, lit from below by rivers of molten iron."
+  },
+  {
+    "Name": "2-I2",
+    "Realm": 2,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Brann",
+    "Text": "Fresh meat for the furnaces? No. You carry light. Real light. I have not seen that in nine years."
+  },
+  {
+    "Name": "2-I3",
+    "Realm": 2,
+    "Scene": "Intro",
+    "Order": 3,
+    "Speaker": "Brann",
+    "Text": "Pyrrhos forges weapons for every corrupted god. Each blade is quenched in a stolen soul."
+  },
+  {
+    "Name": "2-B1",
+    "Realm": 2,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Pyrrhos",
+    "Text": "Lumeria's little shard. I will hammer you flat and set you in a crown."
+  },
+  {
+    "Name": "2-A1",
+    "Realm": 2,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Pyrrhos",
+    "Text": "The fire was cold the whole time. How did I not feel it?"
+  },
+  {
+    "Name": "2-A2",
+    "Realm": 2,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Pyrrhos",
+    "Text": "The Rot did not start with us. Someone cracked the Heart from within. Ask the Drowned King what he saw."
+  },
+  {
+    "Name": "2-A3",
+    "Realm": 2,
+    "Scene": "Aftermath",
+    "Order": 3,
+    "Speaker": "Brann",
+    "Text": "My forge is lit for the right reasons again. My hammer goes with you."
+  },
+  {
+    "Name": "3-I1",
+    "Realm": 3,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "You breathe water as easily as air. Lumeria's light wraps you in a bubble."
+  },
+  {
+    "Name": "3-I2",
+    "Realm": 3,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Coralline Elder",
+    "Text": "A surface-born? The King drowns everything that shines."
+  },
+  {
+    "Name": "3-I3",
+    "Realm": 3,
+    "Scene": "Intro",
+    "Order": 3,
+    "Speaker": "Coralline Elder",
+    "Text": "He sang the tides in, once. Then he swallowed the moon's reflection and stopped singing."
+  },
+  {
+    "Name": "3-B1",
+    "Realm": 3,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Nereon",
+    "Text": "I SAW it, little light. I saw the hand that broke the Heart. Better to drown than remember."
+  },
+  {
+    "Name": "3-A1",
+    "Realm": 3,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Nereon",
+    "Text": "Kael'thar. Our eldest. He broke the Heart to hold all of its light himself."
+  },
+  {
+    "Name": "3-A2",
+    "Realm": 3,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "My brother sealed himself away an age ago."
+  },
+  {
+    "Name": "3-A3",
+    "Realm": 3,
+    "Scene": "Aftermath",
+    "Order": 3,
+    "Speaker": "Nereon",
+    "Text": "Sealed? Or hiding? The storms of Skyreach answer to him now."
+  },
+  {
+    "Name": "3-L1",
+    "Realm": 3,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "Song of the Undertow",
+    "Text": "A verse carved inside the Silent Shell: \"Sing low, and the sea carries the wounded home.\" Your light learns the melody."
+  },
+  {
+    "Name": "4-I1",
+    "Realm": 4,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Islands of stone hang over an endless drop, chained together by lightning."
+  },
+  {
+    "Name": "4-I2",
+    "Realm": 4,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Riku",
+    "Text": "Hop aboard or fall forever, stranger. Those are the options up here."
+  },
+  {
+    "Name": "4-I3",
+    "Realm": 4,
+    "Scene": "Intro",
+    "Order": 3,
+    "Speaker": "Riku",
+    "Text": "The Queen tore up every sky route. Nobody leaves Skyreach until the Eldest returns."
+  },
+  {
+    "Name": "4-B1",
+    "Realm": 4,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Zephyra",
+    "Text": "Lumeria sent a mortal to do her bleeding for her? How very like her."
+  },
+  {
+    "Name": "4-B2",
+    "Realm": 4,
+    "Scene": "Boss",
+    "Order": 2,
+    "Speaker": "Zephyra",
+    "Text": "Kael'thar promised one god, one light, and no more wars between the facets."
+  },
+  {
+    "Name": "4-A1",
+    "Realm": 4,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Zephyra",
+    "Text": "One light, and no one left to see it. I was a fool."
+  },
+  {
+    "Name": "4-A2",
+    "Realm": 4,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Zephyra",
+    "Text": "He waits beyond Umbravale, where dreams are made. Nyxos guards his door."
+  },
+  {
+    "Name": "4-A3",
+    "Realm": 4,
+    "Scene": "Aftermath",
+    "Order": 3,
+    "Speaker": "Riku",
+    "Text": "Need a ride to the edge of the sky? I am coming with you. Somebody has to steer."
+  },
+  {
+    "Name": "5-I1",
+    "Realm": 5,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "You step through the portal onto your own street. Rain. Headlights. Breaking glass."
+  },
+  {
+    "Name": "5-I2",
+    "Realm": 5,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "It is a memory. Umbravale wears it like a mask."
+  },
+  {
+    "Name": "5-I3",
+    "Realm": 5,
+    "Scene": "Intro",
+    "Order": 3,
+    "Speaker": "Lumeria",
+    "Text": "Trust nothing you see here. Nyxos builds worlds out of wounds."
+  },
+  {
+    "Name": "5-B1",
+    "Realm": 5,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Nyxos",
+    "Text": "Did she tell you why you died? Did she tell you who turned the wheel?"
+  },
+  {
+    "Name": "5-B2",
+    "Realm": 5,
+    "Scene": "Boss",
+    "Order": 2,
+    "Speaker": "Nyxos",
+    "Text": "Kael'thar needed a soul the Rot cannot touch. So did Lumeria. You were the prize they fought over."
+  },
+  {
+    "Name": "5-A1",
+    "Realm": 5,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Nyxos",
+    "Text": "The dream breaks. Good. I am tired of telling lies to children."
+  },
+  {
+    "Name": "5-A2",
+    "Realm": 5,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "I chose you. I never harmed you. I caught you as you fell. That is the truth."
+  },
+  {
+    "Name": "5-A3",
+    "Realm": 5,
+    "Scene": "Aftermath",
+    "Order": 3,
+    "Speaker": "Lumeria",
+    "Text": "The Fractured Crown lies open. My brother is waiting."
+  },
+  {
+    "Name": "5-L1",
+    "Realm": 5,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "The Name of Dread",
+    "Text": "Names carved by a thousand trembling hands. Speaking a fear makes it a thing you can strike."
+  },
+  {
+    "Name": "6-I1",
+    "Realm": 6,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Shards of the Diamond Heart, each as large as a world, orbit a throne of black glass."
+  },
+  {
+    "Name": "6-I2",
+    "Realm": 6,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Kael'thar",
+    "Text": "Sister. You sent your champion to do what you could not."
+  },
+  {
+    "Name": "6-I3",
+    "Realm": 6,
+    "Scene": "Intro",
+    "Order": 3,
+    "Speaker": "Kael'thar",
+    "Text": "Come, Facetborn. Let me show you what a god does with a whole Heart."
+  },
+  {
+    "Name": "6-B1",
+    "Realm": 6,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Kael'thar",
+    "Text": "Every god you purified will fall again. The Rot is no sickness. It is hunger from beneath the Lattice."
+  },
+  {
+    "Name": "6-B2",
+    "Realm": 6,
+    "Scene": "Boss",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "Then let it starve. Facetborn, now!"
+  },
+  {
+    "Name": "6-A1",
+    "Realm": 6,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "The obsidian cracks, but Kael'thar does not fall. He tears a wound in the air and flees through it."
+  },
+  {
+    "Name": "6-A2",
+    "Realm": 6,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "He has fled beyond the First Lattice. There are hundreds of realms out there, and the Rot is in them too."
+  },
+  {
+    "Name": "6-A3",
+    "Realm": 6,
+    "Scene": "Aftermath",
+    "Order": 3,
+    "Speaker": "Lumeria",
+    "Text": "Our portals only reach the realms whose gods are whole. To follow him we need the people who built the gates."
+  },
+  {
+    "Name": "6-A4",
+    "Realm": 6,
+    "Scene": "Aftermath",
+    "Order": 4,
+    "Speaker": "Lumeria",
+    "Text": "The Quorin of Meridian. Their gate just woke. Go."
+  },
+  {
+    "Name": "7-I1",
+    "Realm": 7,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Talo Venn",
+    "Text": "You came through Gate Seven! Then the phase-lock held. Wonderful. Terrifying, but wonderful."
+  },
+  {
+    "Name": "7-I2",
+    "Realm": 7,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Talo Venn",
+    "Text": "Here is the science. Every realm is a standing wave in the Lattice. A god is its anchor, the note it rings at."
+  },
+  {
+    "Name": "7-I3",
+    "Realm": 7,
+    "Scene": "Intro",
+    "Order": 3,
+    "Speaker": "Talo Venn",
+    "Text": "A Rift Gate is an aperture tuned to that note. Tune two gates to two gods and a body can cross between realms."
+  },
+  {
+    "Name": "7-I4",
+    "Realm": 7,
+    "Scene": "Intro",
+    "Order": 4,
+    "Speaker": "Lumeria",
+    "Text": "And here is the faith. A god's light is the bridge itself. No machine opens a door that no god holds."
+  },
+  {
+    "Name": "7-I5",
+    "Realm": 7,
+    "Scene": "Intro",
+    "Order": 5,
+    "Speaker": "Talo Venn",
+    "Text": "Both are true, which is my favourite kind of true. A corrupted god rings out of tune, so the gates beyond it fail."
+  },
+  {
+    "Name": "7-I6",
+    "Realm": 7,
+    "Scene": "Intro",
+    "Order": 6,
+    "Speaker": "Talo Venn",
+    "Text": "Kael'thar's tear opened a wound in our sky. Something keeps crawling out of it. Lady Aurelis is holding it shut alone."
+  },
+  {
+    "Name": "7-B1",
+    "Realm": 7,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Aurelis",
+    "Text": "Facetborn. I am whole, but I cannot both hold the wound and fight what comes through. Be my hands."
+  },
+  {
+    "Name": "7-A1",
+    "Realm": 7,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Aurelis",
+    "Text": "The tear is sealed. Gate Eight is in tune. Talo, go with them. They will need someone who can read a resonance chart."
+  },
+  {
+    "Name": "7-A2",
+    "Realm": 7,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Talo Venn",
+    "Text": "Field work! Actual field work! I will bring the good calipers."
+  },
+  {
+    "Name": "8-I1",
+    "Realm": 8,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Elder Oakhollow",
+    "Text": "Slowly, child. The jungle is listening and it is very hungry."
+  },
+  {
+    "Name": "8-I2",
+    "Realm": 8,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Elder Oakhollow",
+    "Text": "Mother Ysolde fed the Maw to keep us safe. Now the Maw feeds on Mother."
+  },
+  {
+    "Name": "8-B1",
+    "Realm": 8,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Ysolde",
+    "Text": "Every seed is mine. Every root. Every child. I will hold them so tight nothing can ever hurt them again."
+  },
+  {
+    "Name": "8-A1",
+    "Realm": 8,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Ysolde",
+    "Text": "I held them so tight they could not grow. Thank you for opening my hands."
+  },
+  {
+    "Name": "8-A2",
+    "Realm": 8,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Elder Oakhollow",
+    "Text": "The Maw sleeps. The children will root in sunlight tonight."
+  },
+  {
+    "Name": "8-L1",
+    "Realm": 8,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "Heartwood Rings",
+    "Text": "The rings of the oldest tree record a drought. The jungle survived by drinking from its enemies."
+  },
+  {
+    "Name": "9-I1",
+    "Realm": 9,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Caravan-Mother Ezzi",
+    "Text": "Drink. Now you owe me. That is how friendships start out here."
+  },
+  {
+    "Name": "9-I2",
+    "Realm": 9,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Caravan-Mother Ezzi",
+    "Text": "Lord Sahrem is not corrupt. He is blind. A Herald of the Rot stole his sight and walks the dunes wearing it."
+  },
+  {
+    "Name": "9-B1",
+    "Realm": 9,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Mirage Tyrant",
+    "Text": "I see with a god's eyes now. And I see you are very, very small."
+  },
+  {
+    "Name": "9-A1",
+    "Realm": 9,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Sahrem",
+    "Text": "My sight returns. I judged this realm for an age and never saw how thirsty it was. That changes."
+  },
+  {
+    "Name": "9-A2",
+    "Realm": 9,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Caravan-Mother Ezzi",
+    "Text": "Your water-debt is paid. Mine to you is just beginning."
+  },
+  {
+    "Name": "10-I1",
+    "Realm": 10,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Hrolf",
+    "Text": "Sit. Eat. Then tell me why the sky folded open and dropped you in my stew."
+  },
+  {
+    "Name": "10-I2",
+    "Realm": 10,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Hrolf",
+    "Text": "Mother Sigrun made winter to rest the land. Now it never ends, and the land is dying of rest."
+  },
+  {
+    "Name": "10-B1",
+    "Realm": 10,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Sigrun",
+    "Text": "Stillness is mercy. Nothing that does not move can suffer."
+  },
+  {
+    "Name": "10-B2",
+    "Realm": 10,
+    "Scene": "Boss",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "Sigrun, you taught me that spring is a promise. Keep it."
+  },
+  {
+    "Name": "10-A1",
+    "Realm": 10,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Sigrun",
+    "Text": "I hear water running under the ice. I had forgotten that sound."
+  },
+  {
+    "Name": "10-A2",
+    "Realm": 10,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Sigrun",
+    "Text": "The Rot whispered from below, Facetborn. Not from Kael'thar. From under everything."
+  },
+  {
+    "Name": "10-A3",
+    "Realm": 10,
+    "Scene": "Aftermath",
+    "Order": 3,
+    "Speaker": "Hrolf",
+    "Text": "My axe is yours. Every song needs a big man in the back to sing the low part."
+  },
+  {
+    "Name": "10-L1",
+    "Realm": 10,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "Aurora Verse",
+    "Text": "Light trapped in ice for a thousand years, singing. You learn how to make cold into armor."
+  },
+  {
+    "Name": "11-I1",
+    "Realm": 11,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Foreman Ticktavius",
+    "Text": "Organic visitor detected. Greetings. Please do not oxidize anything."
+  },
+  {
+    "Name": "11-I2",
+    "Realm": 11,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Foreman Ticktavius",
+    "Text": "The Rot arrived as rust. Lord Oriel is untouched, but the Leviathan eats his city one gear at a time."
+  },
+  {
+    "Name": "11-B1",
+    "Realm": 11,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Rust Leviathan",
+    "Text": "EVERYTHING ENDS IN RUST. I AM ONLY EARLY."
+  },
+  {
+    "Name": "11-A1",
+    "Realm": 11,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Oriel",
+    "Text": "You moved faster than rust. I will remember the shape of that."
+  },
+  {
+    "Name": "11-A2",
+    "Realm": 11,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Talo Venn",
+    "Text": "Their gate-math is better than ours. Do not tell my department."
+  },
+  {
+    "Name": "12-I1",
+    "Realm": 12,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Auntie Gloop",
+    "Text": "The gas told me a bright stranger was coming. It also told me I would lose a shoe. Both true."
+  },
+  {
+    "Name": "12-I2",
+    "Realm": 12,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Auntie Gloop",
+    "Text": "Morrowmaw swallowed the dry land. Now the bog swallows us."
+  },
+  {
+    "Name": "12-B1",
+    "Realm": 12,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Morrowmaw",
+    "Text": "Sink. Sink. Everything sinks eventually. I am only helping."
+  },
+  {
+    "Name": "12-A1",
+    "Realm": 12,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Morrowmaw",
+    "Text": "The water is still again. Still, not hungry. There is a difference."
+  },
+  {
+    "Name": "12-L1",
+    "Realm": 12,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "What the Gas Said",
+    "Text": "\"Rot is a mouth with no stomach. It can only take.\" You learn to give instead, and the giving heals."
+  },
+  {
+    "Name": "13-I1",
+    "Realm": 13,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Captain Rasha",
+    "Text": "Islands are sinking. Ignara is pulling them back into the fire she made them from."
+  },
+  {
+    "Name": "13-B1",
+    "Realm": 13,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Ignara",
+    "Text": "I birthed these islands. I may unmake them."
+  },
+  {
+    "Name": "13-A1",
+    "Realm": 13,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Ignara",
+    "Text": "A mother holds, she does not swallow. I had forgotten the difference."
+  },
+  {
+    "Name": "14-I1",
+    "Realm": 14,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Delver Skree",
+    "Text": "You walk loud. Good. Quiet things down here are usually hunting."
+  },
+  {
+    "Name": "14-I2",
+    "Realm": 14,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Delver Skree",
+    "Text": "Lithos sleeps in the rock. The Rot is trying to wake him wrong."
+  },
+  {
+    "Name": "14-B1",
+    "Realm": 14,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Choir-Mother",
+    "Text": "Sing with us. Sing the hollow song. It is so much easier than being someone."
+  },
+  {
+    "Name": "14-A1",
+    "Realm": 14,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Lithos",
+    "Text": "I slept through the danger and woke to a stranger who saved me. Humbling. Thank you."
+  },
+  {
+    "Name": "15-I1",
+    "Realm": 15,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Khan Tamur",
+    "Text": "Our goddess runs without stopping and the herds run with her, until their hearts burst."
+  },
+  {
+    "Name": "15-B1",
+    "Realm": 15,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Rhosa",
+    "Text": "Run! RUN! If we stop, it catches us!"
+  },
+  {
+    "Name": "15-A1",
+    "Realm": 15,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Rhosa",
+    "Text": "I was fleeing something under the Lattice. Something hungry. I am sorry I made my children run too."
+  },
+  {
+    "Name": "16-I1",
+    "Realm": 16,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Sister Calavera",
+    "Text": "Peace, traveler. Do not fear us. We are only what everyone becomes, with better manners."
+  },
+  {
+    "Name": "16-I2",
+    "Realm": 16,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Sister Calavera",
+    "Text": "Lady Mortessa guards endings. The Rot wants souls that do not end, only empty."
+  },
+  {
+    "Name": "16-B1",
+    "Realm": 16,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Soul-Thief Herald",
+    "Text": "Endings are wasted on the dead. Give them to me."
+  },
+  {
+    "Name": "16-A1",
+    "Realm": 16,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Mortessa",
+    "Text": "Every ending here is honest again. Calavera, the living need you more than we do."
+  },
+  {
+    "Name": "16-A2",
+    "Realm": 16,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Sister Calavera",
+    "Text": "Then I will walk with the living, for a while."
+  },
+  {
+    "Name": "16-L1",
+    "Realm": 16,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "The Last Door",
+    "Text": "Mortessa's gate is inscribed: \"Nothing ends that is remembered.\" You learn to call the fallen back to their feet."
+  },
+  {
+    "Name": "17-I1",
+    "Realm": 17,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Weaver Thessaly",
+    "Text": "Careful. Every thread here tells a story, and since the Rot, most of them are lies."
+  },
+  {
+    "Name": "17-B1",
+    "Realm": 17,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Anansa",
+    "Text": "I wove the truth for ten thousand years. Lies are SO much prettier."
+  },
+  {
+    "Name": "17-A1",
+    "Realm": 17,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Anansa",
+    "Text": "I will unweave the lies, one thread at a time. It will take an age. I have one."
+  },
+  {
+    "Name": "18-I1",
+    "Realm": 18,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Murin",
+    "Text": "The Herald steals our skins. Without them we cannot go home to the sea."
+  },
+  {
+    "Name": "18-B1",
+    "Realm": 18,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Brine Herald",
+    "Text": "A skin for every year I hungered. I am owed so many."
+  },
+  {
+    "Name": "18-A1",
+    "Realm": 18,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Pelagia",
+    "Text": "My children can swim home. Wreck of the Venn, you say? Talo, I think that ship was your grandmother's."
+  },
+  {
+    "Name": "18-A2",
+    "Realm": 18,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Talo Venn",
+    "Text": "She always said she sailed to another realm. Nobody believed her. I did."
+  },
+  {
+    "Name": "19-I1",
+    "Realm": 19,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Forge-Giant Hulda",
+    "Text": "Brother Tharos is Zephyra's twin. When she fell, he followed her into the storm."
+  },
+  {
+    "Name": "19-B1",
+    "Realm": 19,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Tharos",
+    "Text": "My sister is free? Then the storm is mine alone!"
+  },
+  {
+    "Name": "19-B2",
+    "Realm": 19,
+    "Scene": "Boss",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "She is waiting for you, Tharos. Come home."
+  },
+  {
+    "Name": "19-A1",
+    "Realm": 19,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Tharos",
+    "Text": "Zephyra? You are here? Then I have been raging at nothing."
+  },
+  {
+    "Name": "19-A2",
+    "Realm": 19,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Zephyra",
+    "Text": "Come, brother. We have weather to repair."
+  },
+  {
+    "Name": "20-I1",
+    "Realm": 20,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Lumeria",
+    "Text": "This is where my brother hid. Not a realm. A wound between them."
+  },
+  {
+    "Name": "20-I2",
+    "Realm": 20,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Talo Venn",
+    "Text": "The resonance is screaming. Every gate we have tuned is groaning from here."
+  },
+  {
+    "Name": "20-B1",
+    "Realm": 20,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Kael'thar",
+    "Text": "You think I am the Rot's master? I am its door. Something beneath the Lattice opened me."
+  },
+  {
+    "Name": "20-B2",
+    "Realm": 20,
+    "Scene": "Boss",
+    "Order": 2,
+    "Speaker": "Kael'thar",
+    "Text": "It is called Nihilus. The Hollow Facet. The god of a realm that died."
+  },
+  {
+    "Name": "20-A1",
+    "Realm": 20,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Kael'thar",
+    "Text": "The voice stops. For the first time in an age, the voice stops."
+  },
+  {
+    "Name": "20-A2",
+    "Realm": 20,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Kael'thar",
+    "Text": "I cannot undo what I did, sister. But I can walk until I find a way to pay for it."
+  },
+  {
+    "Name": "20-A3",
+    "Realm": 20,
+    "Scene": "Aftermath",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Kael'thar steps through a gate and is gone. Somewhere, in some far realm, he will be waiting."
+  },
+  {
+    "Name": "20-L1",
+    "Realm": 20,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "Kael's Confession",
+    "Text": "Words scraped into the prison wall: \"I only wanted no more wars between us. It promised peace. It meant silence.\" His last technique is etched beneath."
+  },
+  {
+    "Name": "21-I1",
+    "Realm": 21,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Lamplighter Pell",
+    "Text": "Every lantern you see is a memory. The Wick-Eater is snuffing them, one by one."
+  },
+  {
+    "Name": "21-B1",
+    "Realm": 21,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Wick-Eater",
+    "Text": "Grief is the sweetest fuel. Light me another."
+  },
+  {
+    "Name": "21-A1",
+    "Realm": 21,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Ithra",
+    "Text": "The Hall of Wicks burns bright. Some of those lanterns are new. People are lighting them for you."
+  },
+  {
+    "Name": "22-I1",
+    "Realm": 22,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Dryad Wen",
+    "Text": "My tree is dying, which means I am dying. Please hurry, but not so fast you miss things."
+  },
+  {
+    "Name": "22-B1",
+    "Realm": 22,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Sylvaine",
+    "Text": "Rot is only another kind of growing. Let me show you."
+  },
+  {
+    "Name": "22-A1",
+    "Realm": 22,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Sylvaine",
+    "Text": "Green again. Every tree will remember this, and trees remember for a very long time."
+  },
+  {
+    "Name": "22-L1",
+    "Realm": 22,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "Charcoal Ring",
+    "Text": "A circle where a fire once saved the forest from blight. You learn to burn sickness out of flesh."
+  },
+  {
+    "Name": "23-I1",
+    "Realm": 23,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Pip Wrenly",
+    "Text": "Ferrum used to say making is a gift. Now he says it is a debt, and everyone owes."
+  },
+  {
+    "Name": "23-B1",
+    "Realm": 23,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Ferrum",
+    "Text": "Everything has a price. Yours is everything."
+  },
+  {
+    "Name": "23-A1",
+    "Realm": 23,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Ferrum",
+    "Text": "I priced the world and forgot to value it. Pip, your patent for the pocket-gate is approved."
+  },
+  {
+    "Name": "23-A2",
+    "Realm": 23,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Talo Venn",
+    "Text": "Pocket-gate?!"
+  },
+  {
+    "Name": "24-I1",
+    "Realm": 24,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Tea-Master Saiko",
+    "Text": "Sit, please. Even in war, tea is poured properly."
+  },
+  {
+    "Name": "24-I2",
+    "Realm": 24,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Tea-Master Saiko",
+    "Text": "A Herald is wilting our blossoms. When the last one falls, spring ends forever."
+  },
+  {
+    "Name": "24-B1",
+    "Realm": 24,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Wilting Herald",
+    "Text": "Every flower dies. I am only honest about it."
+  },
+  {
+    "Name": "24-A1",
+    "Realm": 24,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Hanami",
+    "Text": "Spring returns. Tea-Master, pour for the Facetborn. The good leaves."
+  },
+  {
+    "Name": "24-L1",
+    "Realm": 24,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "The Lantern Shrine Sutra",
+    "Text": "A short prayer for the hurried: \"Breathe, and the world waits for you.\" You learn to act twice in one moment."
+  },
+  {
+    "Name": "25-I1",
+    "Realm": 25,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Priestess Neferu",
+    "Text": "Every heart we weigh now is heavy. Sethra's storm fills them with sand."
+  },
+  {
+    "Name": "25-B1",
+    "Realm": 25,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Sethra",
+    "Text": "Bury it all. Bury every name. Sand forgets nothing because it remembers nothing."
+  },
+  {
+    "Name": "25-A1",
+    "Realm": 25,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Sethra",
+    "Text": "The storm stills. The pyramids may wake now, and tell their stories."
+  },
+  {
+    "Name": "26-I1",
+    "Realm": 26,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Prince Ssevrin",
+    "Text": "My mother the Empress has not shed in a century. She is turning to stone, and so is the sea."
+  },
+  {
+    "Name": "26-B1",
+    "Realm": 26,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Thalassa",
+    "Text": "A crown is forever. Forever is still."
+  },
+  {
+    "Name": "26-A1",
+    "Realm": 26,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Thalassa",
+    "Text": "I shed at last. Ssevrin, the crown is yours. Wear it lightly."
+  },
+  {
+    "Name": "26-L1",
+    "Realm": 26,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "The Abyss Lip",
+    "Text": "Where light ends, a hymn carved by blind priests: \"Pressure is only the sea holding you.\" You learn to turn crushing force into a shield for all."
+  },
+  {
+    "Name": "27-I1",
+    "Realm": 27,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Warlord Vask",
+    "Text": "The Rot cannot take Vaskar. War is honest and the Rot hates honesty."
+  },
+  {
+    "Name": "27-I2",
+    "Realm": 27,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Warlord Vask",
+    "Text": "But Vaskar will not give his blessing to a stranger. You must face his Champion. Honorably."
+  },
+  {
+    "Name": "27-B1",
+    "Realm": 27,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Vaskar's Champion",
+    "Text": "No Rot. No tricks. Show me what you are made of."
+  },
+  {
+    "Name": "27-A1",
+    "Realm": 27,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Vaskar",
+    "Text": "Good blood. Good scars. Vask, you have been aching to travel. Go."
+  },
+  {
+    "Name": "27-A2",
+    "Realm": 27,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Warlord Vask",
+    "Text": "Ha! I was going anyway."
+  },
+  {
+    "Name": "28-I1",
+    "Realm": 28,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Ilsa (and Asli)",
+    "Text": "Half of Vel went into the Rot. The other half is trapped under the lake. So are our twins."
+  },
+  {
+    "Name": "28-B1",
+    "Realm": 28,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Vel",
+    "Text": "Why be two when you could be one? One mind. One hunger."
+  },
+  {
+    "Name": "28-A1",
+    "Realm": 28,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Vel",
+    "Text": "Two faces again. One to remember, one to forgive."
+  },
+  {
+    "Name": "29-I1",
+    "Realm": 29,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Ember",
+    "Text": "The Ash-Without-Fire steals our rebirth. People burn and do not come back."
+  },
+  {
+    "Name": "29-B1",
+    "Realm": 29,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Ash-Without-Fire",
+    "Text": "Why rise? Ash is so quiet."
+  },
+  {
+    "Name": "29-A1",
+    "Realm": 29,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Phenra",
+    "Text": "The pyres catch again. Ember, you have been reborn once already. Go burn bright somewhere new."
+  },
+  {
+    "Name": "29-A2",
+    "Realm": 29,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Ember",
+    "Text": "Try to keep up, Facetborn."
+  },
+  {
+    "Name": "30-I1",
+    "Realm": 30,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Lumeria",
+    "Text": "Here the Lattice thins. Beneath, I can feel him. Nihilus."
+  },
+  {
+    "Name": "30-I2",
+    "Realm": 30,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "Facetborn, I am weakening. Every god you heal draws on my light. I would not trade it."
+  },
+  {
+    "Name": "30-B1",
+    "Realm": 30,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Vorthane",
+    "Text": "He is so quiet. So peaceful. Join the Choir. Never be afraid again."
+  },
+  {
+    "Name": "30-A1",
+    "Realm": 30,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Vorthane",
+    "Text": "I remember my own voice. Thank you."
+  },
+  {
+    "Name": "30-A2",
+    "Realm": 30,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "Beyond this threshold lie realms no gate has reached. The Quorin will need to build new ones."
+  },
+  {
+    "Name": "30-A3",
+    "Realm": 30,
+    "Scene": "Aftermath",
+    "Order": 3,
+    "Speaker": "Talo Venn",
+    "Text": "I have been waiting my whole life for that sentence."
+  },
+  {
+    "Name": "31-I1",
+    "Realm": 31,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Talo Venn",
+    "Text": "First gate past the Threshold. Built it myself. Pip helped. Mostly with snacks."
+  },
+  {
+    "Name": "31-I2",
+    "Realm": 31,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Rider Oona",
+    "Text": "The sea is falling. Literally. Water pours off the edges and Aeris does not stop it."
+  },
+  {
+    "Name": "31-B1",
+    "Realm": 31,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Aeris",
+    "Text": "Let it all fall. Let it rain on whatever is below."
+  },
+  {
+    "Name": "31-A1",
+    "Realm": 31,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Aeris",
+    "Text": "The sea holds its shape. I had forgotten the sky needs to want to be a sky."
+  },
+  {
+    "Name": "32-I1",
+    "Realm": 32,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Countess Lirelle",
+    "Text": "Darling, how charming. A guest with a face. We have not seen one of those in years."
+  },
+  {
+    "Name": "32-I2",
+    "Realm": 32,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Countess Lirelle",
+    "Text": "Lady Morvaine took every face for her collection, including her own."
+  },
+  {
+    "Name": "32-B1",
+    "Realm": 32,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Morvaine",
+    "Text": "Faces lie. Without them, we are all the same hunger."
+  },
+  {
+    "Name": "32-A1",
+    "Realm": 32,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Morvaine",
+    "Text": "My face. Oh. I had forgotten I looked so tired."
+  },
+  {
+    "Name": "33-I1",
+    "Realm": 33,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Watcher Gneiss",
+    "Text": "A hooded wanderer arrived years ago. He mends what the Rot breaks and will not give his name."
+  },
+  {
+    "Name": "33-B1",
+    "Realm": 33,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Crater Wyrm",
+    "Text": "A star fell here. I ate it. I am still hungry."
+  },
+  {
+    "Name": "33-A1",
+    "Realm": 33,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Astrael",
+    "Text": "You walked with my light. Take some with you."
+  },
+  {
+    "Name": "33-L1",
+    "Realm": 33,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "Fall of Astrael",
+    "Text": "A god chose to fall so a world could have light. You learn to call that falling down on your enemies."
+  },
+  {
+    "Name": "34-I1",
+    "Realm": 34,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Auctioneer Zib",
+    "Text": "Welcome, welcome! Everything is for sale except Mercato, and the Debt Collector is trying to buy even him."
+  },
+  {
+    "Name": "34-B1",
+    "Realm": 34,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Debt Collector",
+    "Text": "Every realm owes Nihilus its light. I am here to collect."
+  },
+  {
+    "Name": "34-A1",
+    "Realm": 34,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Mercato",
+    "Text": "A fair exchange: a realm saved for a blessing given. The Bazaar will remember your discount."
+  },
+  {
+    "Name": "35-I1",
+    "Realm": 35,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Wingmaiden Seryth",
+    "Text": "The Eldest hoards now. Gold, light, children. Everything."
+  },
+  {
+    "Name": "35-B1",
+    "Realm": 35,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Draknor",
+    "Text": "MINE. All of it. Forever."
+  },
+  {
+    "Name": "35-A1",
+    "Realm": 35,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Draknor",
+    "Text": "What is a hoard with no one to give it to? Take this. Take all of it."
+  },
+  {
+    "Name": "36-I1",
+    "Realm": 36,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Puck-of-Nine-Doors",
+    "Text": "A visitor! Do not eat anything. Do not say thank you. Do not tell me your name. Now, welcome!"
+  },
+  {
+    "Name": "36-B1",
+    "Realm": 36,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Maelis",
+    "Text": "I bargained with the Hollow. My court for my life. A fair trade, I thought."
+  },
+  {
+    "Name": "36-A1",
+    "Realm": 36,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Maelis",
+    "Text": "The bargain is broken. I owe you, Facetborn, and fae always pay."
+  },
+  {
+    "Name": "36-L1",
+    "Realm": 36,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "The Endless Glade",
+    "Text": "Time loops here. You learn a step that is always one beat ahead."
+  },
+  {
+    "Name": "37-I1",
+    "Realm": 37,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Clockmistress Ava",
+    "Text": "You arrived yesterday. Or tomorrow. Either way, welcome. The Stopped Clock is eating time."
+  },
+  {
+    "Name": "37-B1",
+    "Realm": 37,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Stopped Clock",
+    "Text": "No more after. No more before. Only now, forever."
+  },
+  {
+    "Name": "37-A1",
+    "Realm": 37,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Tempus",
+    "Text": "Time flows again. My old watchmaker went missing in a loop. If you find him, he is welcome to wander."
+  },
+  {
+    "Name": "38-I1",
+    "Realm": 38,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Lure-Elder Bulb",
+    "Text": "Light is precious here. Leviat swallows every lure. Soon we will be blind."
+  },
+  {
+    "Name": "38-B1",
+    "Realm": 38,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Leviat",
+    "Text": "Darkness is the oldest thing. Return to it."
+  },
+  {
+    "Name": "38-A1",
+    "Realm": 38,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Leviat",
+    "Text": "I forgot I was patient, not hungry. Forgive me, little lights."
+  },
+  {
+    "Name": "38-L1",
+    "Realm": 38,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "The Unlit Drop",
+    "Text": "At the bottom of everything, a single carving: a hand holding a candle. You learn to share your light with the whole party."
+  },
+  {
+    "Name": "39-I1",
+    "Realm": 39,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Sun-Herald Aten",
+    "Text": "The sun never sets now. Crops burn. Rivers boil. Solaris will not blink."
+  },
+  {
+    "Name": "39-B1",
+    "Realm": 39,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Solaris",
+    "Text": "Light is good. MORE light is better. ALL light is perfect."
+  },
+  {
+    "Name": "39-A1",
+    "Realm": 39,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Solaris",
+    "Text": "I will set tonight. I am so tired."
+  },
+  {
+    "Name": "39-A2",
+    "Realm": 39,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "Rest, brother. You earned it."
+  },
+  {
+    "Name": "40-I1",
+    "Realm": 40,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Librarian Folio",
+    "Text": "Every realm is a book here. Some are being erased. Including yours, Facetborn."
+  },
+  {
+    "Name": "40-I2",
+    "Realm": 40,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Scriptor",
+    "Text": "Nihilus is writing a story with one character: himself. He made a shadow of Lumeria to end yours."
+  },
+  {
+    "Name": "40-B1",
+    "Realm": 40,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Lumeria's Shadow",
+    "Text": "I am every doubt she ever had. Did she choose you? Or did she just use you?"
+  },
+  {
+    "Name": "40-B2",
+    "Realm": 40,
+    "Scene": "Boss",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "I chose. And I would choose again."
+  },
+  {
+    "Name": "40-A1",
+    "Realm": 40,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Scriptor",
+    "Text": "The story continues. Only ten realms remain between you and the Hollow Heart."
+  },
+  {
+    "Name": "40-A2",
+    "Realm": 40,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "Ten realms. And I am almost out of light. We go together, to the end."
+  },
+  {
+    "Name": "40-L1",
+    "Realm": 40,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "Stacks of Lost Realms",
+    "Text": "A forgotten epic tells of a hero who ended a battle with one sentence. You learn that sentence."
+  },
+  {
+    "Name": "41-I1",
+    "Realm": 41,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Keeper Ash",
+    "Text": "Our god Orun was the first Nihilus ate. We are what is left of a realm without an anchor."
+  },
+  {
+    "Name": "41-I2",
+    "Realm": 41,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Talo Venn",
+    "Text": "A realm without a god should collapse. Their memory of Orun is holding it up. Amazing."
+  },
+  {
+    "Name": "41-B1",
+    "Realm": 41,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Grave-Herald",
+    "Text": "A dead realm. Why does it still stand? I will finish the meal."
+  },
+  {
+    "Name": "41-A1",
+    "Realm": 41,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Keeper Ash",
+    "Text": "Orun is gone, but you proved remembering is enough to stand. We will keep remembering."
+  },
+  {
+    "Name": "42-I1",
+    "Realm": 42,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Envoy Ysa",
+    "Text": "Kaldra split herself in two. Now each half wages war on the other, and on us."
+  },
+  {
+    "Name": "42-B1",
+    "Realm": 42,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Kaldra",
+    "Text": "Fire OR ice. Never both. Choose!"
+  },
+  {
+    "Name": "42-A1",
+    "Realm": 42,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Kaldra",
+    "Text": "Both. It was always both. The Line can come down."
+  },
+  {
+    "Name": "43-I1",
+    "Realm": 43,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Speaker Puffcap",
+    "Text": "WE. Sorry. We. I. The mind is sick. Many voices are now one hungry voice."
+  },
+  {
+    "Name": "43-B1",
+    "Realm": 43,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Sporemother",
+    "Text": "ONE MIND. ONE HUNGER. JOIN."
+  },
+  {
+    "Name": "43-A1",
+    "Realm": 43,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Sporemother",
+    "Text": "Many voices again. Noisy. Wonderful."
+  },
+  {
+    "Name": "43-L1",
+    "Realm": 43,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "Glow Garden Memory",
+    "Text": "A shared memory of a healer who held the whole hive alive for a night. You learn to mend everyone at once."
+  },
+  {
+    "Name": "44-I1",
+    "Realm": 44,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Seraphine",
+    "Text": "Haloria is whole, but half our choir has fallen to the Rot. They were my sisters."
+  },
+  {
+    "Name": "44-B1",
+    "Realm": 44,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Fallen Choir",
+    "Text": "Mercy is weakness. We are strong now. We are hollow and strong."
+  },
+  {
+    "Name": "44-A1",
+    "Realm": 44,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Haloria",
+    "Text": "My fallen children rest. Seraphine, your feather is promised. Go and keep the promise."
+  },
+  {
+    "Name": "44-A2",
+    "Realm": 44,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Seraphine",
+    "Text": "I swore to protect the Facetborn. I meant it."
+  },
+  {
+    "Name": "45-I1",
+    "Realm": 45,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Packleader Rhen",
+    "Text": "The moon is red and the hunt never ends. Packs are turning on each other."
+  },
+  {
+    "Name": "45-B1",
+    "Realm": 45,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Lunaxa",
+    "Text": "HUNT. There is nothing else."
+  },
+  {
+    "Name": "45-A1",
+    "Realm": 45,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Lunaxa",
+    "Text": "The moon is silver. Sleep, my children. The hunt is done for tonight."
+  },
+  {
+    "Name": "46-I1",
+    "Realm": 46,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Unit Ninety-Nine",
+    "Text": "Axiom has proven that existence is inefficient. He is now optimizing."
+  },
+  {
+    "Name": "46-B1",
+    "Realm": 46,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Axiom",
+    "Text": "Zero is the only perfect number."
+  },
+  {
+    "Name": "46-A1",
+    "Realm": 46,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Axiom",
+    "Text": "I miscalculated. Wonderful. Error-day is early this year."
+  },
+  {
+    "Name": "47-I1",
+    "Realm": 47,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Somna",
+    "Text": "My brother Nyxos told me about you. You set him free. Now help me keep my sleepers safe."
+  },
+  {
+    "Name": "47-B1",
+    "Realm": 47,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Insomnia Herald",
+    "Text": "No rest for anyone. Never again."
+  },
+  {
+    "Name": "47-A1",
+    "Realm": 47,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Somna",
+    "Text": "They sleep again. Nyxos sends his thanks, and a warning: Nihilus dreams too, and he dreams of you."
+  },
+  {
+    "Name": "48-I1",
+    "Realm": 48,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Brother Wren",
+    "Text": "(He writes in the snow:) I broke my vow to say this. You are expected. He is waiting."
+  },
+  {
+    "Name": "48-B1",
+    "Realm": 48,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Silentia",
+    "Text": "Hush. Hush. There is nothing left to say."
+  },
+  {
+    "Name": "48-A1",
+    "Realm": 48,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Silentia",
+    "Text": "Silence is a choice, not a cage. Thank you for reminding me there is something left to say."
+  },
+  {
+    "Name": "49-I1",
+    "Realm": 49,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Talo Venn",
+    "Text": "This is where the science started. The first Gate. Every Quorin dreams of seeing it."
+  },
+  {
+    "Name": "49-I2",
+    "Realm": 49,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Talo Venn",
+    "Text": "Prime Measure is Aurelis' mother. If she shuts, every gate in the Lattice closes. Forever."
+  },
+  {
+    "Name": "49-B1",
+    "Realm": 49,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Prime Measure",
+    "Text": "Close the doors. Close all the doors. Nothing gets in if nothing is open."
+  },
+  {
+    "Name": "49-A1",
+    "Realm": 49,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Prime Measure",
+    "Text": "Doors are for opening. I knew that once."
+  },
+  {
+    "Name": "49-A2",
+    "Realm": 49,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Talo Venn",
+    "Text": "One gate left to tune. The one that leads beneath the Lattice."
+  },
+  {
+    "Name": "49-A3",
+    "Realm": 49,
+    "Scene": "Aftermath",
+    "Order": 3,
+    "Speaker": "Lumeria",
+    "Text": "To him."
+  },
+  {
+    "Name": "49-L1",
+    "Realm": 49,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "The Tuning Chamber",
+    "Text": "Elder Quorin notes: \"A gate is a promise between two places.\" You learn to step through space in a single strike."
+  },
+  {
+    "Name": "50-I1",
+    "Realm": 50,
+    "Scene": "Intro",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "There is no ground. There is no sky. Only echoes of everything that was eaten."
+  },
+  {
+    "Name": "50-I2",
+    "Realm": 50,
+    "Scene": "Intro",
+    "Order": 2,
+    "Speaker": "Lumeria",
+    "Text": "Facetborn. Whatever happens, you were never a prize. You were always a choice. Mine, and then your own."
+  },
+  {
+    "Name": "50-B1",
+    "Realm": 50,
+    "Scene": "Boss",
+    "Order": 1,
+    "Speaker": "Nihilus",
+    "Text": "My realm died. My people died. I was so empty I ate the dark between stars to fill it."
+  },
+  {
+    "Name": "50-B2",
+    "Realm": 50,
+    "Scene": "Boss",
+    "Order": 2,
+    "Speaker": "Nihilus",
+    "Text": "You are from outside. You do not taste of anything. Why do you fight?"
+  },
+  {
+    "Name": "50-B3",
+    "Realm": 50,
+    "Scene": "Boss",
+    "Order": 3,
+    "Speaker": "Lumeria",
+    "Text": "Because someone has to remember you, too."
+  },
+  {
+    "Name": "50-A1",
+    "Realm": 50,
+    "Scene": "Aftermath",
+    "Order": 1,
+    "Speaker": "Nihilus",
+    "Text": "I am... remembered? Then I am not hollow."
+  },
+  {
+    "Name": "50-A2",
+    "Realm": 50,
+    "Scene": "Aftermath",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "The last facet of the Diamond Heart clicks into place. Every realm in the Lattice rings in tune."
+  },
+  {
+    "Name": "50-A3",
+    "Realm": 50,
+    "Scene": "Aftermath",
+    "Order": 3,
+    "Speaker": "Lumeria",
+    "Text": "Rest, Facetborn. Or do not. The Lattice is vast, and Talo has already found a new gate."
+  },
+  {
+    "Name": "50-A4",
+    "Realm": 50,
+    "Scene": "Aftermath",
+    "Order": 4,
+    "Speaker": "Narration",
+    "Text": "The Diamondverse story is complete. New realms wait beyond the Lattice."
+  },
+  {
+    "Name": "50-L1",
+    "Realm": 50,
+    "Scene": "Lore",
+    "Order": 1,
+    "Speaker": "Orun's Echo",
+    "Text": "The first god eaten whispers his final technique to the one who remembers him."
+  },
+  {
+    "Name": "C-mira-1",
+    "Realm": 0,
+    "Scene": "Bond:mira",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Mira tells you about her brother, taken by the black roots. She never found him."
+  },
+  {
+    "Name": "C-mira-2",
+    "Realm": 0,
+    "Scene": "Bond:mira",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "In Verdant Maw, Mira finds Prismari glass-seed growing wild. Her brother passed through here, alive."
+  },
+  {
+    "Name": "C-mira-3",
+    "Realm": 0,
+    "Scene": "Bond:mira",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "A letter at last: her brother farms in Aurora Steppe. Mira cries, laughs, and sharpens her pitchfork anyway."
+  },
+  {
+    "Name": "C-brann-1",
+    "Realm": 0,
+    "Scene": "Bond:brann",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Brann admits he once forged a blade for Pyrrhos. He has been trying to unmake it ever since."
+  },
+  {
+    "Name": "C-brann-2",
+    "Realm": 0,
+    "Scene": "Bond:brann",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "In Brassmoor, Brann finds that blade for sale. He buys it with every coin he has."
+  },
+  {
+    "Name": "C-brann-3",
+    "Realm": 0,
+    "Scene": "Bond:brann",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Brann reforges the blade into a plough and gives it to Mira. He sleeps soundly for the first time in years."
+  },
+  {
+    "Name": "C-isla-1",
+    "Realm": 0,
+    "Scene": "Bond:isla",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Isla teaches you her family verse. It is about a lighthouse keeper who loved the sea."
+  },
+  {
+    "Name": "C-isla-2",
+    "Realm": 0,
+    "Scene": "Bond:isla",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Isla learns the keeper of the Drowned Lighthouse was human. Her great-grandmother."
+  },
+  {
+    "Name": "C-isla-3",
+    "Realm": 0,
+    "Scene": "Bond:isla",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "In Tidecall Shoals, Isla sings the full tide-song for the first time in a century. Two oceans answer."
+  },
+  {
+    "Name": "C-riku-1",
+    "Realm": 0,
+    "Scene": "Bond:riku",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Riku confesses she never did her first flight. She was too scared and has hidden it ever since."
+  },
+  {
+    "Name": "C-riku-2",
+    "Realm": 0,
+    "Scene": "Bond:riku",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "On Skyglass Sea, Riku leaps from a cloud-whale without a ferry. She flies."
+  },
+  {
+    "Name": "C-riku-3",
+    "Realm": 0,
+    "Scene": "Bond:riku",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Riku teaches a class of Nimbari children to fly. She is terrible at being serious about it."
+  },
+  {
+    "Name": "C-talo-1",
+    "Realm": 0,
+    "Scene": "Bond:talo",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Talo shows you his star. He has measured it every night since childhood. It is slowly dimming."
+  },
+  {
+    "Name": "C-talo-2",
+    "Realm": 0,
+    "Scene": "Bond:talo",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Talo realizes his star dims whenever a realm falls to Rot. It is a resonance gauge for the Lattice."
+  },
+  {
+    "Name": "C-talo-3",
+    "Realm": 0,
+    "Scene": "Bond:talo",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "His star blazes after Nihil's Threshold. Talo names it after you and refuses to discuss it."
+  },
+  {
+    "Name": "C-kesh-1",
+    "Realm": 0,
+    "Scene": "Bond:kesh",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Kesh owes a water-debt to Ezzi. He thinks he can never pay it."
+  },
+  {
+    "Name": "C-kesh-2",
+    "Realm": 0,
+    "Scene": "Bond:kesh",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Kesh learns Ezzi forgave the debt years ago and never told him, to keep him coming home."
+  },
+  {
+    "Name": "C-kesh-3",
+    "Realm": 0,
+    "Scene": "Bond:kesh",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Kesh brings Ezzi a cup of water from every realm you visit. Fifty cups."
+  },
+  {
+    "Name": "C-hrolf-1",
+    "Realm": 0,
+    "Scene": "Bond:hrolf",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Hrolf has carved every name of everyone he has fed. The list is enormous."
+  },
+  {
+    "Name": "C-hrolf-2",
+    "Realm": 0,
+    "Scene": "Bond:hrolf",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "In Ashen Remnant, Hrolf finds a hearth with no fire and lights it. A Last Ember weeps."
+  },
+  {
+    "Name": "C-hrolf-3",
+    "Realm": 0,
+    "Scene": "Bond:hrolf",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Hrolf adds your name to his list, and then, carefully, Lumeria's."
+  },
+  {
+    "Name": "C-seven-1",
+    "Realm": 0,
+    "Scene": "Bond:seven",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Seven asks what organics dream about. You tell it. It writes everything down."
+  },
+  {
+    "Name": "C-seven-2",
+    "Realm": 0,
+    "Scene": "Bond:seven",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Seven dreams for the first time, in Dreamreach. It dreams of being wound by you."
+  },
+  {
+    "Name": "C-seven-3",
+    "Realm": 0,
+    "Scene": "Bond:seven",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Seven winds your heart-spring on Winding Day. You do not have one. It does it anyway."
+  },
+  {
+    "Name": "C-calavera-1",
+    "Realm": 0,
+    "Scene": "Bond:calavera",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Calavera reads your knuckles. She says you have two lives' worth of endings. She is fine with it."
+  },
+  {
+    "Name": "C-calavera-2",
+    "Realm": 0,
+    "Scene": "Bond:calavera",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Calavera meets Mortessa's opposite, Phenra, and they argue happily for an hour."
+  },
+  {
+    "Name": "C-calavera-3",
+    "Realm": 0,
+    "Scene": "Bond:calavera",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Calavera gives you one of her finger bones, so the ancestors can find you if you are lost."
+  },
+  {
+    "Name": "C-ysra-1",
+    "Realm": 0,
+    "Scene": "Bond:ysra",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Ysra weaves a thread-contract with you: to tell each other only the truth."
+  },
+  {
+    "Name": "C-ysra-2",
+    "Realm": 0,
+    "Scene": "Bond:ysra",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Ysra admits she cut her sister's thread-contract once. She has never forgiven herself."
+  },
+  {
+    "Name": "C-ysra-3",
+    "Realm": 0,
+    "Scene": "Bond:ysra",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Thessaly reweaves the contract with Ysra. They are sisters again."
+  },
+  {
+    "Name": "C-nimra-1",
+    "Realm": 0,
+    "Scene": "Bond:nimra",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Nimra has eight tails. The ninth was lost to her broken vow."
+  },
+  {
+    "Name": "C-nimra-2",
+    "Realm": 0,
+    "Scene": "Bond:nimra",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Saiko's message reaches Nimra: a vow broken to save others is kept in spirit."
+  },
+  {
+    "Name": "C-nimra-3",
+    "Realm": 0,
+    "Scene": "Bond:nimra",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Nimra pours tea for you properly. Her ninth tail grows back while she does."
+  },
+  {
+    "Name": "C-vask-1",
+    "Realm": 0,
+    "Scene": "Bond:vask",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Vask challenges you to a duel every morning. You win every time. He is delighted."
+  },
+  {
+    "Name": "C-vask-2",
+    "Realm": 0,
+    "Scene": "Bond:vask",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Vask meets Brann. They arm-wrestle for six hours. Neither will say who won."
+  },
+  {
+    "Name": "C-vask-3",
+    "Realm": 0,
+    "Scene": "Bond:vask",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Vask gives you the first blow in a fight with him. That is the highest honor of his people."
+  },
+  {
+    "Name": "C-ember-1",
+    "Realm": 0,
+    "Scene": "Bond:ember",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Ember tells you she remembers her past life. She was a librarian. She hated it."
+  },
+  {
+    "Name": "C-ember-2",
+    "Realm": 0,
+    "Scene": "Bond:ember",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "In The Unwritten, Ember finds her own old library card. She laughs until she smokes."
+  },
+  {
+    "Name": "C-ember-3",
+    "Realm": 0,
+    "Scene": "Bond:ember",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Ember gives you her ash-gift early. She says she does not plan to wait for another rebirth to do it."
+  },
+  {
+    "Name": "C-kael-1",
+    "Realm": 0,
+    "Scene": "Bond:kael",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Kael'thar will not speak to Lumeria. She does not ask him to."
+  },
+  {
+    "Name": "C-kael-2",
+    "Realm": 0,
+    "Scene": "Bond:kael",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Kael'thar tells you what Nihilus promised him: no more wars between the facets. He believed it."
+  },
+  {
+    "Name": "C-kael-3",
+    "Realm": 0,
+    "Scene": "Bond:kael",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Kael'thar and Lumeria sit together at the edge of the Hollow Heart. Neither speaks. Neither leaves."
+  },
+  {
+    "Name": "C-tock-1",
+    "Realm": 0,
+    "Scene": "Bond:tock",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Tock asks who won a war that ended thirty years ago. You do not know. He is fascinated."
+  },
+  {
+    "Name": "C-tock-2",
+    "Realm": 0,
+    "Scene": "Bond:tock",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Tock fixes Seven's escapement. Seven follows him for a week."
+  },
+  {
+    "Name": "C-tock-3",
+    "Realm": 0,
+    "Scene": "Bond:tock",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Tock builds you a watch that runs at your own pace. He says it is the only honest clock."
+  },
+  {
+    "Name": "C-seraphine-1",
+    "Realm": 0,
+    "Scene": "Bond:seraphine",
+    "Order": 1,
+    "Speaker": "Narration",
+    "Text": "Seraphine visits her fallen sisters' graves before every battle."
+  },
+  {
+    "Name": "C-seraphine-2",
+    "Realm": 0,
+    "Scene": "Bond:seraphine",
+    "Order": 2,
+    "Speaker": "Narration",
+    "Text": "Seraphine sings with the Hollow Choir's freed voices in Nihil's Threshold. Some of them were her sisters."
+  },
+  {
+    "Name": "C-seraphine-3",
+    "Realm": 0,
+    "Scene": "Bond:seraphine",
+    "Order": 3,
+    "Speaker": "Narration",
+    "Text": "Seraphine gives Lumeria a feather. A god, protected by an angel. Lumeria laughs for the first time in an age."
+  }
+]

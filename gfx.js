@@ -2,7 +2,7 @@
 // Cel ("toon") shading in three light bands, a hemisphere sky light, a rim light, ink outlines for characters
 // (inverted-hull pass), a gradient sky, vertex colours for terrain, and distance fog.
 // Every primitive sits on y=0, is 1 unit tall and 1 unit wide (centre at y=.5), so scale = size.
-const Gfx = (() => {
+const GfxClassic = (() => {
   let gl, prog, sky, loc = {}, sloc = {}, meshes = {}, canvas, white;
 
   const m4 = {
@@ -217,5 +217,5 @@ const Gfx = (() => {
   }
   // Free GPU buffers of baked meshes when a realm is rebuilt.
   function free(me) { if (me && me.vb) { gl.deleteBuffer(me.vb); gl.deleteBuffer(me.nb); gl.deleteBuffer(me.cb); me.vb = null; } }
-  return { init, frame, draw, project, hex2rgb, terrain, bake, free, rot, m4 };
+  return { name:'Classic WebGL', init, frame, draw, end() {}, project, hex2rgb, terrain, bake, free, rot, m4 };
 })();

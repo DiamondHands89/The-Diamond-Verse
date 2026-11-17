@@ -1,0 +1,957 @@
+[
+  {
+    "Name": "a1",
+    "DisplayName": "Shadow Strike",
+    "Class": "assassin",
+    "Hidden": false,
+    "UnlockLevel": 1,
+    "MPCost": 6,
+    "Cooldown": 0,
+    "Kind": "hit",
+    "Power": 1.6,
+    "Stat": "atk",
+    "Description": "Single strike, +20% crit chance.",
+    "Extra": {
+      "critBonus": 20
+    }
+  },
+  {
+    "Name": "a2",
+    "DisplayName": "Venom Fang",
+    "Class": "assassin",
+    "Hidden": false,
+    "UnlockLevel": 3,
+    "MPCost": 10,
+    "Cooldown": 2,
+    "Kind": "hit",
+    "Power": 1,
+    "Stat": "atk",
+    "Description": "Hit and poison for 3 turns.",
+    "Extra": {
+      "dot": {
+        "pct": 0.35,
+        "turns": 3
+      }
+    }
+  },
+  {
+    "Name": "a3",
+    "DisplayName": "Phantom Flurry",
+    "Class": "assassin",
+    "Hidden": false,
+    "UnlockLevel": 6,
+    "MPCost": 16,
+    "Cooldown": 3,
+    "Kind": "multi",
+    "Power": 0.6,
+    "Stat": "atk",
+    "Description": "Four rapid hits on one target.",
+    "Extra": {
+      "hits": 4
+    }
+  },
+  {
+    "Name": "a4",
+    "DisplayName": "Death Mark",
+    "Class": "assassin",
+    "Hidden": false,
+    "UnlockLevel": 10,
+    "MPCost": 24,
+    "Cooldown": 5,
+    "Kind": "hit",
+    "Power": 3.2,
+    "Stat": "atk",
+    "Description": "Massive strike. Double damage under 30% HP.",
+    "Extra": {
+      "execute": 1
+    }
+  },
+  {
+    "Name": "a5",
+    "DisplayName": "Smoke Veil",
+    "Class": "assassin",
+    "Hidden": false,
+    "UnlockLevel": 20,
+    "MPCost": 18,
+    "Cooldown": 4,
+    "Kind": "buff",
+    "Power": 0,
+    "Stat": "",
+    "Description": "+80% crit chance for 3 turns.",
+    "Extra": {
+      "buff": {
+        "stat": "crit",
+        "amt": 0.8,
+        "turns": 3
+      }
+    }
+  },
+  {
+    "Name": "a6",
+    "DisplayName": "Thousand Cuts",
+    "Class": "assassin",
+    "Hidden": false,
+    "UnlockLevel": 40,
+    "MPCost": 30,
+    "Cooldown": 3,
+    "Kind": "multi",
+    "Power": 0.45,
+    "Stat": "atk",
+    "Description": "Seven hits that ignore 30% DEF.",
+    "Extra": {
+      "hits": 7,
+      "pierce": 0.3
+    }
+  },
+  {
+    "Name": "a7",
+    "DisplayName": "Shadow Step",
+    "Class": "assassin",
+    "Hidden": false,
+    "UnlockLevel": 70,
+    "MPCost": 26,
+    "Cooldown": 4,
+    "Kind": "hit",
+    "Power": 2.2,
+    "Stat": "atk",
+    "Description": "Strike, then act again immediately.",
+    "Extra": {
+      "haste": 1
+    }
+  },
+  {
+    "Name": "a8",
+    "DisplayName": "Eclipse Execution",
+    "Class": "assassin",
+    "Hidden": false,
+    "UnlockLevel": 110,
+    "MPCost": 44,
+    "Cooldown": 6,
+    "Kind": "aoe",
+    "Power": 2.6,
+    "Stat": "atk",
+    "Description": "Hit all foes; double damage under 30% HP.",
+    "Extra": {
+      "execute": 1
+    }
+  },
+  {
+    "Name": "g1",
+    "DisplayName": "Shield Bash",
+    "Class": "guardian",
+    "Hidden": false,
+    "UnlockLevel": 1,
+    "MPCost": 5,
+    "Cooldown": 1,
+    "Kind": "hit",
+    "Power": 1.2,
+    "Stat": "atk",
+    "Description": "Hit with a 35% stun chance.",
+    "Extra": {
+      "stun": 0.35
+    }
+  },
+  {
+    "Name": "g2",
+    "DisplayName": "Diamond Bulwark",
+    "Class": "guardian",
+    "Hidden": false,
+    "UnlockLevel": 3,
+    "MPCost": 10,
+    "Cooldown": 3,
+    "Kind": "shield",
+    "Power": 4,
+    "Stat": "def",
+    "Description": "Gain a shield scaled by DEF.",
+    "Extra": {}
+  },
+  {
+    "Name": "g3",
+    "DisplayName": "Retribution",
+    "Class": "guardian",
+    "Hidden": false,
+    "UnlockLevel": 6,
+    "MPCost": 14,
+    "Cooldown": 2,
+    "Kind": "hit",
+    "Power": 1,
+    "Stat": "atk",
+    "Description": "Strike using ATK plus 150% DEF.",
+    "Extra": {
+      "defScale": 1.5
+    }
+  },
+  {
+    "Name": "g4",
+    "DisplayName": "Aegis of Dawn",
+    "Class": "guardian",
+    "Hidden": false,
+    "UnlockLevel": 10,
+    "MPCost": 22,
+    "Cooldown": 5,
+    "Kind": "buff",
+    "Power": 0,
+    "Stat": "",
+    "Description": "+60% DEF for 3 turns, heal 20% HP.",
+    "Extra": {
+      "buff": {
+        "stat": "def",
+        "amt": 0.6,
+        "turns": 3
+      },
+      "healPct": 0.2
+    }
+  },
+  {
+    "Name": "g5",
+    "DisplayName": "Taunting Roar",
+    "Class": "guardian",
+    "Hidden": false,
+    "UnlockLevel": 20,
+    "MPCost": 16,
+    "Cooldown": 4,
+    "Kind": "shield",
+    "Power": 2,
+    "Stat": "def",
+    "Description": "Draw all attacks for 3 turns and gain a shield.",
+    "Extra": {
+      "taunt": 3
+    }
+  },
+  {
+    "Name": "g6",
+    "DisplayName": "Shield Wall",
+    "Class": "guardian",
+    "Hidden": false,
+    "UnlockLevel": 40,
+    "MPCost": 30,
+    "Cooldown": 5,
+    "Kind": "shieldAll",
+    "Power": 2.5,
+    "Stat": "def",
+    "Description": "Shield the whole party, scaled by DEF.",
+    "Extra": {}
+  },
+  {
+    "Name": "g7",
+    "DisplayName": "Earthshatter",
+    "Class": "guardian",
+    "Hidden": false,
+    "UnlockLevel": 70,
+    "MPCost": 34,
+    "Cooldown": 4,
+    "Kind": "aoe",
+    "Power": 1.6,
+    "Stat": "atk",
+    "Description": "Hit all foes with ATK + DEF; 30% stun.",
+    "Extra": {
+      "defScale": 1.2,
+      "stun": 0.3
+    }
+  },
+  {
+    "Name": "g8",
+    "DisplayName": "Immovable",
+    "Class": "guardian",
+    "Hidden": false,
+    "UnlockLevel": 110,
+    "MPCost": 40,
+    "Cooldown": 6,
+    "Kind": "buff",
+    "Power": 0,
+    "Stat": "",
+    "Description": "Double DEF for 4 turns, heal 30% HP.",
+    "Extra": {
+      "buff": {
+        "stat": "def",
+        "amt": 1,
+        "turns": 4
+      },
+      "healPct": 0.3
+    }
+  },
+  {
+    "Name": "w1",
+    "DisplayName": "Cleave",
+    "Class": "warrior",
+    "Hidden": false,
+    "UnlockLevel": 1,
+    "MPCost": 6,
+    "Cooldown": 0,
+    "Kind": "aoe",
+    "Power": 1.2,
+    "Stat": "atk",
+    "Description": "Hits every enemy.",
+    "Extra": {}
+  },
+  {
+    "Name": "w2",
+    "DisplayName": "War Cry",
+    "Class": "warrior",
+    "Hidden": false,
+    "UnlockLevel": 3,
+    "MPCost": 10,
+    "Cooldown": 4,
+    "Kind": "buff",
+    "Power": 0,
+    "Stat": "",
+    "Description": "+40% ATK for 3 turns.",
+    "Extra": {
+      "buff": {
+        "stat": "atk",
+        "amt": 0.4,
+        "turns": 3
+      }
+    }
+  },
+  {
+    "Name": "w3",
+    "DisplayName": "Blood Rend",
+    "Class": "warrior",
+    "Hidden": false,
+    "UnlockLevel": 6,
+    "MPCost": 14,
+    "Cooldown": 2,
+    "Kind": "hit",
+    "Power": 1.9,
+    "Stat": "atk",
+    "Description": "Heavy hit, heal 30% of damage.",
+    "Extra": {
+      "lifesteal": 0.3
+    }
+  },
+  {
+    "Name": "w4",
+    "DisplayName": "Titan Breaker",
+    "Class": "warrior",
+    "Hidden": false,
+    "UnlockLevel": 10,
+    "MPCost": 24,
+    "Cooldown": 5,
+    "Kind": "hit",
+    "Power": 3.4,
+    "Stat": "atk",
+    "Description": "Crushing blow, −40% enemy DEF.",
+    "Extra": {
+      "debuff": {
+        "stat": "def",
+        "amt": 0.4,
+        "turns": 3
+      }
+    }
+  },
+  {
+    "Name": "w5",
+    "DisplayName": "Whirlwind",
+    "Class": "warrior",
+    "Hidden": false,
+    "UnlockLevel": 20,
+    "MPCost": 20,
+    "Cooldown": 2,
+    "Kind": "aoe",
+    "Power": 1.7,
+    "Stat": "atk",
+    "Description": "Spin through all foes, heal 15% of damage.",
+    "Extra": {
+      "lifesteal": 0.15
+    }
+  },
+  {
+    "Name": "w6",
+    "DisplayName": "Battle Hymn",
+    "Class": "warrior",
+    "Hidden": false,
+    "UnlockLevel": 40,
+    "MPCost": 28,
+    "Cooldown": 5,
+    "Kind": "buff",
+    "Power": 0,
+    "Stat": "",
+    "Description": "+35% ATK to the whole party for 3 turns.",
+    "Extra": {
+      "buff": {
+        "stat": "atk",
+        "amt": 0.35,
+        "turns": 3,
+        "party": true
+      }
+    }
+  },
+  {
+    "Name": "w7",
+    "DisplayName": "Executioner",
+    "Class": "warrior",
+    "Hidden": false,
+    "UnlockLevel": 70,
+    "MPCost": 32,
+    "Cooldown": 4,
+    "Kind": "hit",
+    "Power": 3.6,
+    "Stat": "atk",
+    "Description": "Huge strike; double damage under 30% HP.",
+    "Extra": {
+      "execute": 1
+    }
+  },
+  {
+    "Name": "w8",
+    "DisplayName": "Ragnarok",
+    "Class": "warrior",
+    "Hidden": false,
+    "UnlockLevel": 110,
+    "MPCost": 48,
+    "Cooldown": 6,
+    "Kind": "aoe",
+    "Power": 3.2,
+    "Stat": "atk",
+    "Description": "Shatter all foes, −30% DEF.",
+    "Extra": {
+      "debuff": {
+        "stat": "def",
+        "amt": 0.3,
+        "turns": 3
+      }
+    }
+  },
+  {
+    "Name": "m1",
+    "DisplayName": "Arcane Bolt",
+    "Class": "mage",
+    "Hidden": false,
+    "UnlockLevel": 1,
+    "MPCost": 6,
+    "Cooldown": 0,
+    "Kind": "hit",
+    "Power": 1.5,
+    "Stat": "mag",
+    "Description": "Bolt of raw prism-light.",
+    "Extra": {}
+  },
+  {
+    "Name": "m2",
+    "DisplayName": "Ember Storm",
+    "Class": "mage",
+    "Hidden": false,
+    "UnlockLevel": 3,
+    "MPCost": 14,
+    "Cooldown": 2,
+    "Kind": "aoe",
+    "Power": 1.1,
+    "Stat": "mag",
+    "Description": "Burn every enemy.",
+    "Extra": {
+      "dot": {
+        "pct": 0.25,
+        "turns": 2
+      }
+    }
+  },
+  {
+    "Name": "m3",
+    "DisplayName": "Frost Prison",
+    "Class": "mage",
+    "Hidden": false,
+    "UnlockLevel": 6,
+    "MPCost": 16,
+    "Cooldown": 3,
+    "Kind": "hit",
+    "Power": 1.4,
+    "Stat": "mag",
+    "Description": "Freeze the target for a turn.",
+    "Extra": {
+      "stun": 1
+    }
+  },
+  {
+    "Name": "m4",
+    "DisplayName": "Prism Nova",
+    "Class": "mage",
+    "Hidden": false,
+    "UnlockLevel": 10,
+    "MPCost": 30,
+    "Cooldown": 5,
+    "Kind": "aoe",
+    "Power": 2.8,
+    "Stat": "mag",
+    "Description": "Detonate all light in the field.",
+    "Extra": {}
+  },
+  {
+    "Name": "m5",
+    "DisplayName": "Chain Lightning",
+    "Class": "mage",
+    "Hidden": false,
+    "UnlockLevel": 20,
+    "MPCost": 22,
+    "Cooldown": 2,
+    "Kind": "aoe",
+    "Power": 1.5,
+    "Stat": "mag",
+    "Description": "Arc through all foes; 20% stun.",
+    "Extra": {
+      "stun": 0.2
+    }
+  },
+  {
+    "Name": "m6",
+    "DisplayName": "Arcane Barrier",
+    "Class": "mage",
+    "Hidden": false,
+    "UnlockLevel": 40,
+    "MPCost": 30,
+    "Cooldown": 5,
+    "Kind": "shieldAll",
+    "Power": 2.2,
+    "Stat": "mag",
+    "Description": "Shield the whole party, scaled by MAG.",
+    "Extra": {}
+  },
+  {
+    "Name": "m7",
+    "DisplayName": "Meteor",
+    "Class": "mage",
+    "Hidden": false,
+    "UnlockLevel": 70,
+    "MPCost": 40,
+    "Cooldown": 4,
+    "Kind": "aoe",
+    "Power": 3,
+    "Stat": "mag",
+    "Description": "Crush all foes and leave them burning.",
+    "Extra": {
+      "dot": {
+        "pct": 0.3,
+        "turns": 3
+      }
+    }
+  },
+  {
+    "Name": "m8",
+    "DisplayName": "Time Stop",
+    "Class": "mage",
+    "Hidden": false,
+    "UnlockLevel": 110,
+    "MPCost": 50,
+    "Cooldown": 7,
+    "Kind": "aoe",
+    "Power": 1.5,
+    "Stat": "mag",
+    "Description": "Hit and freeze every foe for a turn.",
+    "Extra": {
+      "stun": 1
+    }
+  },
+  {
+    "Name": "p1",
+    "DisplayName": "Holy Smite",
+    "Class": "priest",
+    "Hidden": false,
+    "UnlockLevel": 1,
+    "MPCost": 6,
+    "Cooldown": 0,
+    "Kind": "hit",
+    "Power": 1.4,
+    "Stat": "mag",
+    "Description": "Holy damage to one enemy.",
+    "Extra": {}
+  },
+  {
+    "Name": "p2",
+    "DisplayName": "Mending Light",
+    "Class": "priest",
+    "Hidden": false,
+    "UnlockLevel": 3,
+    "MPCost": 12,
+    "Cooldown": 2,
+    "Kind": "heal",
+    "Power": 2.4,
+    "Stat": "mag",
+    "Description": "Heal the most wounded ally.",
+    "Extra": {}
+  },
+  {
+    "Name": "p3",
+    "DisplayName": "Sanctuary",
+    "Class": "priest",
+    "Hidden": false,
+    "UnlockLevel": 6,
+    "MPCost": 16,
+    "Cooldown": 4,
+    "Kind": "shieldAll",
+    "Power": 2,
+    "Stat": "mag",
+    "Description": "Holy shield on the whole party.",
+    "Extra": {}
+  },
+  {
+    "Name": "p4",
+    "DisplayName": "Judgment of Facets",
+    "Class": "priest",
+    "Hidden": false,
+    "UnlockLevel": 10,
+    "MPCost": 26,
+    "Cooldown": 5,
+    "Kind": "aoe",
+    "Power": 2.2,
+    "Stat": "mag",
+    "Description": "Smite all, heal 15% HP.",
+    "Extra": {
+      "healPct": 0.15
+    }
+  },
+  {
+    "Name": "p5",
+    "DisplayName": "Prayer of Light",
+    "Class": "priest",
+    "Hidden": false,
+    "UnlockLevel": 20,
+    "MPCost": 24,
+    "Cooldown": 3,
+    "Kind": "healAll",
+    "Power": 1.6,
+    "Stat": "mag",
+    "Description": "Heal the whole party.",
+    "Extra": {}
+  },
+  {
+    "Name": "p6",
+    "DisplayName": "Resurrection",
+    "Class": "priest",
+    "Hidden": false,
+    "UnlockLevel": 40,
+    "MPCost": 36,
+    "Cooldown": 6,
+    "Kind": "revive",
+    "Power": 0,
+    "Stat": "mag",
+    "Description": "Revive a fallen ally at 50% HP.",
+    "Extra": {
+      "revive": 0.5
+    }
+  },
+  {
+    "Name": "p7",
+    "DisplayName": "Divine Shield",
+    "Class": "priest",
+    "Hidden": false,
+    "UnlockLevel": 70,
+    "MPCost": 40,
+    "Cooldown": 5,
+    "Kind": "shieldAll",
+    "Power": 3,
+    "Stat": "mag",
+    "Description": "Large party shield; removes poison.",
+    "Extra": {
+      "cleanse": 1
+    }
+  },
+  {
+    "Name": "p8",
+    "DisplayName": "Miracle",
+    "Class": "priest",
+    "Hidden": false,
+    "UnlockLevel": 110,
+    "MPCost": 56,
+    "Cooldown": 7,
+    "Kind": "healAll",
+    "Power": 3.2,
+    "Stat": "mag",
+    "Description": "Heal everyone and revive the fallen at 30%.",
+    "Extra": {
+      "revive": 0.3
+    }
+  },
+  {
+    "Name": "h1",
+    "DisplayName": "Chime Rhythm",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 14,
+    "Cooldown": 4,
+    "Kind": "buff",
+    "Power": 0,
+    "Stat": "main",
+    "Description": "+30% SPD to the whole party.",
+    "Extra": {
+      "buff": {
+        "stat": "spd",
+        "amt": 0.3,
+        "turns": 3,
+        "party": true
+      }
+    }
+  },
+  {
+    "Name": "h2",
+    "DisplayName": "Undertow Hymn",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 20,
+    "Cooldown": 3,
+    "Kind": "healAll",
+    "Power": 1.4,
+    "Stat": "main",
+    "Description": "Heal the whole party.",
+    "Extra": {}
+  },
+  {
+    "Name": "h3",
+    "DisplayName": "Name the Dread",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 18,
+    "Cooldown": 4,
+    "Kind": "aoe",
+    "Power": 0.8,
+    "Stat": "main",
+    "Description": "Hit all foes; 50% stun.",
+    "Extra": {
+      "stun": 0.5
+    }
+  },
+  {
+    "Name": "h4",
+    "DisplayName": "Heartwood Drain",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 16,
+    "Cooldown": 2,
+    "Kind": "hit",
+    "Power": 1.8,
+    "Stat": "main",
+    "Description": "Heal 50% of the damage dealt.",
+    "Extra": {
+      "lifesteal": 0.5
+    }
+  },
+  {
+    "Name": "h5",
+    "DisplayName": "Rime Armor",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 22,
+    "Cooldown": 4,
+    "Kind": "shieldAll",
+    "Power": 2,
+    "Stat": "main",
+    "Description": "Ice shield on the whole party.",
+    "Extra": {}
+  },
+  {
+    "Name": "h6",
+    "DisplayName": "Gift of Giving",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 14,
+    "Cooldown": 2,
+    "Kind": "heal",
+    "Power": 2.6,
+    "Stat": "main",
+    "Description": "Big heal on the most wounded ally.",
+    "Extra": {}
+  },
+  {
+    "Name": "h7",
+    "DisplayName": "The Last Door",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 30,
+    "Cooldown": 6,
+    "Kind": "revive",
+    "Power": 0,
+    "Stat": "main",
+    "Description": "Revive a fallen ally at 60% HP.",
+    "Extra": {
+      "revive": 0.6
+    }
+  },
+  {
+    "Name": "h8",
+    "DisplayName": "Rift Tear",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 28,
+    "Cooldown": 3,
+    "Kind": "aoe",
+    "Power": 2.2,
+    "Stat": "main",
+    "Description": "Tear space through all foes, −30% DEF.",
+    "Extra": {
+      "debuff": {
+        "stat": "def",
+        "amt": 0.3,
+        "turns": 3
+      }
+    }
+  },
+  {
+    "Name": "h9",
+    "DisplayName": "Purging Flame",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 20,
+    "Cooldown": 3,
+    "Kind": "hit",
+    "Power": 1.6,
+    "Stat": "main",
+    "Description": "Burn a foe for 4 turns; cure your party of poison.",
+    "Extra": {
+      "dot": {
+        "pct": 0.5,
+        "turns": 4
+      },
+      "cleanse": 1
+    }
+  },
+  {
+    "Name": "h10",
+    "DisplayName": "Breath Between",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 24,
+    "Cooldown": 5,
+    "Kind": "haste",
+    "Power": 0,
+    "Stat": "main",
+    "Description": "Act again immediately.",
+    "Extra": {}
+  },
+  {
+    "Name": "h11",
+    "DisplayName": "Pressure Ward",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 30,
+    "Cooldown": 5,
+    "Kind": "shieldAll",
+    "Power": 2.8,
+    "Stat": "main",
+    "Description": "Heavy shield on the whole party.",
+    "Extra": {}
+  },
+  {
+    "Name": "h12",
+    "DisplayName": "Starfall",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 36,
+    "Cooldown": 4,
+    "Kind": "aoe",
+    "Power": 3,
+    "Stat": "main",
+    "Description": "Call down a star on every foe.",
+    "Extra": {}
+  },
+  {
+    "Name": "h13",
+    "DisplayName": "One Beat Ahead",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 24,
+    "Cooldown": 5,
+    "Kind": "buff",
+    "Power": 0,
+    "Stat": "main",
+    "Description": "+60% crit to the whole party.",
+    "Extra": {
+      "buff": {
+        "stat": "crit",
+        "amt": 0.6,
+        "turns": 3,
+        "party": true
+      }
+    }
+  },
+  {
+    "Name": "h14",
+    "DisplayName": "Shared Light",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 28,
+    "Cooldown": 4,
+    "Kind": "healAll",
+    "Power": 2,
+    "Stat": "main",
+    "Description": "Heal the party and restore 15% of their MP.",
+    "Extra": {
+      "mpGift": 0.15
+    }
+  },
+  {
+    "Name": "h15",
+    "DisplayName": "The Final Sentence",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 40,
+    "Cooldown": 6,
+    "Kind": "hit",
+    "Power": 5,
+    "Stat": "main",
+    "Description": "Enormous strike; double damage under 30% HP.",
+    "Extra": {
+      "execute": 1
+    }
+  },
+  {
+    "Name": "h16",
+    "DisplayName": "Hive Mend",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 34,
+    "Cooldown": 4,
+    "Kind": "healAll",
+    "Power": 3,
+    "Stat": "main",
+    "Description": "Large heal on the whole party.",
+    "Extra": {}
+  },
+  {
+    "Name": "h17",
+    "DisplayName": "Gate Strike",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 32,
+    "Cooldown": 3,
+    "Kind": "multi",
+    "Power": 0.9,
+    "Stat": "main",
+    "Description": "Five strikes that ignore 50% DEF.",
+    "Extra": {
+      "hits": 5,
+      "pierce": 0.5
+    }
+  },
+  {
+    "Name": "h18",
+    "DisplayName": "Remembrance",
+    "Class": "",
+    "Hidden": true,
+    "UnlockLevel": 0,
+    "MPCost": 60,
+    "Cooldown": 7,
+    "Kind": "aoe",
+    "Power": 4,
+    "Stat": "main",
+    "Description": "Devastate all foes and heal 20% HP.",
+    "Extra": {
+      "healPct": 0.2
+    }
+  }
+]

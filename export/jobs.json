@@ -1,0 +1,266 @@
+[
+  {
+    "Name": "blacksmith",
+    "DisplayName": "Blacksmith",
+    "Tier": 1,
+    "Perk": "Forge upgrades cost 20% less gold. +5% success at +5 and above.",
+    "Mods": {
+      "upCostCut": 0.2,
+      "upRate": 0.05
+    },
+    "Mastery": {
+      "text": "+3% ATK",
+      "mods": {
+        "atk": 0.03
+      }
+    },
+    "Requirements": [],
+    "Luxury": false
+  },
+  {
+    "Name": "tailor",
+    "DisplayName": "Tailor",
+    "Tier": 1,
+    "Perk": "Helms and armor give 20% more stats. Salvage gives 50% more shards.",
+    "Mods": {
+      "armorGear": 0.2,
+      "salvageBonus": 0.5
+    },
+    "Mastery": {
+      "text": "+3% DEF",
+      "mods": {
+        "def": 0.03
+      }
+    },
+    "Requirements": [],
+    "Luxury": false
+  },
+  {
+    "Name": "hunter",
+    "DisplayName": "Hunter",
+    "Tier": 1,
+    "Perk": "+20% gold and +10% gear drop chance.",
+    "Mods": {
+      "gold": 0.2,
+      "drop": 0.1
+    },
+    "Mastery": {
+      "text": "+2 CRIT",
+      "mods": {
+        "critFlat": 2
+      }
+    },
+    "Requirements": [],
+    "Luxury": false
+  },
+  {
+    "Name": "fisher",
+    "DisplayName": "Fisher",
+    "Tier": 1,
+    "Perk": "+15% max MP. 30% chance to reel in a Mana Shard after each win.",
+    "Mods": {
+      "mp": 0.15,
+      "catch": 0.3
+    },
+    "Mastery": {
+      "text": "+5% max MP",
+      "mods": {
+        "mp": 0.05
+      }
+    },
+    "Requirements": [],
+    "Luxury": false
+  },
+  {
+    "Name": "farmer",
+    "DisplayName": "Farmer",
+    "Tier": 1,
+    "Perk": "+12% max HP. 30% chance to harvest a Facet Tonic after each win.",
+    "Mods": {
+      "hp": 0.12,
+      "harvest": 0.3
+    },
+    "Mastery": {
+      "text": "+5% max HP",
+      "mods": {
+        "hp": 0.05
+      }
+    },
+    "Requirements": [],
+    "Luxury": false
+  },
+  {
+    "Name": "chef",
+    "DisplayName": "Chef",
+    "Tier": 1,
+    "Perk": "Start every battle with +15% ATK and MAG for 3 turns.",
+    "Mods": {
+      "feast": 0.15
+    },
+    "Mastery": {
+      "text": "+2% ATK and MAG",
+      "mods": {
+        "atk": 0.02,
+        "mag": 0.02
+      }
+    },
+    "Requirements": [],
+    "Luxury": false
+  },
+  {
+    "Name": "doctor",
+    "DisplayName": "Doctor",
+    "Tier": 2,
+    "Perk": "Potions heal 60% more. +1 potion per battle. Heal 3% HP every turn.",
+    "Mods": {
+      "potionPow": 0.6,
+      "potUses": 1,
+      "regen": 0.03
+    },
+    "Mastery": {
+      "text": "Heal 1% HP every turn",
+      "mods": {
+        "regen": 0.01
+      }
+    },
+    "Requirements": [
+      {
+        "job": "chef",
+        "lv": 5
+      },
+      {
+        "level": 10
+      }
+    ],
+    "Luxury": false
+  },
+  {
+    "Name": "botanist",
+    "DisplayName": "Botanist",
+    "Tier": 2,
+    "Perk": "35% chance each to gather a Facet Tonic and a Mana Shard after wins. Skills cost 10% less MP.",
+    "Mods": {
+      "harvest": 0.35,
+      "catch": 0.35,
+      "mpCostCut": 0.1
+    },
+    "Mastery": {
+      "text": "Skills cost 5% less MP",
+      "mods": {
+        "mpCostCut": 0.05
+      }
+    },
+    "Requirements": [
+      {
+        "job": "farmer",
+        "lv": 5
+      },
+      {
+        "world": 1
+      }
+    ],
+    "Luxury": false
+  },
+  {
+    "Name": "merchant",
+    "DisplayName": "Merchant",
+    "Tier": 2,
+    "Perk": "Bazaar prices 20% lower. +30% gold from battles.",
+    "Mods": {
+      "shopCut": 0.2,
+      "gold": 0.3
+    },
+    "Mastery": {
+      "text": "+10% gold",
+      "mods": {
+        "gold": 0.1
+      }
+    },
+    "Requirements": [
+      {
+        "anyJob": [
+          "hunter",
+          "fisher"
+        ],
+        "lv": 5
+      },
+      {
+        "gold": 3000
+      }
+    ],
+    "Luxury": false
+  },
+  {
+    "Name": "gemcutter",
+    "DisplayName": "Royal Gemcutter",
+    "Tier": 3,
+    "Perk": "+10% to every stat. Upgrades up to +8 never fail.",
+    "Mods": {
+      "all": 0.1,
+      "safeTo": 8
+    },
+    "Mastery": {
+      "text": "+2% to every stat",
+      "mods": {
+        "all": 0.02
+      }
+    },
+    "Requirements": [],
+    "Luxury": true
+  },
+  {
+    "Name": "gourmand",
+    "DisplayName": "Celestial Gourmand",
+    "Tier": 3,
+    "Perk": "Start battles with +25% ATK and MAG for 3 turns. Heal 4% HP every turn. Potions 25% stronger.",
+    "Mods": {
+      "feast": 0.25,
+      "regen": 0.04,
+      "potionPow": 0.25
+    },
+    "Mastery": {
+      "text": "Heal 1% HP every turn",
+      "mods": {
+        "regen": 0.01
+      }
+    },
+    "Requirements": [],
+    "Luxury": true
+  },
+  {
+    "Name": "starforger",
+    "DisplayName": "Starforger",
+    "Tier": 3,
+    "Perk": "Gear drops roll one rarity higher. +15% drop chance.",
+    "Mods": {
+      "rarityUp": 1,
+      "drop": 0.15
+    },
+    "Mastery": {
+      "text": "+5% drop chance",
+      "mods": {
+        "drop": 0.05
+      }
+    },
+    "Requirements": [],
+    "Luxury": true
+  },
+  {
+    "Name": "baron",
+    "DisplayName": "Diamond Baron",
+    "Tier": 3,
+    "Perk": "+50% gold and +5 Diamonds every victory.",
+    "Mods": {
+      "gold": 0.5,
+      "dia": 5
+    },
+    "Mastery": {
+      "text": "+10% gold",
+      "mods": {
+        "gold": 0.1
+      }
+    },
+    "Requirements": [],
+    "Luxury": true
+  }
+]
